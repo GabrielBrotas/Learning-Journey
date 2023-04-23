@@ -2,8 +2,6 @@
 
 <p align="center"> Contains all my learning related to DevOps tools and tech.</p>
 
-<p>test</p>
-
 ## Architecture
 
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" height="100" alt="Kubernetes"> 
