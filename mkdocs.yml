@@ -1,4 +1,10 @@
 site_name: Advanced Journey
+repo_url: https://github.com/GabrielBrotas/Advanced-Journey
+edit_uri: blob/main/docs/
+site_description: My learning related to Architecture
+site_author: Gabriel Brotas
+remote_branch: gh-deploy
+
 nav:
   - Home: index.md
   - Architecture:
@@ -8,3 +14,5 @@ nav:
       - "Design Quality Software": Architecture/design-quality-software.md
 theme:
   name: mkdocs
+  nav_style: dark
+  locale: en
