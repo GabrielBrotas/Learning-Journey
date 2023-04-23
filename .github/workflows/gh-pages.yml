@@ -7,8 +7,8 @@ on:
 
 permissions:
   pages: write
-  deployments: write
-  # contents: write
+  # deployments: write
+  contents: write
   
   # actions: read|write|none
   # checks: read|write|none
