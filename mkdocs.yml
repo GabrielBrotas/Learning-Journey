@@ -1,0 +1,10 @@
+site_name: Advanced Journey
+nav:
+  - Home: index.md
+  - Architecture:
+      - "Types of Architecture": Architecture/types-of-architecture.md
+      - "Sustainability": Architecture/sustainability.md
+      - "Architectural Features": Architecture/architectural-features.md
+      - "Design Quality Software": Architecture/design-quality-software.md
+theme:
+  name: mkdocs
