@@ -8,6 +8,7 @@ on:
     paths:
       - 'docs/**'
       - 'mkdocs.yml'
+      - 'requirements.txt'
       - '.github/workflows/gh-pages.yml'
 
 permissions:
