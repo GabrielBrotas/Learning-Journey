@@ -78,7 +78,8 @@ With that, we end up having a problem space and a solution space
 ```json
 Problem                             Solution
 -----------------------      ------------------------------
-(1) Domain overview      =>   (3) Analysis and modeling of the and its complexities. domain
+(1) Domain overview      =>   (3) Analysis and modeling of the 
+								  domain and its complexities.
 
         ⬇️                             ⬇️
         ⬇️                             ⬇️
@@ -318,9 +319,9 @@ class Customer {
 
 ## **Domain Services**
 
-***> A domain service is a stateless operation that performs a domain-specific task. Often the best indication that you should create a Service in the domain model is when the operation you need to perform doesn't seem to fit as a method on an Aggregate or a Value Object.***
+> ***A domain service is a stateless operation that performs a domain-specific task. Often the best indication that you should create a Service in the domain model is when the operation you need to perform doesn't seem to fit as a method on an Aggregate or a Value Object.***
 
-***> When a significant process or transformation in the domain is not the natural responsibility of an ENTITY or Value Object, add an operation to the model as a stand-alone interface declared as a SERVICE. Set the interface in based on the domain model language and make sure the operation name is part of the UBIQUITOUS LANGUAGE. Make the SERVICE stateless.***
+> ***When a significant process or transformation in the domain is not the natural responsibility of an ENTITY or Value Object, add an operation to the model as a stand-alone interface declared as a SERVICE. Set the interface in based on the domain model language and make sure the operation name is part of the UBIQUITOUS LANGUAGE. Make the SERVICE stateless.***
 
 Domain Service is stateless;
 
@@ -341,18 +342,16 @@ When to create domain service?
 
 ## **Repositories**
 
-***> A repository commonly refers to a place of storage, generally considered a place of security or preservation of the items stored there. When you store something in a repository and then go back to retrieve it, you expect it to be in the same state it was in when you put it there. At some point, you can choose to remove the stored item from the repository.***
->
+> ***A repository commonly refers to a place of storage, generally considered a place of security or preservation of the items stored there. When you store something in a repository and then go back to retrieve it, you expect it to be in the same state it was in when you put it there. At some point, you can choose to remove the stored item from the repository.***
 
-> These objects, similar to collections, are about persistence. Every Persistent Aggregate type will have a Repository. Generally speaking, there is a 1-1 relationship between an Aggregate type and a Repository.
->
+These objects, similar to collections, are about persistence. Every Persistent Aggregate type will have a Repository. Generally speaking, there is a 1-1 relationship between an Aggregate type and a Repository.
+
 
 ## **Domain Events**
 
-***> Use a domain event to capture an instance of something that happened in the domain.***
+> ***Use a domain event to capture an instance of something that happened in the domain.***
 
-> The essence of a domain event is that you use it to capture things that might trigger a change in the state of the application you are developing. These event objects are processed to cause system changes and stored to provide an AuditLog.
->
+> ***The essence of a domain event is that you use it to capture things that might trigger a change in the state of the application you are developing. These event objects are processed to cause system changes and stored to provide an AuditLog.***
 
 Perform an operation based on an event or store a log;
 
@@ -387,8 +386,7 @@ Now to trigger an event, just execute the “notify” method of the “Event Di
 
 ## **Modules**
 
-> In a DDD context, Modules in your model serve as named containers for classes of domain objects that are highly cohesive with each other. The goal should be loose coupling between classes that are in different modules. Since the Modules used in DDD are not anemic or generic storage bins, it is also important to properly name the Modules.
->
+> ***In a DDD context, Modules in your model serve as named containers for classes of domain objects that are highly cohesive with each other. The goal should be loose coupling between classes that are in different modules. Since the Modules used in DDD are not anemic or generic storage bins, it is also important to properly name the Modules.***
 
 - Represents the application represented by the domain;
 - The modules must respect the universal (ubiquitous) language;
@@ -399,8 +397,7 @@ Now to trigger an event, just execute the “notify” method of the “Event Di
 
 ## **Factories**
 
-> Shift the responsibility for creating instances of complex objects and Aggregates to a separate object, which may not have responsibility in the domain model but is still part of the domain design. Provide an interface that encapsulates all complex creation and doesn't require the client to reference the concrete classes of the objects being instantiated. Create entire Aggregates at once, enforcing their invariants.
->
+> ***Shift the responsibility for creating instances of complex objects and Aggregates to a separate object, which may not have responsibility in the domain model but is still part of the domain design. Provide an interface that encapsulates all complex creation and doesn't require the client to reference the concrete classes of the objects being instantiated. Create entire Aggregates at once, enforcing their invariants.***
 
 Every time we need to create a complex object, we can delegate this to the factory.
 

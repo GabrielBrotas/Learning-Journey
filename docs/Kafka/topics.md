@@ -128,25 +128,4 @@ In case a leader partition goes down, the consumer will read from the next avail
 Broker A goes down and is no longer available, so now Broker B will have Partition 1 and 2 as leader.
 The follower is just a backup in case a leader goes down.
 
-**Delivery Guarantee**
 
-```jsx
-[Producer] ----> [Broker A][Topic A] Leader
-				 [Broker B][Topic A] Follower
-				 [Broker C][Topic A] Follwer
-```
-
-The Producer will alwasy send the message to the leader broker first.
-
-**Types of delivery**
-
-- [Ack 0, None] → Acknowledge 0, None, AKA FF (Fire and Forget)
-    - It’s the fastest way to send messages because Kafka doesn’t waste time responding to the user so it can handle way more transactions
-    - Uber usecase: The driver send his location every 10 seconds, this location is sent to Kafka to handle that message, if Kafka loses 2 location moments, that wouldn't be a drastic loss for the software, so Uber can afford to lose some data in this case;;
-- [Ack 1, Leader] → Acknowledge 1, The moment the leader saves the message it will return to the user saying that the message was stored;
-    - The speed is a little bit slower
-    - Potencial Problem: the Broker A saved the message and then returned to the users saying that the message was stored but in the same moment the node goes down, and the Broker A didn’t have time to replicate the data to the followers;
-- [Ack -1, All] → Acknowledge -1, The producer will send the message to the leader, the leader will replicate to the followers, the followers will notify the leader saying the message was stored and then the leader will respond the client saying the message was safely saved
-    - If you can’t afford lose a message no matter what, you should use this type
-    - If Broker A goes down doesn’t matter because the message is stored in other brokers;
-    - We’ll lost speed to process the messages

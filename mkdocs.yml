@@ -36,6 +36,14 @@ theme:
   features:
     - tabs
     - content.tabs.link
+  font:
+    code: Roboto Mono
+    text: Roboto
+  palette:
+    - primary: black
+      scheme: purple
+      accent: red
+        
 plugins:
   - search:
       lang: en

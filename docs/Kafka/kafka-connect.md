@@ -12,32 +12,33 @@ Lets suppose I have my data stored on an CRM such as Salesforce and I want to st
 
 I can connect my Kafka Connect on Salesforce, the salesforce data will be stored on a Kafka topic and from this topic I can save on my database;
 
-Or if I want to put my SQL data on Mongo,
-
-it requires some effort to create this integration and Kafka Connect help us with this problem without us need to write a line of code
+Or if I want to put my SQL data on Mongo, it requires some effort to create this integration and Kafka Connect helps us with this problem without us having to write a line of code
 
 ```jsx
 [Apache Kafka] <----> [Kafka Connect]
-  					 MySql <--- [Connector]
-    			 MongoDb <---	[Connector]
-  											[Connector] ---> Lambda
-											  [Connector] ---> Elasticsearch
+  		   MySql   <--- [Connector]
+    	   MongoDb <---	[Connector]
+  						[Connector] ---> Lambda
+						[Connector] ---> Elasticsearch
 ```
 
 A connector can be a mysql, mongo, lambda, elastic search, salesforce,…
 
 Connectors Type:
 
-- Data Sources ⇒ Get data from somewhere to send to Apache Kafka, Ex:
+- **Data Sources** ⇒ Get data from somewhere to send to Apache Kafka, Ex:
     - MySQL
     - Mongo
     - SalesForce
-- Sinks ⇒ Where to send this information
+- **Sinks** ⇒ Where to send this information
     - Elasticsearch
     - AWS Lamda
 
-Ex: I can send this MySQL data and send to a AWS Lambda,
-Get data from MongoDB and send to a ElasticSearch,…
+Ex:
+
+- I can send MySQL data to a AWS Lambda,
+- Get data from MongoDB and send to a ElasticSearch,
+- …
 
 [https://www.confluent.io/hub/](https://www.confluent.io/hub/)
 
@@ -56,7 +57,7 @@ Popular formats
 
 ### DLQ - Dead Letter Queue
 
-When there is a invalid registry, for any reason, this error can be handled on the connector config through the property “errors.tolerance”. This type of config just can be used by “Sink” connectors;
+When there is an invalid record, for any reason, this error can be handled in the connector configuration through the “errors.tolerance” property. This type of configuration can only be used for “Sink” connectors;
 
 - none: the task stops immediately
 - all: errors are ignored and the process continue normally
