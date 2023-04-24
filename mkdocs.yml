@@ -16,14 +16,6 @@ nav:
       - REST: SystemsCommunication/REST.md
       - gRPC: SystemsCommunication/gRPC.md
       - GraphQL: SystemsCommunication/GraphQL.md
-  - Kafka:
-      - Kafka/index.md
-      - Topics: Kafka/topics.md
-      - "Producers and Consumers": Kafka/producers-and-consumers.md
-      - "Kafka Connect": Kafka/kafka-connect.md
-      - Avro: Kafka/avro.md
-  - Microservices: microservices.md
-  - "Domain Driven Design": domain-driven-design.md
   - SOLID:
       - SOLID/index.md
       - "Single Responsibility Principle": SOLID/single-responsability.md
@@ -31,8 +23,19 @@ nav:
       - "Liskov Substitution Principle": SOLID/liskov-substitution.md
       - "Interface Segregation Principle": SOLID/interface-segregation.md
       - "Dependency Inversion Principle": SOLID/dependency-inversion.md
-
+  - "Domain Driven Design": domain-driven-design.md
+  - Microservices: microservices.md
+  - Kafka: 
+    - Kafka/index.md
+    - Topics: Kafka/topics.md
+    - 'Producers and Consumers': Kafka/producers-and-consumers.md
+    - 'Kafka Connect': Kafka/kafka-connect.md
+    - Avro: Kafka/avro.md
 theme:
-  name: mkdocs
-  nav_style: dark
-  locale: en
+  name: material
+plugins:
+  - search:
+      lang: en
+markdown_extensions:
+  - attr_list
+  - md_in_html
