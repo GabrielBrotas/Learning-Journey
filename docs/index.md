@@ -1,6 +1,6 @@
-<h1 align="center"> DevOps </h1>
+<h1 align="center"> Advanced Journey </h1>
 
-<p align="center"> Contains all my learning related to DevOps tools and tech.</p>
+<p align="center"> Contains my learning related to Architecture, DevOps and Backend tools.</p>
 
 ## Architecture
 
