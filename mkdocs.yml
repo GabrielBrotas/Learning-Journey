@@ -7,23 +7,31 @@ remote_branch: gh-deploy
 nav:
   - Home: index.md
   - Architecture:
-    - "Types of Architecture": Architecture/types-of-architecture.md
-    - "Sustainability": Architecture/sustainability.md
-    - "Architectural Features": Architecture/architectural-features.md
-    - "Design Quality Software": Architecture/design-quality-software.md
-  - 'Systems Communication': 
-    - SystemsCommunication/index.md
-    - REST: SystemsCommunication/REST.md
-    - gRPC: SystemsCommunication/gRPC.md
-    - GraphQL: SystemsCommunication/GraphQL.md
-  - Kafka: 
-    - Kafka/index.md
-    - Topics: Kafka/topics.md
-    - 'Producers and Consumers': Kafka/producers-and-consumers.md
-    - 'Kafka Connect': Kafka/kafka-connect.md
-    - Avro: Kafka/avro.md
+      - "Types of Architecture": Architecture/types-of-architecture.md
+      - "Sustainability": Architecture/sustainability.md
+      - "Architectural Features": Architecture/architectural-features.md
+      - "Design Quality Software": Architecture/design-quality-software.md
+  - "Systems Communication":
+      - SystemsCommunication/index.md
+      - REST: SystemsCommunication/REST.md
+      - gRPC: SystemsCommunication/gRPC.md
+      - GraphQL: SystemsCommunication/GraphQL.md
+  - Kafka:
+      - Kafka/index.md
+      - Topics: Kafka/topics.md
+      - "Producers and Consumers": Kafka/producers-and-consumers.md
+      - "Kafka Connect": Kafka/kafka-connect.md
+      - Avro: Kafka/avro.md
   - Microservices: microservices.md
   - "Domain Driven Design": domain-driven-design.md
+  - SOLID:
+      - SOLID/index.md
+      - "Single Responsibility Principle": SOLID/single-responsability.md
+      - "Open-closed Principle": SOLID/open-closed.md
+      - "Liskov Substitution Principle": SOLID/liskov-substitution.md
+      - "Interface Segregation Principle": SOLID/interface-segregation.md
+      - "Dependency Inversion Principle": SOLID/dependency-inversion.md
+
 theme:
   name: mkdocs
   nav_style: dark
