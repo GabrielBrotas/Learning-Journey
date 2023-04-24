@@ -4,7 +4,7 @@
 
 ## Architecture
 
-<img align="right" src="/images/architecture-blocks.png" alt="Architecture" style="height: 100px"> 
+<img align="right" src="images/architecture-blocks.png" alt="Architecture" style="height: 100px"> 
 
 - [Types of Architecture](Architecture/types-of-architecture.md)
 - [Sustainability](Architecture/sustainability.md)
@@ -37,7 +37,7 @@
 <br>
 
 ## Domain Driven Design
-<img align="right" src="/images/domain-driven-design.png" style="height: 100px" alt="Domain Driven Design"> 
+<img align="right" src="images/domain-driven-design.png" style="height: 100px" alt="Domain Driven Design"> 
 
 - [Notes](/domain-driven-design)
 - [Project](https://github.com/GabrielBrotas/domain-driven-design)
@@ -45,7 +45,7 @@
 <br>
 
 ## Microservices
-<img align="right" src="/images/microservices.png" style="height: 100px" alt="Microservices"> 
+<img align="right" src="images/microservices.png" style="height: 100px" alt="Microservices"> 
 
 - [Notes](/microservices)
 - [Project](https://github.com/GabrielBrotas/meetup-microservices)

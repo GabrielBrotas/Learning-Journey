@@ -35,7 +35,7 @@ Now, suppose the producer application encounters a network error while sending a
 
 However, if the producer application is configured to use the producer idempotent feature, it will ensure that only one copy of the message is delivered to the Kafka topic, even if multiple retries are attempted. This ensures that the consumer application processes each order exactly once, regardless of any duplicate messages in the Kafka topic.
 
-![Producer Idempotent](/images/producer_indepotence.png)
+![producer_indepotence.png](images/producer_indepotence.png)
 
 The message 4 first got an error but after the retry rule it tried again and was successfully stored, but on the first error the producer tried to send the message again and in this case we will have a duplicated data.
 
