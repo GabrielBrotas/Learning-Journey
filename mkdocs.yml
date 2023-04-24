@@ -22,6 +22,7 @@ nav:
     - 'Producers and Consumers': Kafka/producers-and-consumers.md
     - 'Kafka Connect': Kafka/kafka-connect.md
     - Avro: Kafka/avro.md
+  - Microservices: microservices.md
 theme:
   name: mkdocs
   nav_style: dark
