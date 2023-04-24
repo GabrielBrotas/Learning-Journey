@@ -23,6 +23,7 @@ nav:
     - 'Kafka Connect': Kafka/kafka-connect.md
     - Avro: Kafka/avro.md
   - Microservices: microservices.md
+  - "Domain Driven Design": domain-driven-design.md
 theme:
   name: mkdocs
   nav_style: dark
