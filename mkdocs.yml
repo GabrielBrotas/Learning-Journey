@@ -4,7 +4,6 @@ edit_uri: blob/main/docs/
 site_description: My learning related to Architecture
 site_author: Gabriel Brotas
 remote_branch: gh-deploy
-
 nav:
   - Home: index.md
   - Architecture:
