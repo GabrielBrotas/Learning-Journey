@@ -33,6 +33,9 @@ nav:
     - Avro: Kafka/avro.md
 theme:
   name: material
+  features:
+    - tabs
+    - content.tabs.link
 plugins:
   - search:
       lang: en
