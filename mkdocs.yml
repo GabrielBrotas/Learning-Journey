@@ -16,6 +16,12 @@ nav:
     - REST: SystemsCommunication/REST.md
     - gRPC: SystemsCommunication/gRPC.md
     - GraphQL: SystemsCommunication/GraphQL.md
+  - Kafka: 
+    - Kafka/index.md
+    - Topics: Kafka/topics.md
+    - 'Producers and Consumers': Kafka/producers-and-consumers.md
+    - 'Kafka Connect': Kafka/kafka-connect.md
+    - Avro: Kafka/avro.md
 theme:
   name: mkdocs
   nav_style: dark
