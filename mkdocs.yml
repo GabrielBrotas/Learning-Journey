@@ -1,4 +1,5 @@
 site_name: Advanced Journey
+site_url: https://gabrielbrotas.github.io/
 repo_url: https://github.com/GabrielBrotas/Advanced-Journey
 edit_uri: blob/main/docs/
 site_description: My learning related to Architecture
@@ -47,6 +48,7 @@ theme:
 plugins:
   - search:
       lang: en
+  - glightbox
 markdown_extensions:
   - attr_list
   - md_in_html
