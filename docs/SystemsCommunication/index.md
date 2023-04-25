@@ -12,6 +12,6 @@ In software development, when building a web application, synchronous communicat
 
 
 ## Some Types of System Communication
-- [REST](SystemsCommunication/REST)
-- [gRPC](SystemsCommunication/gRPC)
-- [GraphQL](SystemsCommunication/GraphQL)
+- [REST](REST)
+- [gRPC](gRPC)
+- [GraphQL](GraphQL)
