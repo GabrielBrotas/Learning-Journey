@@ -1,7 +1,7 @@
 # Types of Architecture
 
 - Technological Architecture
-- Corporate Architecture
+- Enterprise/Corporate Architecture
 - Solution Architecture
 - Software Architecture
 
