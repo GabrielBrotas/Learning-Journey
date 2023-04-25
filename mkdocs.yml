@@ -26,14 +26,17 @@ nav:
       - "Dependency Inversion Principle": SOLID/dependency-inversion.md
   - "Domain Driven Design": domain-driven-design.md
   - Microservices: microservices.md
-  - Kafka: 
+  - Kafka:
     - Kafka/index.md
     - Topics: Kafka/topics.md
     - 'Producers and Consumers': Kafka/producers-and-consumers.md
     - 'Kafka Connect': Kafka/kafka-connect.md
     - Avro: Kafka/avro.md
+  - Kubernetes: kubernetes.md
 theme:
   name: material
+  logo: images/volcano.svg
+  favicon: images/volcano.svg
   features:
     - tabs
     - content.tabs.link

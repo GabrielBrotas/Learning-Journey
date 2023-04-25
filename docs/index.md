@@ -17,29 +17,29 @@
 
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg" style="height: 100px" alt="Systems Communication"> 
 
-- [Notes](/SystemsCommunication)
-- [REST](/SystemsCommunication/REST)
-- [gRPC](/SystemsCommunication/gRPC)
-- [GraphQL](/SystemsCommunication/GraphQL)
+- [Notes](SystemsCommunication)
+- [REST](SystemsCommunication/REST)
+- [gRPC](SystemsCommunication/gRPC)
+- [GraphQL](SystemsCommunication/GraphQL)
 
 <br>
 
 ## S.O.L.I.D
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" style="height: 100px" alt="SOLID"> 
 
-- [Notes](/SOLID)
-- [S ⇒ SRC ⇒ Single Responsibility Principle](/SOLID/single-responsability)
-- [O ⇒ OCP ⇒ Open-closed Principle](/SOLID/open-closed)
-- [L ⇒ LSP ⇒ Liskov Substitution Principle](/SOLID/liskov-substitution)
-- [I ⇒ ISP ⇒ Interface Segregation Principle](/SOLID/interface-segregation)
-- [D ⇒ DIP ⇒ Dependency Inversion Principle](/SOLID/dependency-inversion)
+- [Notes](SOLID)
+- [S ⇒ SRC ⇒ Single Responsibility Principle](SOLID/single-responsability)
+- [O ⇒ OCP ⇒ Open-closed Principle](SOLID/open-closed)
+- [L ⇒ LSP ⇒ Liskov Substitution Principle](SOLID/liskov-substitution)
+- [I ⇒ ISP ⇒ Interface Segregation Principle](SOLID/interface-segregation)
+- [D ⇒ DIP ⇒ Dependency Inversion Principle](SOLID/dependency-inversion)
 
 <br>
 
 ## Domain Driven Design
 <img align="right" src="images/domain-driven-design.png" style="height: 100px" alt="Domain Driven Design"> 
 
-- [Notes](/domain-driven-design)
+- [Notes](domain-driven-design)
 - [Project](https://github.com/GabrielBrotas/domain-driven-design)
 
 <br>
@@ -47,7 +47,7 @@
 ## Microservices
 <img align="right" src="images/microservices.png" style="height: 100px" alt="Microservices"> 
 
-- [Notes](/microservices)
+- [Notes](microservices)
 - [Project](https://github.com/GabrielBrotas/meetup-microservices)
 
 <br>
@@ -55,8 +55,15 @@
 ## Kafka
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg" style="height: 100px" alt="Kafka"> 
 
-- [Introduction](/Kafka)
-- [Topics](/Kafka/topics)
-- [Producers and Consumers](/Kafka/producers-and-consumers)
-- [Kafka Connect](/Kafka/kafka-connect)
-- [Avro](/Kafka/avro)
+- [Introduction](Kafka)
+- [Topics](Kafka/topics)
+- [Producers and Consumers](Kafka/producers-and-consumers)
+- [Kafka Connect](Kafka/kafka-connect)
+- [Avro](Kafka/avro)
+
+## Kubernetes
+<img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" style="height: 100px" alt="Kubernetes"> 
+
+- [Notes](kubernetes)
+- [Resources](https://github.com/GabrielBrotas/kubernetes)
+- [Project with K8s](https://github.com/GabrielBrotas/meetup-microservices)
