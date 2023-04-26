@@ -35,6 +35,8 @@ nav:
   - Kubernetes: kubernetes.md
   - Observability:
     - Observability/index.md
+    - "Service Level": Observability/service-level.md
+    - "OpenTelemetry": Observability/open-telemetry.md
     - "Elastic Stack": Observability/elastic-stack.md
 theme:
   name: material

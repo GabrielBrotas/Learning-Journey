@@ -67,3 +67,11 @@
 - [Notes](kubernetes)
 - [Resources](https://github.com/GabrielBrotas/kubernetes)
 - [Project with K8s](https://github.com/GabrielBrotas/meetup-microservices)
+
+## Observability
+<img align="right"src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/prometheus/prometheus-original.svg" style="height: 100px" alt="Observability"> 
+
+- [Notes](Observability)
+- [Service Level](Observability/service-level)
+- [Elastic Stack](Observability/elastic-stack)
+- [Open Telemetry](Observability/open-telemetry)

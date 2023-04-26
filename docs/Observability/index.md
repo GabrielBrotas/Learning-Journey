@@ -69,5 +69,5 @@ And the observability would allow teams to explore data in real-time to gain ins
 ## Tools
 - [Elastic Stack](elastic-stack)
 - Prometheus & Grafana
+- [OpenTelemetry](open-telemetry)
 - Datadog
-- OpenTelemetry

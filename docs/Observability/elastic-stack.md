@@ -38,3 +38,7 @@ Products:
 ## Kibana
 
 Kibana is your window into the Elastic Stack. Specifically, it's a browser-based analytics and search dashboard for Elasticsearch.
+
+## Projects
+
+- [Observability-ElasticStack](https://github.com/GabrielBrotas/observability-elasticstack)
