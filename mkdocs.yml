@@ -33,6 +33,9 @@ nav:
     - 'Kafka Connect': Kafka/kafka-connect.md
     - Avro: Kafka/avro.md
   - Kubernetes: kubernetes.md
+  - Observability:
+    - Observability/index.md
+    - "Elastic Stack": Observability/elastic-stack.md
 theme:
   name: material
   logo: images/volcano.svg
