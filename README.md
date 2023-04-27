@@ -1,15 +1,18 @@
 # Advanced-Journey
 
-## Commands
+This repository contains documentation related to Architecture, DevOps, and Backend tools and concepts that I have been learning.
 
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+The documentation is organized in a mkdocs site and published using github pages. To view it, simply navigate to the [github-page](https://gabrielbrotas.github.io/Advanced-Journey/).
 
-## Project layout
+## Local Development
+
+Requirements:
+- python
+
 ```sh
-mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the live-reloading docs server
+mkdocs server
 ```
