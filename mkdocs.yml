@@ -38,6 +38,7 @@ nav:
     - "Service Level": Observability/service-level.md
     - "OpenTelemetry": Observability/open-telemetry.md
     - "Elastic Stack": Observability/elastic-stack.md
+  - "Program, Process and Thread": core-thread-process.md
 theme:
   name: material
   logo: images/volcano.svg
