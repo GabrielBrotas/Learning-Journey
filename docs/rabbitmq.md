@@ -14,7 +14,7 @@ RabbitMQ is an open-source message broker software, highly consolidated, used to
 - Priority, which means that messages with higher priority are processed first.
 - Many companies use it, well tested.
 
-## **Under the Hood:**
+## **Under the Hood**
 
 RabbitMQ is based on the message queue model, where messages are sent from producers (publishers) to consumers through a broker (RabbitMQ server). 
 
@@ -32,14 +32,14 @@ It only opens a single persistent connection (which speeds up the process as it 
 
 **Exchange ⇒** Retrieves the message the publisher sent and discovers which queue the message will be sent to, because in some cases, the message may go to more than one queue.
 
-Flow:
+**Flow:**
 
 [Publisher] ⇒ [Exchange] ⇒ [Queue] ⇒ [Consumer]
 
 The publisher publishes a message, the exchange redirects it to the queue(s), and the consumer listens to the queue to process the message and delete it afterwards.
 
 
-## Types of Exchange:
+## Types of Exchange
 - **Direct**: The Exchange sends the message specifically to a certain queue
 - **Fanout**: The exchange sends the message to all the queues that are binded/related to this exchange, if there are 10 related queues the message is sent to the 10 queues
 - **Topic**: It has rules, e.g.: depending on the 'route key' it will forward to the queue we want.
@@ -47,7 +47,7 @@ The publisher publishes a message, the exchange redirects it to the queue(s), an
 
 The system can have several exchanges with several queues and each queue can be related to one or more exchanges.
 
-Playground: (<http://tryrabbitmq.com/>)
+Playground: <http://tryrabbitmq.com/>
 
 ### Direct Exchange
 Uses a message routing key to transport messages to queues. The routing key is a message attribute that the producer adds to the message header. You can consider the routing key to be an “address” that the exchange uses to determine how the message should be routed. A message is delivered to the queue with the binding key that exactly matches the message’s routing key
@@ -127,6 +127,7 @@ RabbitMQ features to solve such situations:
 - **Durable/persisted queues and messages ⇒** should not be used always because it costs memory and will slow down the system
 
 **Types of Consumer Acknowledgement**
+
 - Basic.Ack
     Every time we send a message to the consumer and it responds with "I received and processed the message"
     
