@@ -75,3 +75,8 @@
 - [Service Level](Observability/service-level)
 - [Elastic Stack](Observability/elastic-stack)
 - [Open Telemetry](Observability/open-telemetry)
+
+## Computer Science
+<img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" style="height: 100px" alt="Computer Science"> 
+
+- [Program, Process, Thread, Core...](core-thread-process)
