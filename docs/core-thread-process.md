@@ -2,33 +2,31 @@
 
 ## **Programs**
 
-First of all, you probably are aware that **a program is the code that is stored on your computer that is intended to fulfill a certain task**. There are many types of programs, including programs that help your computer function and are part of the operating system, and other programs that fulfill a particular job. These task-specific programs are also known as “applications” and can include programs such as word processing, web browsing, or emailing a message to another computer.
+**A program is a code that is stored on your computer that is intended to fulfill a certain task**. There are many types of programs, including programs that help your computer function and are part of the operating system, and other programs that fulfill a particular job. These task-specific programs are also known as “applications” and can include programs such as word processing, web browsing,...
 
-Programs are typically stored on disk or in non-volatile memory in a form that can be executed by your computer. Prior to that, **they are created using a programming language such as C, Lisp, Pascal, or many others using instructions that involve logic, data and device manipulation, recurrence, and user interaction.** The end result is a text file of code that is **compiled** into binary form (ones and zeros) in order to run on the computer. Another type of program is called **interpreted** and instead of being compiled in advance in order to run, is interpreted into executable code at the time it is run. Some common, typically interpreted programming languages, are Python, PHP, JavaScript, and Ruby.
+Programs are typically stored on disk or in non-volatile memory in a form that can be executed by your computer. Prior to that, **they are created using a programming language using instructions that involve logic, data and device manipulation, recurrence, and user interaction.** The end result is a text file of code that is **compiled** into binary form (ones and zeros) in order to run on the computer. Another type of program is called **interpreted** and instead of being compiled in advance in order to run, is interpreted into executable code at the time it is run. Some common, typically interpreted programming languages, are Python, PHP, JavaScript, and Ruby.
 
 ## **Process**
 
 The program has been loaded into the computer’s memory in binary form. Now what?
 
-An executing program needs more than just the binary code that tells the computer what to do. The program needs memory and various operating system resources in order to run. **A “process” is what we call a program that has been loaded into memory along with all the resources it needs to operate.** The “operating system” is the brains behind allocating all these resources. The OS handles the task of managing the resources needed to turn your program into a running process.
+The program needs memory and various operating system resources in order to run. **A “process” is what we call a program that has been loaded into memory along with all the resources it needs to operate.** The “operating system” is the brains behind allocating all these resources. The OS handles the task of managing the resources needed to turn your program into a running process.
 
 **There can be multiple instances of a single program, and each instance of that running program is a process. Each process has a separate memory address space, which means that a process runs independently and is isolated from other processes**. **It cannot directly access shared data in other processes.** Switching from one process to another requires some time (relatively) for saving and loading registers, memory maps, and other resources.
 
 This independence of processes is valuable because the operating system tries its best to isolate processes so that a problem with one process doesn’t corrupt or cause havoc with another process. You’ve undoubtedly run into the situation in which one application on your computer freezes or has a problem and you’ve been able to quit that program without affecting others.
 
-## Thread
+## **Thread**
 
-**Thread is a single sequential flow of control in a program that allows multiple activities within a single process.** However, single-threaded processes are based on the execution of programs (or instructions) in a single sequence. In simple words, **a single thread is like one command that runs at a time.**
+**Thread is a single sequential flow of control in a program that allows multiple activities within a single process.** A single thread is like one command that runs at a time.
 
 Most processor manufacturers use the Simultaneous multithreading (SMT) technique to make sure a single processer can run multiple threads. Multithreading is similar to multitasking in which multiple threads are executed at a time, and **a multithread ability manages numerous requests by the same user without opening multiple copies of programs running on the computer.**
 
-A thread is a unit of execution on concurrent programming. **Multithreading is a technique which allows a CPU to execute many tasks of one process at the same time.** These threads can execute individually while sharing their resources.
-
-Multithreading enables the CPU to run multiple tasks on one process simultaneously. It can also be executed separately at the time of resource sharing. But both are important to each other.
+A thread is a unit of execution on concurrent/parallel programming. **Multithreading is a technique which allows a CPU to execute many tasks of one process at the same time.** These threads can execute individually while sharing their resources.
 
 ### **How Threads Work**
 
-A thread is the unit of execution within a process. A process can have anywhere from just one thread to many threads.
+A thread is the unit of execution within a process. A process can have from just one thread to many threads.
 
 ![Thread](/Advanced-Journey/images/core-thread-process/thread.png)
 
@@ -53,7 +51,7 @@ Review:
 7. Threads can communicate with each other more easily than processes can.
 8. Threads are more vulnerable to problems caused by other threads in the same process.
 
-### **Why Choose Process Over Thread, or Thread Over Process**
+### **Thread vs Process**
 
 When Google was designing the Chrome browser, they needed to decide how to handle the many different tasks that needed computer, communications, and network resources at the same time. Each browser window or tab communicates with multiple servers on the internet to retrieve text, programs, graphics, audio, video, and other resources, and renders that data for display and interaction with the user. In addition, the browser can open many windows, each with many tasks.
 
@@ -63,17 +61,7 @@ Google made a calculated trade-off with the multi-processing design. Starting a 
 
 Using processes instead of threads also provides better memory usage when memory gets low. An inactive window is treated as a lower priority by the operating system and becomes eligible to be swapped to disk when memory is needed for other processes. That helps keep the user-visible windows more responsive. If the windows were threaded, it would be more difficult to separate the used and unused memory as cleanly, wasting both memory and performance.
 
-### **Working of Core and Thread**
-
-The **core** is a hardware component and performs and has the ability to run one task at one time.
-
-But **multiple cores** can support varied applications to be executed without any disruptions.
-
-If the user is planning to set up a game, some parts of cores are required to run the game, some needed to check other background applications like skype, chrome, Facebook, etc. **But the CPU should supports multithreading** to executes these effectively to fetch the relevant information from the application within a minimum response time. Multithreading just makes the process fast and organized, and convert into better performance. It increases power consumption but rarely causes a rise in temperature.
-
-A CPU performance will depend upon the number of cores on the machine and the speed at which the individual cores can execute instructions.
-
-## **How Multithreading Works?**
+### **How Multithreading Works?**
 
 For example, most modern CPUs support multithreading. A simple app on your smartphone can give you a live demo of the same.
 
@@ -85,6 +73,17 @@ In the background, there are two threads:
 - One rendering the GUI that displays the spinner
 
 Both of these threads execute one after the other to give the illusion of concurrent execution
+
+### **Working of Core and Thread**
+
+The **core** is a hardware component and performs and has the ability to run one task at one time.
+
+But **multiple cores** can support multiple applications to be executed without any disruptions.
+
+If the user is planning to set up a game, some parts of cores are required to run the game, some needed to check other background applications like skype, chrome, Facebook, etc. **But the CPU should supports multithreading** to executes these effectively to fetch the relevant information from the application within a minimum response time. Multithreading just makes the process fast and organized, and convert into better performance. It increases power consumption but rarely causes a rise in temperature.
+
+A CPU performance will depend upon the number of cores on the machine and the speed at which the individual cores can execute instructions.
+
 
 
 ## **Concurrency and Parallelism**
@@ -127,35 +126,7 @@ Therefore, parallelism is the real way in which multiple tasks can be processed 
 
 • Cores require only a signal process unit whereas threads require multiple processing units.
 
-## **Compiler vs. Interpreter**
-
-**Computers can only understand a program written in a binary system known as machine code.**
-
-To speak to a computer in its non-human language, we came up with two solutions: interpreters and compilers. Ironically, most of us know very little about them, although they belong to our daily coding life.
-
-A **compiler** is a computer program that transforms code written in a high-level programming language into the machine code. It is a program which translates the human-readable code to a language a computer processor understands (binary 1 and 0 bits). The computer processes the machine code to perform the corresponding tasks.
-
-An interpreter is a computer program, which converts each high-level program statement into the machine code. This includes source code, pre-compiled code, and scripts. Both compiler and interpreters do the same job which is converting higher level programming language to machine code. However, a compiler will convert the code into machine code (create an exe) before program run. Interpreters convert code into machine code when the program is run.
-
-- A compiler translates a code written in a high-level programming language into *a lower-level language like assembly language, object code, and* machine code (binary 1 and 0 bits). It converts the code ahead of time before the program runs.
-- An interpreter translates the code line by line when the program is running. You’ve likely used interpreters unknowingly at some point in your work career.
-
-![Compiler vs Interpreter](/Advanced-Journey/images/core-thread-process/compiler-vs-interpreter.png)
-
-Both compilers and interpreters have pros and cons:
-
-- Compiler transforms code written in a high-level programming language into the machine code, at once, before program runs, whereas an Interpreter converts each high-level program statement, one by one, into the machine code, during program run.
-- Compiled code runs faster while interpreted code runs slower.
-- Compiler displays all errors after compilation, on the other hand, the Interpreter displays errors of each line one by one.
-- Compiler is based on translation linking-loading model, whereas Interpreter is based on Interpretation Method.
-- Compiler takes an entire program whereas the Interpreter takes a single line of code.
-
-![Compiler vs Interpreter](/Advanced-Journey/images/core-thread-process/compiler-program.png)
-
-A high-level programming language is usually referred to as “compiled language” or “interpreted language.” However, in practice, they can have both compiled and interpreted implementations. C, for example, is called a compiled language, despite the existence of C interpreters. The first JavaScript engines were simple interpreters, but all modern engines use just-in-time (JIT) compilation for performance reasons.
-
-
-## **What is CPU Core?**
+## **CPU Core**
 
 A CPU core is the part of something central to its existence or character. In the same way in the computer system, the CPU is also referred to as the core.
 
@@ -184,6 +155,33 @@ Here are some advantages of the multicore processor:
 - Shorter connections
 - Lower capacitance
 - A small circuit can work at fast speed
+
+## **Compiler vs. Interpreter**
+
+**Computers can only understand a program written in a binary system known as machine code.**
+
+To speak to a computer in its non-human language, we came up with two solutions: interpreters and compilers. Ironically, most of us know very little about them, although they belong to our daily coding life.
+
+A **compiler** is a computer program that transforms code written in a high-level programming language into the machine code. It is a program which translates the human-readable code to a language a computer processor understands (binary 1 and 0 bits). The computer processes the machine code to perform the corresponding tasks.
+
+An interpreter is a computer program, which converts each high-level program statement into the machine code. This includes source code, pre-compiled code, and scripts. Both compiler and interpreters do the same job which is converting higher level programming language to machine code. However, a compiler will convert the code into machine code (create an exe) before program run. Interpreters convert code into machine code when the program is run.
+
+- A compiler translates a code written in a high-level programming language into *a lower-level language like assembly language, object code, and* machine code (binary 1 and 0 bits). It converts the code ahead of time before the program runs.
+- An interpreter translates the code line by line when the program is running. You’ve likely used interpreters unknowingly at some point in your work career.
+
+![Compiler vs Interpreter](/Advanced-Journey/images/core-thread-process/compiler-vs-interpreter.png)
+
+Both compilers and interpreters have pros and cons:
+
+- Compiler transforms code written in a high-level programming language into the machine code, at once, before program runs, whereas an Interpreter converts each high-level program statement, one by one, into the machine code, during program run.
+- Compiled code runs faster while interpreted code runs slower.
+- Compiler displays all errors after compilation, on the other hand, the Interpreter displays errors of each line one by one.
+- Compiler is based on translation linking-loading model, whereas Interpreter is based on Interpretation Method.
+- Compiler takes an entire program whereas the Interpreter takes a single line of code.
+
+![Compiler vs Interpreter](/Advanced-Journey/images/core-thread-process/compiler-program.png)
+
+A high-level programming language is usually referred to as “compiled language” or “interpreted language.” However, in practice, they can have both compiled and interpreted implementations. C, for example, is called a compiled language, despite the existence of C interpreters. The first JavaScript engines were simple interpreters, but all modern engines use just-in-time (JIT) compilation for performance reasons.
 
 ## Refs
 - [https://www.backblaze.com/blog/whats-the-diff-programs-processes-and-threads/](https://www.backblaze.com/blog/whats-the-diff-programs-processes-and-threads/)
