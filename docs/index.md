@@ -61,6 +61,11 @@
 - [Kafka Connect](Kafka/kafka-connect)
 - [Avro](Kafka/avro)
 
+## RabbitMQ
+<img align="right" src="images/rabbitmq.png" alt="Architecture" style="height: 100px"> 
+
+- [Notes](rabbitmq)
+
 ## Kubernetes
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg" style="height: 100px" alt="Kubernetes"> 
 
