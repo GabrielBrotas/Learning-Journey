@@ -84,4 +84,6 @@
 ## Computer Science
 <img align="right" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/markdown/markdown-original.svg" style="height: 100px" alt="Computer Science"> 
 
-- [Program, Process, Thread, Core...](core-thread-process)
+- [Program, Process, Thread, Core...](Computer-Science/core-thread-process)
+- [Object-Oriented Programming vs Functional Programming](Computer-Science/OOP-vs-Functional-Programming.md)
+- [HTTPS, TLS and mTLS](Computer-Science/https-tls-mtls.md)

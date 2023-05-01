@@ -39,8 +39,10 @@ nav:
     - "Service Level": Observability/service-level.md
     - "OpenTelemetry": Observability/open-telemetry.md
     - "Elastic Stack": Observability/elastic-stack.md
-  - "Program, Process and Thread": core-thread-process.md
-  - "Object-Oriented-Programming vs Functional Programming": OOP-vs-Functional-Programming.md
+  - "Computer Science":
+    - "Program, Process and Thread": Computer-Science/core-thread-process.md
+    - "Object-Oriented-Programming vs Functional Programming": Computer-Science/OOP-vs-Functional-Programming.md
+    - "HTTPS, TLS and mTLS": Computer-Science/https-tls-mtls.md
 theme:
   name: material
   logo: images/volcano.svg
@@ -55,7 +57,6 @@ theme:
     - primary: black
       scheme: purple
       accent: red
-        
 plugins:
   - search:
       lang: en
