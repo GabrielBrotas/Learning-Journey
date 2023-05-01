@@ -40,6 +40,7 @@ nav:
     - "OpenTelemetry": Observability/open-telemetry.md
     - "Elastic Stack": Observability/elastic-stack.md
   - "Program, Process and Thread": core-thread-process.md
+  - "Object-Oriented-Programming vs Functional Programming": OOP-vs-Functional-Programming.md
 theme:
   name: material
   logo: images/volcano.svg
