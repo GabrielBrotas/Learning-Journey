@@ -1,4 +1,4 @@
-name: Publish docs via GitHub Pages
+name: gh-pages
 
 on:
   workflow_dispatch:
@@ -17,6 +17,7 @@ permissions:
 
 jobs:
   deploy:
+    name: gh-pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
