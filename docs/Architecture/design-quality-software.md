@@ -4,6 +4,7 @@
 When it comes to developing software, performance is an essential factor. It's the software's ability to complete a specific workload. But how can we determine how well a software performs a particular action? To measure performance, we need data. The primary units of measurement for evaluating software performance are latency and throughput.
 
 The units of measurement for evaluating software performance are:
+
 - Latency or "response time" ⇒ Time it takes for a software application to process a request and complete a workload.
 - Throughput ⇒ Number of requests a software application can handle.
 
