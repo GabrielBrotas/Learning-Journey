@@ -43,6 +43,7 @@ nav:
     - "Program, Process and Thread": Computer-Science/core-thread-process.md
     - "Object-Oriented-Programming vs Functional Programming": Computer-Science/OOP-vs-Functional-Programming.md
     - "HTTPS, TLS and mTLS": Computer-Science/https-tls-mtls.md
+    - "Reactive Programming vs Reactive Systems": Computer-Science/reactive-programming-vs-reactive-systems.md
 theme:
   name: material
   logo: images/volcano.svg
