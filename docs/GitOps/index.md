@@ -42,7 +42,7 @@ I think you undesrstood the number of problems with this approach so far, needle
 
 And because of these problems, using an declarative approach is extremely important to a modern software development to companies of all sizes
 
-## GITOPS
+## GitOps
 
 In a few words, GitOps is infrastructure as Code (IaC), but it goes far beyond that.
 
@@ -61,6 +61,7 @@ You might also use a pull-request strategy so that once the changes are approved
 By using this approach, you can ensure that your infrastructure changes are tracked and versioned in Git, and that your deployment process is automated and auditable. This makes it easier to manage your infrastructure at scale.
 
 **Benefits**
+
 - declarative approach (follows a declaration of an expected state rather than a sequence of commands.), easier to know and understand what's in your environment
 - reduce errors and downtime
 - enable more rapid innovation and experimentation
