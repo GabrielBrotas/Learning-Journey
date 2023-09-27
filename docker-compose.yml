@@ -1,0 +1,16 @@
+---
+version: "3"
+services:
+  mkdocs:
+    container_name: mkdocs
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+    restart: always
+    volumes:
+      - ./docs:/code/docs
+      - ./mkdocs.yml:/code/mkdocs.yml
+      - ./requirements.txt:/code/requirements.txt
+    ports:
+      - "8000:8000"

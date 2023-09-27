@@ -7,8 +7,17 @@ The documentation is organized in a mkdocs site and published using github pages
 
 ## Local Development
 
-Requirements:
-- python
+### With Docker
+
+```sh
+docker-compose up -d --build
+```
+
+Navigate to [localhost:8000](http://localhost:8000).
+
+Changes in your workspace will automatically be reflected in your local browser.
+
+### With Python
 
 ```sh
 # Install dependencies
