@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: nginx-vs
+spec:
+  hosts:
+    - nginx # k8s nginx service
+  http:
+    - fault:
+        delay:
+          fixedDelay: 2s # wait 2s before process the request
+          percentage:
+            value: 100 # to 100% of requests
+      route:
+        - destination:
+            host: nginx
+            subset: all
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: circuit-breaker-servicex
+spec:
+  host: nginx # k8s nginx service
+  trafficPolicy:
+    outlierDetection:
+      consecutiveGatewayErrors: 20 # 20 502, 503 or 504 consecutive errors
+      interval: 10s # if 20 consecutive errors occur in the interval of 10s the circuit will open
+      baseEjectionTime: 30s # eject the service for 30s
+      maxEjectionPercent: 100 # eject all pods

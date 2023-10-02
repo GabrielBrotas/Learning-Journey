@@ -34,7 +34,9 @@ nav:
     - Avro: Kafka/avro.md
   - RabbitMQ: rabbitmq.md
   - Kubernetes: kubernetes.md
-  - Service Mesh: service-mesh.md
+  - Service Mesh:
+      - ServiceMesh/index.md
+      - Istio: ServiceMesh/istio.md
   - Observability:
     - Observability/index.md
     - Service Level: Observability/service-level.md

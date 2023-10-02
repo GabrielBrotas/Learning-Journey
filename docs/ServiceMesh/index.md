@@ -75,7 +75,7 @@ Some downsides to service mesh are as follows:
 - AWS App Mesh
 - Linkerd
 
-
 ## Refs
-- https://www.techtarget.com/searchitoperations/definition/service-mesh
-- https://www.redhat.com/en/topics/microservices/what-is-a-service-mesh
+
+- [TechTarget-definition-service-mesh](https://www.techtarget.com/searchitoperations/definition/service-mesh)
+- [RedHat-what-is-a-service-mesh](https://www.redhat.com/en/topics/microservices/what-is-a-service-mesh)

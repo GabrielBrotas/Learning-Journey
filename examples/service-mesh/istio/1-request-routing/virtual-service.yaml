@@ -1,0 +1,76 @@
+##################################################################################################
+# NGIXN Service
+##################################################################################################
+--- # define a Kubernetes Service resource named "nginx" to be used by both nginx-v1 and nginx-v2 deployments
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      name: http
+  selector:
+    app: nginx
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: nginx-gateway
+spec:
+  # The selector matches the ingress gateway pod labels.
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 8080
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nginx-vs
+spec:
+  hosts:
+    - "*" # k8s nginx service
+  gateways:
+    - nginx-gateway
+  http:
+    - match:
+        - uri:
+            exact: "/"
+      route:
+        - destination:
+            host: nginx
+            port:
+              number: 80
+            subset: v1
+          weight: 70 # 70% of traffic to v1
+        - destination:
+            host: nginx
+            subset: v2
+          weight: 30 # 30% of traffic to v2
+--- # DestinationRule to specify how the load balancing should be performed between these subsets.
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: nginx-dr
+spec:
+  host: nginx # DestinationRule for the host "nginx" corresponding to the Kubernetes service named "nginx"
+  trafficPolicy: # traffic policy for load balancing:
+    loadBalancer: # load balancing policy is
+      simple: ROUND_ROBIN # "ROUND_ROBIN" load balancing algorithm, which distributes traffic evenly across available subsets.
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
