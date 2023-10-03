@@ -1,9 +1,9 @@
 # Istio
 
-
 ## Tests
 
 **Requirements:**
+
 - minikube
 - kubectl
 - istioctl
@@ -37,25 +37,20 @@ istioctl install --set profile=demo -y
 # 3. Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
 kubectl label namespace default istio-injection=enabled
 
-# 4. Install the Istio Gateway API CRDs:
-# kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
-#   { kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v0.8.1" | kubectl apply -f -; }
-
-
-# 5. Run this command in a new terminal window to start a Minikube tunnel that sends traffic to your Istio Ingress Gateway. This will provide an external load balancer, EXTERNAL-IP, for service/istio-ingressgateway.
+# 4. Run this command in a new terminal window to start a Minikube tunnel that sends traffic to your Istio Ingress Gateway. This will provide an external load balancer, EXTERNAL-IP, for service/istio-ingressgateway.
 minikube tunnel
 
-# 6. Set the ingress host and ports:
+# 5. Set the ingress host and ports:
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 
-# 7.1 Ensure an IP address and ports were successfully assigned to each environment variable:
+# 6.1 Ensure an IP address and ports were successfully assigned to each environment variable:
 echo "$INGRESS_HOST"
 echo "$INGRESS_PORT"
 echo "$SECURE_INGRESS_PORT"
 
-# 7.2 Set GATEWAY_URL:
+# 6.2 Set GATEWAY_URL:
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
 echo "$GATEWAY_URL"
 ```
@@ -63,6 +58,7 @@ echo "$GATEWAY_URL"
 ### 3. Deploy Apps
 
 #### 1. Deploy the sample istio application
+
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.19/samples/bookinfo/platform/kube/bookinfo.yaml
 
@@ -121,32 +117,18 @@ NUM_REQUESTS=100
 ```
 
 clean up sample istio app
+
 ```sh
 kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.19/samples/bookinfo/platform/kube/bookinfo.yaml
 kubectl delete -f https://raw.githubusercontent.com/istio/istio/release-1.19/samples/bookinfo/networking/bookinfo-gateway.yaml
 ```
 
+### Stress test - Fortio
 
-
-
-## Stress test
-kubectl apply -n istio-ingress -f https://raw.githubusercontent.com/istio/istio/release-1.16/samples/httpbin/sample-client/fortio-deploy.yaml
-export FORTIO_POD=$(kubectl get pods -n istio-ingress -l app=fortio -o 'jsonpath={.items[0].metadata.name}')
-kubectl exec "$FORTIO_POD" -n istio-ingress -c fortio -- /usr/bin/fortio load -c 2 -qps 0 -t 200s -loglevel Warning http://nginx:80/
-```
-
-2. fault injection
 ```sh
-kubectl apply -n istio-ingress -f apps/3-fault-injection
+kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.16/samples/httpbin/sample-client/fortio-deploy.yaml
 
-export FORTIO_POD=$(kubectl get pods -n istio-ingress -l app=fortio -o 'jsonpath={.items[0].metadata.name}')
-kubectl exec "$FORTIO_POD" -n istio-ingress -c fortio -- /usr/bin/fortio load -c 2 -qps 0 -t 10s -loglevel Warning http://nginx:80/
-```
+export FORTIO_POD=$(kubectl get pods -l app=fortio -o 'jsonpath={.items[0].metadata.name}')
 
-3. ingress
-```sh
-kubectl apply -n istio-ingress -f apps/5-ingress
-
-minikube service istio-ingress -n istio-ingress --url
-
+kubectl exec "$FORTIO_POD" -c fortio -- /usr/bin/fortio load -c 2 -qps 0 -t 200s -loglevel Warning http://nginx:80/
 ```
