@@ -12,3 +12,4 @@ spec:
           - name: "TARGET"
             value: "ArgoCD"
         port: 8080
+        
