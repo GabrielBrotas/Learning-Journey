@@ -61,37 +61,7 @@ argocd app create first-vela-app \
 
 ```
 
-2. setup kubevela
 ```sh
-# install vela
-vela install
-
-# velaux
-vela addon enable velaux
-
-# port-forward
-vela port-forward addon-velaux -n vela-system 8000:8000
-```
-
-3. setup kubevela app
-
-```sh
-# This command will create a namespace in the local cluster
-vela env init prod --namespace prod
-
-vela up -f examples/argocd-kubevela/app.yaml
-
-vela status first-vela-app
-
-vela port-forward first-vela-app 8001:8000
-
-# After we finished checking the application, we can approve the workflow to continue:
-vela workflow resume first-vela-app
-
-vela status first-vela-app
-```
-
-4. clean up
-```sh
-vela delete first-vela-app
+# debug:
+kubectl logs -n argocd argo-cd-argocd-repo-server-7cdccb4499-mx59l -c vela
 ```
