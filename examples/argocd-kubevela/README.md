@@ -4,16 +4,18 @@
 minikube start --kubernetes-version=v1.28.3
 
 # Install Argo CD
-kubectl create namespace argo-system
+kubectl create namespace argocd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm dep update charts/argo-cd/
-helm install argo-cd charts/argo-cd/ -n argo-system --values charts/argo-cd/values.yaml
+
+kubectl apply -f charts/argo-cd/templates/plugin.yaml -n argocd
+
+helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml
 
 kubectl wait --for=condition=available --timeout=600s deployment/argo-cd-argocd-server -n argo-system
 
-k apply -f charts/argo-cd/plugin.yaml
 # Install KubeVela
-vela install -n vela-system -v 1.3.5
+vela install -n vela-system -v 1.6.4
 
 # velaux
 vela addon enable velaux

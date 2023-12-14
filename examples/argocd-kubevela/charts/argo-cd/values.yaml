@@ -7,36 +7,47 @@ argo-cd:
   repoServer:
     clusterAdminAccess:
       enabled: true
+
     extraContainers:
-      - name: kubevela
-        command: [/var/run/argocd/argocd-cmp-server] # Entrypoint should be Argo CD lightweight CMP server i.e. argocd-cmp-server
-        image: busybox # This can be off-the-shelf or custom-built image
+      - name: vela
+        image: nginx
+        command: [/var/run/argocd/argocd-cmp-server]
+        # env:
+        #   - name: KUBECONFIG
+        #     value: /kubeconfig
+        resources: {}
         securityContext:
           runAsNonRoot: true
           runAsUser: 999
         volumeMounts:
-          - mountPath: /var/run/argocd
-            name: var-files
-          - mountPath: /home/argocd/cmp-server/plugins
-            name: plugins
-          # Remove this volumeMount if you've chosen to bake the config file into the sidecar image.
-          - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          - name: var-files
+            mountPath: /var/run/argocd
+          - name: vela-cli-dir
+            mountPath: /.vela
+          # - name: kubeconfig
+          #   mountPath: /kubeconfig
+          #   subPath: kubeconfig
+          - name: plugins
+            mountPath: /home/argocd/cmp-server/plugins
+          - name: vela-cmp
+            mountPath: /home/argocd/cmp-server/config/plugin.yaml
             subPath: plugin.yaml
-            name: kubevela-config
-          # Starting with v2.4, do NOT mount the same tmp volume as the repo-server container. The filesystem separation helps
-          # mitigate path traversal attacks.
-          - mountPath: /tmp
-            name: cmp-tmp
+          - name: cmp-tmp
+            mountPath: /tmp
+          - name: custom-tools
+            mountPath: /usr/local/bin/vela
+            subPath: vela
+
     initContainers:
-      - command:
+      - name: kubevela
+        image: nginx:1.21.6
+        command:
           - bash
-          - -c
+          - "-c"
           - |
             #!/usr/bin/env bash
             set -eo pipefail
-            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.5
-        image: nginx:1.21.6 # To use bash + curl
-        name: kubevela-setup
+            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.4
         env:
           - name: VELA_INSTALL_DIR
             value: /custom-tools
@@ -48,17 +59,19 @@ argo-cd:
             cpu: 10m
             memory: 32Mi
         volumeMounts:
-          - mountPath: /custom-tools
-            name: custom-tools
+          - name: custom-tools
+            mountPath: /custom-tools
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+
     volumes:
       - emptyDir: {}
         name: custom-tools
       - configMap:
-          name: kubevela-config
-        name: kubevela-config
+          name: vela-cmp
+        name: vela-cmp
       - emptyDir: {}
         name: cmp-tmp
-    volumeMounts:
-      - mountPath: /usr/local/bin/vela
-        name: custom-tools
-        subPath: vela
+      - emptyDir: {}
+        name: vela-cli-dir
