@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubevela-config
+  namespace: argo-system
+data:
+  vela.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: vela
+    spec:
+      init:
+        command: ["vela", "traits"]
+      generate:
+        command: ["sh"]
+        args:
+          - -c
+          - |
+            vela export -f "${APPFILE_PATH}"

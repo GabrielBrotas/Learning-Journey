@@ -3,5 +3,5 @@ name: first-vela-app
 services:
   testsvc:
     type: webservice
-    image: crccheck/hello-world
+    image: oamdev/hello-world
     port: 8000

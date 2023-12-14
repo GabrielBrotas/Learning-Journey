@@ -7,10 +7,11 @@ minikube start --kubernetes-version=v1.28.3
 kubectl create namespace argo-system
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm dep update charts/argo-cd/
-helm install argo-cd charts/argo-cd/ -n argo-system
+helm install argo-cd charts/argo-cd/ -n argo-system --values charts/argo-cd/values.yaml
 
 kubectl wait --for=condition=available --timeout=600s deployment/argo-cd-argocd-server -n argo-system
 
+k apply -f charts/argo-cd/plugin.yaml
 # Install KubeVela
 vela install -n vela-system -v 1.3.5
 
@@ -47,23 +48,14 @@ argocd account update-password \
 create vela app:
 
 ```sh
-  argo:create-vela-app:
-    vars:
-      APP_NAME: first-vela-app
-      APPFILE_NAME: appfile.yaml
-      NAMESPACE: default
-      REPO: https://github.com/GabrielBrotas/Advanced-Journey
-      REVISION: main
-    cmds:
-      - |
-        argocd app create first-vela-app \
-          --dest-namespace=default \
-          --dest-server=https://kubernetes.default.svc \
-          --config-management-plugin=vela \
-          --plugin-env="APPFILE_PATH=./appfile.yaml" \
-          --repo="{{.REPO}}" \
-          --path="./sample" \
-          --revision="main"
+argocd app create first-vela-app \
+  --dest-namespace="default" \
+  --dest-server=https://kubernetes.default.svc \
+  --config-management-plugin=vela \
+  --plugin-env="APPFILE_PATH=appfile.yaml" \
+  --repo="https://github.com/GabrielBrotas/Advanced-Journey" \
+  --path="./examples/argocd-kubevela" \
+  --revision="main"
 
 ```
 
