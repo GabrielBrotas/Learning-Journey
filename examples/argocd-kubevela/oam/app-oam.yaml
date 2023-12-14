@@ -1,17 +1,14 @@
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: first-vela-app
+  name: test-2
 spec:
   components:
-    - name: express-server
+    - name: wf-poc-app-2
       type: webservice
       properties:
-        image: oamdev/hello-world
-        ports:
-         - port: 8000
-           expose: true
-      traits:
-        - type: scaler
-          properties:
-            replicas: 1
+        image: oamdev/helloworld-python:v1
+        env:
+          - name: "TARGET"
+            value: "ArgoCD"
+        port: 8080
