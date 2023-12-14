@@ -8,7 +8,7 @@ spec:
       type: helm
       properties:
         repoType: "helm"
-        url: "https://charts.bitnami.com/bitnami"
+        url: "https://git"
         chart: "redis"
         version: "17.7.3"
         values: 
