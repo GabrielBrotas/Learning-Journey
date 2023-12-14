@@ -1,0 +1,9 @@
+data:
+  configManagementPlugins: |
+    - name: vela
+      init:
+        command: ["sh", "-xc"]
+        args: ["vela traits"]
+      generate:
+        command: ["sh", "-xc"]
+        args: ["vela export"]
