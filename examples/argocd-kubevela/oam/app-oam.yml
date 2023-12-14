@@ -11,5 +11,7 @@ spec:
         env:
           - name: "TARGET"
             value: "ArgoCD"
+          - name: APPFILE_PATH
+            value: ./app-oam.yml
         port: 8080
         
