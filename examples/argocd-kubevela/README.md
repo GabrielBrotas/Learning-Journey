@@ -29,7 +29,7 @@ kubectl port-forward -n argo-system service/argo-cd-argocd-server 8080:443
 ```sh
 # update argocd password
 export PASS=$(kubectl \
-    --namespace argo-system \
+    --namespace argocd \
     get secret argocd-initial-admin-secret \
     --output jsonpath="{.data.password}" \
     | base64 --decode)
