@@ -8,17 +8,17 @@ kubectl create namespace argocd
 helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm dep update charts/argo-cd/
 
-kubectl apply -f charts/argo-cd/templates/plugin.yaml -n argocd
-
 helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml
 
-kubectl wait --for=condition=available --timeout=600s deployment/argo-cd-argocd-server -n argo-system
+kubectl apply -f charts/argo-cd/templates/plugin.yaml -n argocd
+
+kubectl wait --for=condition=available --timeout=600s deployment/argo-cd-argocd-server -n argocd
 
 # Install KubeVela
-vela install -n vela-system -v 1.6.4
+vela install -n vela-system -v 1.9.7
 
 # velaux
-vela addon enable velaux
+# vela addon enable velaux
 ```
 
 ```sh

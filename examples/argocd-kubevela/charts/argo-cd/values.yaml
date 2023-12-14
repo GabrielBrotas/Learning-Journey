@@ -8,36 +8,6 @@ argo-cd:
     clusterAdminAccess:
       enabled: true
 
-    extraContainers:
-      - name: vela
-        image: nginx
-        command: [/var/run/argocd/argocd-cmp-server]
-        # env:
-        #   - name: KUBECONFIG
-        #     value: /kubeconfig
-        resources: {}
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 999
-        volumeMounts:
-          - name: var-files
-            mountPath: /var/run/argocd
-          - name: vela-cli-dir
-            mountPath: /.vela
-          # - name: kubeconfig
-          #   mountPath: /kubeconfig
-          #   subPath: kubeconfig
-          - name: plugins
-            mountPath: /home/argocd/cmp-server/plugins
-          - name: vela-cmp
-            mountPath: /home/argocd/cmp-server/config/plugin.yaml
-            subPath: plugin.yaml
-          - name: cmp-tmp
-            mountPath: /tmp
-          - name: custom-tools
-            mountPath: /usr/local/bin/vela
-            subPath: vela
-
     initContainers:
       - name: kubevela
         image: nginx:1.21.6
@@ -47,7 +17,7 @@ argo-cd:
           - |
             #!/usr/bin/env bash
             set -eo pipefail
-            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.4
+            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.9.7
         env:
           - name: VELA_INSTALL_DIR
             value: /custom-tools
@@ -65,13 +35,38 @@ argo-cd:
         terminationMessagePolicy: File
         imagePullPolicy: IfNotPresent
 
+    containers:
+      - name: vela
+        image: nginx
+        command: [/var/run/argocd/argocd-cmp-server] # Entrypoint should be Argo CD lightweight CMP server i.e. argocd-cmp-server
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+          - name: var-files
+            mountPath: /var/run/argocd
+          - name: plugins
+            mountPath: /home/argocd/cmp-server/plugins
+          - name: vela-config
+            mountPath: /home/argocd/cmp-server/config/plugin.yaml
+            subPath: plugin.yaml
+          - name: cmp-tmp
+            mountPath: /tmp
+          - name: custom-tools
+            mountPath: /usr/local/bin/vela
+            subPath: vela
+          # - name: vela-cli-dir
+          #   mountPath: /.vela
+          # - name: kubeconfig
+          # mountPath: /kubeconfig
+          # subPath: kubeconfig
+
+    ##
     volumes:
-      - emptyDir: {}
-        name: custom-tools
+      - name: custom-tools
+        emptyDir: {}
       - configMap:
-          name: vela-cmp
-        name: vela-cmp
+          name: vela-config
+        name: vela-config
       - emptyDir: {}
         name: cmp-tmp
-      - emptyDir: {}
-        name: vela-cli-dir
