@@ -8,11 +8,30 @@ In this guide, you'll learn how to integrate Argo CD and KubeVela.
 
 ## GitOps with Developer-centric Experience
 
-Ideally, developers want to focus on writing applications and pushing their code to git repos without worrying about CI/CD pipelines and other operational issues in configuring and running applications. A very popular pattern on Kubernetes is to automatically deploy applications from git to production. This is where Argo CD comes in. It continuously watches git repos for new commits, and automatically deploys them to production. Argo CD applies pre-defined Kubernetes deployment manifest files in the repo to provision or upgrade the application running on Kubernetes. This pattern, known as GitOps, is the key to enable continuous automatic app delivery in the modern cloud-native stack at Alibaba.
+### GitOps
 
-While conceptually simple, there are several important issues that emerge when applying GitOps to broader end user scenarios. The first issue, is that a real-world production application is complex, and requires developers to understand how to configure many different types of Kubernetes resources. The second issue, which is related to the first, is that it becomes super challenging for each developer to learn how to properly configure and maintain all these objects while complying with organizational security, compliance and operational policies. Even a simple mis-configuration may lead to failed deployments or even service unavailablity. The third issue is when there is a change to Kubernetes specs or organizational policies, ALL application manifests must be updated to reflect these changes. This is a HUGE undertaking for an organization that may have thousands of applications and millions of lines of YAML for Kubernetes manifest files. These issues create a strong need for an application abstraction that isolates developers from platform and operational concerns that do not directly affect their application and provides an anchor to avoid configuration drift. The core Kubernetes abstraction, by intentional design, do not provide a standard mechanism to abstract applications.
+Developers often want to focus on writing applications and pushing their code to Git repositories without being burdened by the complexities of configuring and running applications, especially in CI/CD pipelines. A popular approach on Kubernetes is to automatically deploy applications from Git to production, and this is where Argo CD comes into play. Argo CD continuously monitors Git repositories for new commits and automates the deployment process, applying pre-defined Kubernetes deployment manifest files to provision or upgrade applications running on Kubernetes. This practice, known as GitOps, is crucial for achieving continuous and automatic application delivery in the modern cloud-native stack, especially at Alibaba.
 
-With this goal in mind, KubeVela is created and designed as a minimal, extensible application engine for platform builders to create “PaaS-like” experiences on Kubernetes. Specifically, KubeVela provides simple and effective abstraction that separates application configuration concerns from platform and operation concerns. Here is an example of the artifact, which is named `first-vela-app`:
+While GitOps is conceptually straightforward, there are key challenges when applying it to broader end-user scenarios.
+
+- Complexity of Real-world Applications:
+
+  - Production applications are complex, requiring developers to configure various types of Kubernetes resources.
+
+- Learning Curve and Maintenance:
+
+  - Developers face challenges in learning how to configure and maintain diverse objects, adhering to organizational security, compliance, and operational policies.
+  - Misconfigurations can lead to deployment failures or service unavailability.
+
+- Updates and Manifest Management:
+
+  - Changes to Kubernetes specs or organizational policies necessitate updating all application manifests, a monumental task for organizations with numerous applications and extensive YAML files.
+
+### KubeVela
+
+Addressing these challenges, KubeVela is created as a minimal, extensible application engine designed to offer "PaaS-like" experiences on Kubernetes. KubeVela provides a simple and effective abstraction that separates application configuration concerns from platform and operational concerns.
+
+Here is an example of the artifact, which is named `first-vela-app`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -48,17 +67,142 @@ Tools:
 - helm==3.13.3
 - kubectl==1.26.8
 
-For the platform operator, the only “trick” is to enable KubeVela as a custom plugin to Argo CD so that it will “understand” the OAM CRD.
+For the platform operator, the only “trick” is to enable KubeVela as a custom plugin to Argo CD so that it will “understand” OAM (Open Application Model) resources.
 
-### Environment Setup
-
-1. Install Minikube
+### 1. Run Minikube
 
 ```sh
 minikube start --kubernetes-version=v1.28.3
 ```
 
-2. Install ArgoCD
+### 2. Write the plugin configuration file
+
+Argo CD allows integrating additional config management plugins like for Kubevela by configuring a plugin tool via a sidecar to the `repo-server`.
+
+Plugins will be configured via a `ConfigManagementPlugin` manifest located inside the plugin container.
+
+In our argocd helmchart, we have added the following plugin file to the path [`charts/argo-cd/templates/plugin.yaml/`](./charts/argo-cd/templates/plugin.yaml):
+
+```yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vela-config
+data:
+  plugin.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: vela
+    spec:
+      version: v1.0
+      init:
+        command: ["vela", "traits"]
+      generate:
+        command: ["sh"]
+        args:
+          - -c
+          - |
+            vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+      discover:
+        find:
+          glob: "**/*oam.yml"
+```
+
+This plugin is responsible for converting Kubevela OAM manifest definition to raw kubernetes object and ArgoCD should be responsible to deploy.
+
+### 3. Register the plugin sidecar
+
+To install a plugin, patch `argocd-repo-server` to run the plugin container as a sidecar, with `argocd-cmp-server` as its entrypoint.
+
+Vela plugin runs the vela command to export manifest when the plugin is discovered on git manifest. Before initializing the plugin, we need to install Kubevela CLI to run the order successfully. The below configuration adds an init container to download the necessary CLI.
+
+```yaml
+argo-cd:
+  repoServer:
+    initContainers: # add vela cli
+      - name: kubevela
+        image: nginx:1.21.6
+        command:
+          - bash
+          - "-c"
+          - |
+            #!/usr/bin/env bash
+            set -eo pipefail
+            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.9.7
+        env:
+          - name: VELA_INSTALL_DIR
+            value: /custom-tools
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 32Mi
+        volumeMounts:
+          - name: custom-tools
+            mountPath: /custom-tools
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+    volumes:
+      - name: custom-tools
+        emptyDir: {}
+      - configMap:
+          name: vela-config
+        name: vela-config
+      - emptyDir: {}
+        name: cmp-tmp
+      - name: vela-cli-dir
+        emptyDir: {}
+```
+
+after adding init container, we need to add our custom sidecar binary to run plugins properly. To use configmap plugin configuration in our sidecar, we need to mount configmap plugin to our pods
+
+```yaml
+argo-cd:
+  repoServer:
+    extraContainers: # add vela plugin
+      - name: vela
+        image: busybox
+        command: [/var/run/argocd/argocd-cmp-server]
+        args: ["--loglevel", "info"]
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+          - name: var-files
+            mountPath: /var/run/argocd
+          - name: plugins
+            mountPath: /home/argocd/cmp-server/plugins
+          - name: vela-config
+            mountPath: /home/argocd/cmp-server/config/plugin.yaml
+            subPath: plugin.yaml
+          - name: cmp-tmp
+            mountPath: /tmp
+          - name: custom-tools
+            mountPath: /usr/local/bin/vela
+            subPath: vela
+          - name: vela-cli-dir
+            mountPath: /.vela
+
+    volumes:
+      - name: custom-tools
+        emptyDir: {}
+      - configMap:
+          name: vela-config
+        name: vela-config
+      - emptyDir: {}
+        name: cmp-tmp
+      - name: vela-cli-dir
+        emptyDir: {}
+```
+
+### 4. Install ArgoCD
+
+Now we can deploy ArgoCD with the plugin:
 
 ```sh
 helm repo add argo-cd https://argoproj.github.io/argo-helm
@@ -74,9 +218,9 @@ kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
 kubectl port-forward -n argocd service/argo-cd-argocd-server 8080:443
 ```
 
-_Note_: This ArgoCD chart is updated with the plugin to support `kubevela`, we will explain the details in the next section.
+By now the vela plugin should have been registered and the `argo-repo-server` should have access to the vela cli to render the OAM files into Kubernetes resources.
 
-3. Update ArgoCD password
+Update ArgoCD password:
 
 ```sh
 export PASS=$(kubectl --namespace argocd get secret argocd-initial-admin-secret \
@@ -87,11 +231,13 @@ argocd login localhost:8080 --insecure --username admin --password $PASS
 
 argocd account update-password --current-password $PASS --new-password admin123
 
-# argocd login: admin
-# argocd password: admin123
+# login: admin
+# password: admin123
 ```
 
-4. Install KubeVela
+### 5. Install KubeVela
+
+Install KubeVela so that the `argo-repo-server` can render the OAM files into Kubernetes resources.
 
 ```sh
 helm repo add kubevela https://kubevela.github.io/charts
@@ -104,156 +250,25 @@ helm install kubevela charts/kubevela/ -n vela-system --create-namespace
 kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 ```
 
-5. Deploy `first-vela-app.oam.yml` using ArgoCD application file
+### 6. Use Argo CD with KubeVela
+
+Now, acting as the application developer, you can deploy the app specified using KubeVela via GitOps.
+
+In this case, we'll use the [`argocd-app`](./apps/argocd-app.yml) that will watch the git repository and apply the [`first-vela-app`](./apps/first-vela-app.oam.yml) to the local kubernetes cluster.
 
 ```sh
 kubectl apply -f apps/argocd-app.yml
 ```
 
-### Register plugin
+![first-vela-app.png](./imgs/first-vela-app.png)
 
-Argo CD allows integrating additional config management plugins like for Kubevela by editing the argocd-cm ConfigMap.
-
-Save the following as `argo-cm.yaml`:
-
-```yaml
-data:
-  configManagementPlugins: |
-    - name: vela
-      init:
-        command: ["sh", "-xc"]
-        args: ["vela traits"]
-      generate:
-        command: ["sh", "-xc"]
-        args: ["vela export"]
-```
-
-Then run the following command to update the `argocd-cm` ConfigMap:
-
-```sh
-kubectl -n argocd patch cm/argocd-cm -p "$(cat ./examples/argocd-kubevela/argo-cm.yaml)"
-```
-
-### Configure argo-repo-server
-
-Argo CD has a component called `argo-repo-server` which pulls the deployment manifest files from Git and renders the final output. This is where we will use the vela cli to parse the `appfile` and render it into Kubernetes resources.
-
-First, create the ConfigMap with the required kubeconfig credential to talk to the target Kubernetes cluster where KubeVela should already be installed:
-
-```yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: vela-kubeconfig
-  namespace: argocd
-data:
-  config: | # fill your kubeconfig here
-```
-
-Once the above ConfigMap is created, update the `argo-repo-server` to hold the vela cli and credentials.
-
-Save the following patch file as `deploy.yaml`:
-
-```yaml
-spec:
-  template:
-    spec:
-      # 1. Define an emptyDir volume which will hold the custom binaries
-      volumes:
-        - name: custom-tools
-          emptyDir: {}
-        - name: vela-kubeconfig
-          configMap:
-            name: vela-kubeconfig
-      # 2. Use an init container to download/copy custom binaries
-      initContainers:
-        - name: download-tools
-          image: oamdev/argo-tool:v1
-          command: [sh, -c]
-          args:
-            - cp /app/vela /custom-tools/vela
-          volumeMounts:
-            - mountPath: /custom-tools
-              name: custom-tools
-      # 3. Volume mount the custom binary to the bin directory
-      containers:
-        - name: argocd-repo-server
-          env:
-            - name: KUBECONFIG
-              value: /home/argocd/.kube/config
-          volumeMounts:
-            - mountPath: /usr/local/bin/vela
-              name: custom-tools
-              subPath: vela
-            - mountPath: /home/argocd/.kube/
-              name: vela-kubeconfig
-```
-
-Then run the following command to update the `argocd-repo-server` Deployment:
-
-```sh
-kubectl -n argocd patch deploy/argocd-repo-server -p "$(cat deploy.yaml)"
-```
-
-By now the vela plugin should have been registered and the argo-repo-server should have access to the vela cli to render the appfile into Kubernetes resources.
-
-Use Argo CD with KubeVela
-Now, acting as the application developer, you can deploy the app specified using KubeVela via GitOps. Just remember to specify the plugin name when creating apps via the argocd cli:
-
-argocd app create <appName> --config-management-plugin vela
-Let’s walk through a demo with the Argo CD UI as well. Here is an example repo that contains the appfile to deploy:
-
-https://github.com/hongchaodeng/argocd-example-apps/tree/master/appfile
-
-Configure Argo CD to watch this repo for Git pushes, including the initial state:
-
-Repo screenshot
-Any pushes to the repo will now be automatically detected and deployed:
-
-Argo CD screenshot
-That’s it! Now you can create/modify appfiles, push to git, and Argo CD will automatically deploy them to your Kubernetes cluster, all via the magic of GitOps!
+That’s it! Now you can create/modify OAM files, push to git, and Argo CD will automatically deploy them to your Kubernetes cluster, all via the magic of GitOps!
 
 ## Refs:
 
+- https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/
 - https://www.cncf.io/blog/2020/12/22/argocd-kubevela-gitops-with-developer-centric-experience/
 - https://kubevela.io/blog/2023/01/06/kubevela-argocd-integration/
-
-2. Install ArgoCD
-
-```sh
-helm repo add argo-cd https://argoproj.github.io/argo-helm
-helm repo update
-helm dep update charts/argo-cd/
-
-kubectl create namespace argocd
-helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml
-
-```
-
-3. Install KubeVela
-
-```sh
-
-```
-
-4. port forward
-
-```sh
-# argocd ui
-kubectl port-forward -n argocd service/argo-cd-argocd-server 8080:443
-```
-
-6. create argocd app-of-apps
-
-```sh
-kubectl apply -f argo-app-of-apps.yaml -n argocd
-```
-
-7. access the apps
-
-```sh
-k create ns vela-app
-```
 
 ## Debug Plugin
 
