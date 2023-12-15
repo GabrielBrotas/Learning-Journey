@@ -8,7 +8,7 @@ spec:
     namespace: default
     server: "https://kubernetes.default.svc"
   source:
-    path: examples/argocd-kubevela/apps/argo-cd-app.yml
+    path: examples/argocd-kubevela/apps
     repoURL: "https://github.com/GabrielBrotas/Advanced-Journey/"
     targetRevision: HEAD
   project: default

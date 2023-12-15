@@ -91,6 +91,12 @@ argocd account update-password --current-password $PASS --new-password admin123
 # argocd password: admin123
 ```
 
+4. Deploy `first-vela-app.oam.yml` using ArgoCD application file
+
+```sh
+kubectl apply -f apps/argocd-app.yml
+```
+
 ### Register plugin
 
 Argo CD allows integrating additional config management plugins like for Kubevela by editing the argocd-cm ConfigMap.
