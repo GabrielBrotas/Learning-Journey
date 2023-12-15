@@ -5,10 +5,16 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: default
+    namespace: guestbook
     server: https://kubernetes.default.svc
   project: default
   source:
     path: guestbook
     repoURL: https://github.com/argoproj/argocd-example-apps
     targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
