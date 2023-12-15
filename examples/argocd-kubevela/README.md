@@ -59,10 +59,16 @@ argocd account update-password \
 # argocd password: admin123
 ```
 
-6. create argocd app
+6. create argocd app-of-apps
 
 ```sh
 kubectl apply -f argo-app-of-apps.yaml -n argocd
+```
+
+7. access the apps
+
+```sh
+k port-forward svc/vela-dashboard 8000:8000
 ```
 
 ## Debug Plugin
