@@ -17,7 +17,7 @@ data:
         args:
           - -c
           - |
-            vela dry-run -f $ARGOCD_ENV_APP_FILE_NAME
+            vela dry-run -f $ARGOCD_APP_NAME-oam.yml
       discover:
         find:
-          glob: "**/*oam*.yml"
+          glob: "**/*oam.yml"

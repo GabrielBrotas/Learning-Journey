@@ -62,7 +62,7 @@ argocd account update-password \
 6. create argocd app
 
 ```sh
-kubectl apply -f argo-app.yaml -n argocd
+kubectl apply -f argo-app-of-apps.yaml -n argocd
 ```
 
 ## Debug Plugin
