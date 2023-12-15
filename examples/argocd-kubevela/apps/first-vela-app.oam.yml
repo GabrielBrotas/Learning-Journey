@@ -2,14 +2,15 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: first-vela-app
-  namespace: vela-app
 spec:
   components:
-    - name: wf-poc-app-2
+    - name: express-server
       type: webservice
       properties:
-        image: oamdev/helloworld-python:v1
-        port: 8080
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
       traits:
         - type: scaler
           properties:

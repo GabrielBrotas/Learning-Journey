@@ -39,6 +39,7 @@ argo-cd:
       - name: vela
         image: busybox
         command: [/var/run/argocd/argocd-cmp-server]
+        args: ["--loglevel", "info"]
         securityContext:
           runAsNonRoot: true
           runAsUser: 999

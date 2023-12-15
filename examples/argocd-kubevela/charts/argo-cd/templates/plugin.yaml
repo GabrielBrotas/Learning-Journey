@@ -18,15 +18,14 @@ data:
         args:
           - -c
           - |
-            if [ -f "$ARGOCD_APP_NAME.oam.yml" ]; then
-                vela dry-run -f $ARGOCD_APP_NAME.oam.yml
-            else 
-                echo "{}"
-            fi
+            vela dry-run -f $ARGOCD_APP_NAME.oam.yml
       discover:
         find:
           glob: "**/*oam.yml"
 
+# for file in $(find . -name "*oam.yml"); do
+#   vela dry-run -f $file
+# done
 # apiVersion: v1
 # kind: ConfigMap
 # metadata:
