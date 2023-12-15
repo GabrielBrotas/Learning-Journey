@@ -91,7 +91,20 @@ argocd account update-password --current-password $PASS --new-password admin123
 # argocd password: admin123
 ```
 
-4. Deploy `first-vela-app.oam.yml` using ArgoCD application file
+4. Install KubeVela
+
+```sh
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm dep update charts/kubevela/
+
+helm install kubevela charts/kubevela/ -n vela-system --create-namespace
+
+# wait for vela ready
+kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
+```
+
+5. Deploy `first-vela-app.oam.yml` using ArgoCD application file
 
 ```sh
 kubectl apply -f apps/argocd-app.yml
@@ -244,7 +257,8 @@ k create ns vela-app
 
 ## Debug Plugin
 
+You can debug the plugin by running the following command to print the logs of the `argo-repo-server` pod in the `vela` container:
+
 ```sh
-# debug:
 kubectl logs -n argocd argo-cd-argocd-repo-server-7cdccb4499-mx59l -c vela
 ```
