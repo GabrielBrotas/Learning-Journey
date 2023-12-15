@@ -69,6 +69,8 @@ kubectl apply -f argo-app-of-apps.yaml -n argocd
 
 ```sh
 k port-forward svc/vela-dashboard 8000:8000
+
+k create ns vela-app
 ```
 
 ## Debug Plugin
