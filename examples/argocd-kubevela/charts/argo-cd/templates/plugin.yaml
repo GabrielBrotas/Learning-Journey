@@ -17,7 +17,7 @@ data:
         args:
           - -c
           - |
-            vela dry-run -f "${APPFILE_PATH}"
+            vela dry-run -f app-oam.yml
       discover:
         find:
           glob: "**/*oam*.yml"

@@ -39,7 +39,6 @@ argo-cd:
       - name: vela
         image: busybox
         command: [/var/run/argocd/argocd-cmp-server] # Entrypoint should be Argo CD lightweight CMP server i.e. argocd-cmp-server
-        args: [--loglevel, debug]
         securityContext:
           runAsNonRoot: true
           runAsUser: 999
@@ -56,8 +55,8 @@ argo-cd:
           - name: custom-tools
             mountPath: /usr/local/bin/vela
             subPath: vela
-          # - name: vela-cli-dir
-          #   mountPath: /.vela
+          - name: vela-cli-dir
+            mountPath: /.vela
           # - name: kubeconfig
           # mountPath: /kubeconfig
           # subPath: kubeconfig
@@ -71,3 +70,5 @@ argo-cd:
         name: vela-config
       - emptyDir: {}
         name: cmp-tmp
+      - name: vela-cli-dir
+        emptyDir: {}
