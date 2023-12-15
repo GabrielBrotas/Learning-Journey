@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  destination:
+    namespace: test-vela-1
+    server: "https://kubernetes.default.svc"
+  source:
+    path: examples/argocd-kubevela/oam
+    repoURL: "https://github.com/GabrielBrotas/Advanced-Journey/"
+    targetRevision: HEAD
+    plugin:
+      env:
+        - name: APP_FILE_NAME
+          value: app-oam.yml
+
+  project: default
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

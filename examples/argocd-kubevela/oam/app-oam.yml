@@ -8,10 +8,8 @@ spec:
       type: webservice
       properties:
         image: oamdev/helloworld-python:v1
-        env:
-          - name: "TARGET"
-            value: "ArgoCD"
-          - name: APPFILE_PATH
-            value: ./app-oam.yml
         port: 8080
-        
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1

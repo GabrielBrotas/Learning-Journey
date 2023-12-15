@@ -1,33 +1,45 @@
-1. setup environment
+1. Install Minikube
+
 ```sh
 # Install Minikube
 minikube start --kubernetes-version=v1.28.3
+```
 
-# Install Argo CD
-kubectl create namespace argocd
+2. Install ArgoCD
+
+```sh
 helm repo add argo-cd https://argoproj.github.io/argo-helm
+helm repo update
 helm dep update charts/argo-cd/
 
+kubectl create namespace argocd
 helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml
 
-kubectl apply -f charts/argo-cd/templates/plugin.yaml -n argocd
-
-kubectl wait --for=condition=available --timeout=600s deployment/argo-cd-argocd-server -n argocd
-
-# Install KubeVela
-vela install -n vela-system -v 1.9.7
-
-# velaux
-# vela addon enable velaux
+kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
 ```
 
-```sh
-# port-forward
-kubectl port-forward -n argo-system service/argo-cd-argocd-server 8080:443
-```
+3. Install KubeVela
 
 ```sh
-# update argocd password
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm dep update charts/kubevela/
+
+kubectl create namespace vela-system
+helm install kubevela charts/kubevela/ -n vela-system
+# vela install -n vela-system -v 1.9.7
+```
+
+4. port forward
+
+```sh
+# argocd ui
+kubectl port-forward -n argocd service/argo-cd-argocd-server 8080:443
+```
+
+5. update argocd password
+
+```sh
 export PASS=$(kubectl \
     --namespace argocd \
     get secret argocd-initial-admin-secret \
@@ -47,19 +59,13 @@ argocd account update-password \
 # argocd password: admin123
 ```
 
-create vela app:
+6. create argocd app
 
 ```sh
-argocd app create first-vela-app \
-  --dest-namespace="default" \
-  --dest-server=https://kubernetes.default.svc \
-  --config-management-plugin=vela \
-  --plugin-env="APPFILE_PATH=appfile.yaml" \
-  --repo="https://github.com/GabrielBrotas/Advanced-Journey" \
-  --path="./examples/argocd-kubevela" \
-  --revision="main"
-
+kubectl apply -f argo-app.yaml -n argocd
 ```
+
+## Debug Plugin
 
 ```sh
 # debug:
