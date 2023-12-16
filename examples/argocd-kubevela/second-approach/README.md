@@ -1,6 +1,12 @@
-## KubeVela with Argo CD Step-by-Step
+# 2. Kubevela Controller + ArgoCD Gitops syncer
 
-### Prerequisites
+Second approach is that we can use Kubevela gitops controller way as the server side and argocd can be our gitops syncer. This approach is flexible to use native kubevela feature set without using a custom plugin or dry run module. We just need to add below annotations to our manifest repository to ignore outofsync.
+
+```yaml
+argocd.argoproj.io/compare-options: IgnoreExtraneous
+```
+
+## Prerequisites
 
 Tools:
 
@@ -8,17 +14,13 @@ Tools:
 - helm==3.13.3
 - kubectl==1.26.8
 
-For the platform operator, the only “trick” is to enable KubeVela as a custom plugin to Argo CD so that it will “understand” OAM (Open Application Model) resources.
-
-### 1. Run Minikube
+## 1. Run Minikube
 
 ```sh
 minikube start --kubernetes-version=v1.28.3
 ```
 
-### 2. Install ArgoCD
-
-Now we can deploy ArgoCD with the plugin:
+## 2. Install ArgoCD
 
 ```sh
 helm repo add argo-cd https://argoproj.github.io/argo-helm
@@ -49,9 +51,7 @@ argocd account update-password --current-password $PASS --new-password admin123
 # password: admin123
 ```
 
-### 3. Install KubeVela
-
-Install KubeVela so that the `argo-repo-server` can render the OAM files into Kubernetes resources.
+## 3. Install KubeVela
 
 ```sh
 helm repo add kubevela https://kubevela.github.io/charts
@@ -64,11 +64,15 @@ helm install kubevela charts/kubevela/ -n vela-system --create-namespace
 kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 ```
 
-### 6. Use Argo CD with KubeVela
+## 4. Use Argo CD with KubeVela
+
+Deploy the `argocd-app` so that ArgoCD can track the application resources. 
 
 ```sh
-kubectl apply -f ../apps/argocd-app.yml
+kubectl apply -f ./apps/argocd-app.yml
 ```
+
+In this example, ArgoCD tracks native Kubevela application resources and its revision.
 
 ## Refs:
 
