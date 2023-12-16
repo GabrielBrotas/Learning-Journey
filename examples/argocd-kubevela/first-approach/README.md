@@ -1,5 +1,9 @@
 # 1. Vela dry-run approach
 
+First approach is that without using Kubevela GitOps Controller, we can use ArgoCD as the GitOps Controller, which means ArgoCD applies a raw manifest to the target cluster. Kubevela provides us to export oam application components and traits to native Kubernetes resource therefore we can still use OAM based model and ArgoCD can manage resources with custom argo-repo-server plugin. Behind this approach that KubeVela and OAM can also works as a client side tool with the feature dry-run.
+
+This part describe how ArgoCD apply dry-run mode on Kubevela resources.
+
 ## Prerequisites
 
 Tools:
@@ -9,6 +13,8 @@ Tools:
 - kubectl==1.26.8
 
 For the platform operator, the only “trick” is to enable KubeVela as a custom plugin to Argo CD so that it will “understand” OAM (Open Application Model) resources.
+
+_Note: All commands below are executed from this folder (`first-approach`)._
 
 ## 1. Run Minikube
 
@@ -191,7 +197,7 @@ helm install kubevela charts/kubevela/ -n vela-system --create-namespace
 kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 ```
 
-### 6. Use Argo CD with KubeVela
+## 6. Use Argo CD with KubeVela
 
 Now, acting as the application developer, you can deploy the app specified using KubeVela via GitOps.
 
@@ -204,6 +210,14 @@ kubectl apply -f apps/argocd-app.yml
 ![first-vela-app.png](./imgs/first-vela-app.png)
 
 That’s it! Now you can create/modify OAM files, push to git, and Argo CD will automatically deploy them to your Kubernetes cluster, all via the magic of GitOps!
+
+## Clean Up
+
+```sh
+kubectl delete -f apps/argocd-app.yml
+helm uninstall argo-cd -n argocd
+helm uninstall kubevela -n vela-system
+```
 
 ## Refs:
 

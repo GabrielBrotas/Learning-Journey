@@ -66,13 +66,23 @@ kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 
 ## 4. Use Argo CD with KubeVela
 
-Deploy the `argocd-app` so that ArgoCD can track the application resources. 
+Deploy the `argocd-app` so that ArgoCD can track the application resources.
 
 ```sh
 kubectl apply -f ./apps/argocd-app.yml
 ```
 
 In this example, ArgoCD tracks native Kubevela application resources and its revision.
+
+![first-vela-app.png](./imgs/first-vela-app.png)
+
+## Clean Up
+
+```sh
+kubectl delete -f apps/argocd-app.yml
+helm uninstall argo-cd -n argocd
+helm uninstall kubevela -n vela-system
+```
 
 ## Refs:
 
