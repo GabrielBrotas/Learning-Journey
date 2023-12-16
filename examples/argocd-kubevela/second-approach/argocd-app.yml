@@ -3,7 +3,6 @@ kind: Application
 metadata:
   name: first-vela-app
   namespace: argocd
-  metadata:
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
