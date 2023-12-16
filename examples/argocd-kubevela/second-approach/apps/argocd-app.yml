@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: first-vela-app
+  namespace: argocd
+  metadata:
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
+spec:
+  destination:
+    namespace: default
+    server: "https://kubernetes.default.svc"
+  source:
+    path: examples/argocd-kubevela/second-approach/apps
+    repoURL: "https://github.com/GabrielBrotas/Advanced-Journey/"
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

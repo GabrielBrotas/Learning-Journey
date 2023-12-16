@@ -1,0 +1,6 @@
+dependencies:
+- name: vela-core
+  repository: https://kubevela.github.io/charts
+  version: 1.9.7
+digest: sha256:d2d6a953c8231bee790c03405dcb68ca3ea931ed465a018e55b193830c046c4e
+generated: "2023-12-15T09:43:05.468245-03:00"
