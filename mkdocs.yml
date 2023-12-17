@@ -27,26 +27,26 @@ nav:
   - Domain Driven Design: domain-driven-design.md
   - Microservices: microservices.md
   - Kafka:
-    - Kafka/index.md
-    - Topics: Kafka/topics.md
-    - Producers and Consumers: Kafka/producers-and-consumers.md
-    - Kafka Connect: Kafka/kafka-connect.md
-    - Avro: Kafka/avro.md
+      - Kafka/index.md
+      - Topics: Kafka/topics.md
+      - Producers and Consumers: Kafka/producers-and-consumers.md
+      - Kafka Connect: Kafka/kafka-connect.md
+      - Avro: Kafka/avro.md
   - RabbitMQ: rabbitmq.md
   - Kubernetes: kubernetes.md
   - Service Mesh:
       - ServiceMesh/index.md
       - Istio: ServiceMesh/istio.md
   - Observability:
-    - Observability/index.md
-    - Service Level: Observability/service-level.md
-    - OpenTelemetry: Observability/open-telemetry.md
-    - Elastic Stack: Observability/elastic-stack.md
+      - Observability/index.md
+      - Service Level: Observability/service-level.md
+      - OpenTelemetry: Observability/open-telemetry.md
+      - Elastic Stack: Observability/elastic-stack.md
   - Computer Science:
-    - Program, Process and Thread: Computer-Science/core-thread-process.md
-    - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
-    - HTTPS, TLS and mTLS: Computer-Science/https-tls-mtls.md
-    - Reactive Programming vs Reactive Systems: Computer-Science/reactive-programming-vs-reactive-systems.md
+      - Program, Process and Thread: Computer-Science/core-thread-process.md
+      - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
+      - HTTPS, TLS and mTLS: Computer-Science/https-tls-mtls.md
+      - Reactive Programming vs Reactive Systems: Computer-Science/reactive-programming-vs-reactive-systems.md
   - GitOps: GitOps/index.md
   - IAM: IAM.md
 theme:
@@ -67,10 +67,8 @@ plugins:
   - search:
       lang: en
   - glightbox
-  - blog:
-      blog_dir: examples/
 markdown_extensions:
   - attr_list
   - md_in_html
   - toc:
-        permalink: True
+      permalink: True
