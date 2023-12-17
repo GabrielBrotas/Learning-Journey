@@ -29,7 +29,7 @@ An Istio service mesh is logically split into a **data plane** and a **control p
 
 The following diagram shows the different components that make up each plane:
 
-![Istio Architecture](/Advanced-Journey/images/service-mesh/istio-architecture.png)
+![Istio Architecture](/Learning-Journey/images/service-mesh/istio-architecture.png)
 
 The flow of communication in an Istio-enabled service mesh works as follows:
 
@@ -303,34 +303,34 @@ See the Sidecar reference for more details.
 
 1. **Request Arrival**
 
-     - An external request (e.g., an HTTP request from a client) arrives at the Istio Gateway, which is configured to accept incoming traffic for a specific host and port.
+   - An external request (e.g., an HTTP request from a client) arrives at the Istio Gateway, which is configured to accept incoming traffic for a specific host and port.
 
 2. **Gateway Processing**:
 
-     - The Gateway examines the request and forwards it to the appropriate Virtual Service based on the host and port configuration.
+   - The Gateway examines the request and forwards it to the appropriate Virtual Service based on the host and port configuration.
 
 3. **Virtual Service Routing**:
 
-     - The Virtual Service, based on its rules and criteria (e.g., matching HTTP paths or headers), determines which destination service or subset should receive the traffic.
+   - The Virtual Service, based on its rules and criteria (e.g., matching HTTP paths or headers), determines which destination service or subset should receive the traffic.
 
 4. **Destination Rules Application**:
 
-     - The Destination Rules associated with the selected destination service are consulted to apply traffic policies, such as load balancing, circuit breaking, or mTLS.
+   - The Destination Rules associated with the selected destination service are consulted to apply traffic policies, such as load balancing, circuit breaking, or mTLS.
 
 5. **Sidecar Proxy Handling**:
 
-     - The Sidecar proxies (Envoy) for both the source and destination services are involved in routing the traffic.
-     - The source-side Envoy proxy intercepts the outgoing traffic and applies any policies related to retries, timeouts, or authentication.
-     - The destination-side Envoy proxy receives the incoming traffic and forwards it to the appropriate service instance based on load balancing rules.
+   - The Sidecar proxies (Envoy) for both the source and destination services are involved in routing the traffic.
+   - The source-side Envoy proxy intercepts the outgoing traffic and applies any policies related to retries, timeouts, or authentication.
+   - The destination-side Envoy proxy receives the incoming traffic and forwards it to the appropriate service instance based on load balancing rules.
 
 6. **Service Execution**:
 
-     - The target service processes the request and generates a response.
+   - The target service processes the request and generates a response.
 
 7. **Response Path**:
-   
-     - The response follows a similar path in reverse, going through the Sidecar proxies, adhering to policies set in Destination Rules and Virtual Services, and eventually returning to the client through the Gateway.
+
+   - The response follows a similar path in reverse, going through the Sidecar proxies, adhering to policies set in Destination Rules and Virtual Services, and eventually returning to the client through the Gateway.
 
 ## How To - Examples
 
-See the [examples/service-mesh/istio](https://github.com/GabrielBrotas/Advanced-Journey/tree/main/examples/service-mesh/istio) folder for examples on how to use Istio to manage traffic in your service mesh.
+See the [examples/service-mesh/istio](https://github.com/GabrielBrotas/Learning-Journey/tree/main/examples/service-mesh/istio) folder for examples on how to use Istio to manage traffic in your service mesh.

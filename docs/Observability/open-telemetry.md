@@ -28,20 +28,20 @@ Below is a sample of the type of information that would be present in a Span:
 
 **Span Attributes**
 
-| Key | Value |
-| --- | --- |
-| net.transport | IP.TCP |
-| net.peer.ip | 10.244.0.1 |
-| net.peer.port | 10243 |
-| net.host.name | localhost |
-| http.method | GET |
-| http.target | /cart |
-| http.server_name | frontend |
-| http.route | /cart |
-| http.scheme | http |
-| http.host | localhost |
-| http.flavor | 1.1 |
-| http.status_code | 200 |
+| Key              | Value      |
+| ---------------- | ---------- |
+| net.transport    | IP.TCP     |
+| net.peer.ip      | 10.244.0.1 |
+| net.peer.port    | 10243      |
+| net.host.name    | localhost  |
+| http.method      | GET        |
+| http.target      | /cart      |
+| http.server_name | frontend   |
+| http.route       | /cart      |
+| http.scheme      | http       |
+| http.host        | localhost  |
+| http.flavor      | 1.1        |
+| http.status_code | 200        |
 
 ## **Distributed Traces**
 
@@ -57,7 +57,7 @@ Tracing makes debugging and understanding distributed systems less daunting by b
 
 Many Observability back-ends visualize Traces as waterfall diagrams that may look something like this:
 
-![Traces as Waterfall](/Advanced-Journey/images/observability/waterfall-trace.png)
+![Traces as Waterfall](/Learning-Journey/images/observability/waterfall-trace.png)
 
 Waterfall diagrams show the parent-child relationship between a Root Span and its child Spans. When a Span encapsulates another Span, this also represents a nested relationship.
 
@@ -100,7 +100,6 @@ Vendors and Tools with different patterns = Lock-In
 ## **What OpenTelemetry is not**
 
 OpenTelemetry is not an observability back-end like Jaeger or Prometheus. Instead, it supports exporting data to a variety of open-source and commercial back-ends. It provides a pluggable architecture so additional technology protocols and formats can be easily added.
-
 
 Refs:
 

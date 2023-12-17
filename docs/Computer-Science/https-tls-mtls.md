@@ -31,7 +31,7 @@ Normally in TLS, the server has a TLS certificate and a public/private key pair,
 3. Client verifies the server's certificate
 4. Client and server exchange information over encrypted TLS connection
 
-![TLS](/Advanced-Journey/images/https-tls-mtls/tls.png)
+![TLS](/Learning-Journey/images/https-tls-mtls/tls.png)
 
 mTLS is not a different protocol. It is just an extension of the TLS standard.
 
@@ -45,7 +45,7 @@ In mTLS, however, both the client and server have a certificate, and both sides 
 6. **Server grants access**
 7. Client and server exchange information over encrypted TLS connection
 
-![mTLS](/Advanced-Journey/images/https-tls-mtls/mtls.png)
+![mTLS](/Learning-Journey/images/https-tls-mtls/mtls.png)
 
 **Certificate authorities in mTLS**
 

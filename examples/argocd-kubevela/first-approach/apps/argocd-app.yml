@@ -9,7 +9,7 @@ spec:
     server: "https://kubernetes.default.svc"
   source:
     path: examples/argocd-kubevela/first-approach/apps
-    repoURL: "https://github.com/GabrielBrotas/Advanced-Journey/"
+    repoURL: "https://github.com/GabrielBrotas/Learning-Journey/"
     targetRevision: HEAD
   project: default
   syncPolicy:

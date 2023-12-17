@@ -6,16 +6,16 @@
 - We normally access the API using the CLI: **kubectl**;
 - Everything is state based. You configure the state of each object;
 - Kubernetes Master: Control the entire process of what the others node are going to do;
-    - Kube-apiserver
-    - Kube-controller-manager
-    - Kube-scheduler
+  - Kube-apiserver
+  - Kube-controller-manager
+  - Kube-scheduler
 - Other Nodes:
-    - Kubelet
-    - Kubeproxy
+  - Kubelet
+  - Kubeproxy
 
 ### **Structure**
 
-![Kubernetes Structure](/Advanced-Journey/images/k8s/structure.png)
+![Kubernetes Structure](/Learning-Journey/images/k8s/structure.png)
 
 **Master(Control Plane) →** Manage the entire process; it must be high available;
 
@@ -40,7 +40,8 @@ Pod represents the process running on the cluster. Normally a pod represents a c
 
 **ReplicaSet:** it makes sure the desired amount of pods will be running, if a pod goes down it will create another one automatically
 
-Ex: 
+Ex:
+
 ```
 B = Backend ⇒ 3 replicas
 F = Frontend ⇒ 2 replicas
@@ -54,7 +55,7 @@ k8s is monitoring the health of clusters and pods to be able to recreate if they
 
 Deployment will restore replicaset with running pods
 
-![Kubernetes Structure](/Advanced-Journey/images/k8s/deployment.png)
+![Kubernetes Structure](/Learning-Journey/images/k8s/deployment.png)
 
 ```yaml
 replicas: 3
@@ -85,19 +86,20 @@ It works with label selector.
 Different types of service:
 
 - **ClusterIP**
-Default type of service, only accessible from within cluster, if you are outside the cluster and you want to access the service you can't do it.
+  Default type of service, only accessible from within cluster, if you are outside the cluster and you want to access the service you can't do it.
 - **LoadBalancer**
-Cloud specific implementation, accessible from outside cluster, has dns name, ssl termination, WAF integration, Access Logs, Health Check, etc.
-when we run a 'kubectl get services' in a cloud provider the LoadBalancer type will generate an External IP to us so we can use this IP to access our service
+  Cloud specific implementation, accessible from outside cluster, has dns name, ssl termination, WAF integration, Access Logs, Health Check, etc.
+  when we run a 'kubectl get services' in a cloud provider the LoadBalancer type will generate an External IP to us so we can use this IP to access our service
 - **Nodeport**
-Accessible from outside cluster, creates cluster wide pord. NodePort[30000-32767] 
-ex: 10.16.10.01:32000, that way you can access your application
+  Accessible from outside cluster, creates cluster wide pord. NodePort[30000-32767]
+  ex: 10.16.10.01:32000, that way you can access your application
 
 **Namespaces**
 
 Isolated environment, we can group resources separately like a database, app1, app2, ...
 
 ## **EKS**
+
 AWS manages the Control Plane(Master Node)
 
 - AWS maintains high availability - Multiple EC2s in Multiple AZs
@@ -110,15 +112,15 @@ AWS manages the Control Plane(Master Node)
 **EKS Data Plane**
 
 - **Amazon EC2 - Self Managed Node Groups**
-    - You maintain worker EC2s
-    - You orchestrate version upgrade, security patching, AMI Rehydration, keeping pods up during upgrade;
-    - Can use custom AMI
+  - You maintain worker EC2s
+  - You orchestrate version upgrade, security patching, AMI Rehydration, keeping pods up during upgrade;
+  - Can use custom AMI
 - **Amazon EC2 - Managed Node Groups**
-    - AWS manages worker EC2s
-    - AWS provides AMI with security patches, version upgrade,...
-    - AWS manages pod disruption during upgrade
-    - Doesn't work with custom AMI
+  - AWS manages worker EC2s
+  - AWS provides AMI with security patches, version upgrade,...
+  - AWS manages pod disruption during upgrade
+  - Doesn't work with custom AMI
 - **AWS Fargate**
-    - No worker EC2 whatsoever !
-    - You define and deploy pods
-    - Container + Serverless
+  - No worker EC2 whatsoever !
+  - You define and deploy pods
+  - Container + Serverless

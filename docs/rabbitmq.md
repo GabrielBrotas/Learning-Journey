@@ -16,7 +16,7 @@ RabbitMQ is an open-source message broker software, highly consolidated, used to
 
 ## **Under the Hood**
 
-RabbitMQ is based on the message queue model, where messages are sent from producers (publishers) to consumers through a broker (RabbitMQ server). 
+RabbitMQ is based on the message queue model, where messages are sent from producers (publishers) to consumers through a broker (RabbitMQ server).
 
 It only opens a single persistent connection (which speeds up the process as it doesn't need to create TCP connections all the time) and then configures the channels (sub-connection) for consumers to retrieve the data they need;
 
@@ -38,8 +38,8 @@ It only opens a single persistent connection (which speeds up the process as it 
 
 The publisher publishes a message, the exchange redirects it to the queue(s), and the consumer listens to the queue to process the message and delete it afterwards.
 
-
 ## Types of Exchange
+
 - **Direct**: The Exchange sends the message specifically to a certain queue
 - **Fanout**: The exchange sends the message to all the queues that are binded/related to this exchange, if there are 10 related queues the message is sent to the 10 queues
 - **Topic**: It has rules, e.g.: depending on the 'route key' it will forward to the queue we want.
@@ -50,6 +50,7 @@ The system can have several exchanges with several queues and each queue can be 
 Playground: <http://tryrabbitmq.com/>
 
 ### Direct Exchange
+
 Uses a message routing key to transport messages to queues. The routing key is a message attribute that the producer adds to the message header. You can consider the routing key to be an “address” that the exchange uses to determine how the message should be routed. A message is delivered to the queue with the binding key that exactly matches the message’s routing key
 
 The direct exchange’s default exchange is “amq. direct“, which AMQP brokers must offer for communication
@@ -61,10 +62,11 @@ As is shown in the figure, queue A (create_pdf_queue) is tied to a direct exchan
 The exchange binds the related queue with an exchange so it can forward the messages
 The message passes the Routing Key and the Exchange redirects to the respective queue.
 
-![Direct Exchange Ex 2](/Advanced-Journey/images/rabbitmq/direct-exchange.png)
+![Direct Exchange Ex 2](/Learning-Journey/images/rabbitmq/direct-exchange.png)
 
 ### Fanout Exchange
-A fanout exchange, like direct and topic exchange, duplicates and routes a received message to any associated queues, regardless of routing keys or pattern matching. Here, your provided keys will be entirely ignored. 
+
+A fanout exchange, like direct and topic exchange, duplicates and routes a received message to any associated queues, regardless of routing keys or pattern matching. Here, your provided keys will be entirely ignored.
 
 Fanout exchanges are useful when the same message needs to be passed to one or perhaps more queues with consumers who may process the message differently
 
@@ -76,30 +78,30 @@ Ex: An e-commerce system has several sectors (purchase, marketing, invoice, log,
 
 If we want that when a user makes a purchase the message is sent to all queues we can use this model, the queues are connected in the exchange and we send the messages.
 
-![Fanout Exchange](/Advanced-Journey/images/rabbitmq/fanout.png)
+![Fanout Exchange](/Learning-Journey/images/rabbitmq/fanout.png)
 
 ### Topic Exchange
+
 Sends messages to queues depending on wildcard matches between the routing key and the queue binding’s routing pattern. Messages are routed to one or more queues based on a pattern that matches a message routing key.
 
 - Routing keys have rules, similar to Regex; Ex: X.LOG, T.Y, ...
 
-![Topic Exchange](/Advanced-Journey/images/rabbitmq/topic.png)
+![Topic Exchange](/Learning-Journey/images/rabbitmq/topic.png)
 
 ## **Queues**
 
 - **FIFO ⇒** First In, First Out
-    The message that enters first is the first to leave.
-    
+  The message that enters first is the first to leave.
 - **Properties:**
-    - **Durable:** If it should be saved even after the broker restarts, persist on disk or keep it only in memory. If we restart the broker and the queue is not durable, it will be removed.
-    - **Auto-delete:** Automatically removed when the consumer disconnects. If the consumer disconnects, the queue will be deleted.
-    - **Expiry:** Defines the time that no messages or clients are consuming. For example, if no client is consuming this queue for 3 hours, it will be deleted.
-    - **Message TTL:** Message's lifetime, if not consumed during this time, the message will be automatically removed.
-    - **Overflow:**
-        - Drop head (remove the oldest one), if it reaches the limit of messages for this queue and a new one arrives, remove the oldest one.
-        - Reject publish, does not allow more inputs; will receive an error.
-    - **Exclusive:** Only the channel that created it can access it.
-    - **Max Length or bytes:** Maximum number of messages or maximum size in bytes allowed. For example, the queue can have a maximum of 10 messages. After that, it will fall under the overflow rule, or the queue can only have 2MB of messages.
+  - **Durable:** If it should be saved even after the broker restarts, persist on disk or keep it only in memory. If we restart the broker and the queue is not durable, it will be removed.
+  - **Auto-delete:** Automatically removed when the consumer disconnects. If the consumer disconnects, the queue will be deleted.
+  - **Expiry:** Defines the time that no messages or clients are consuming. For example, if no client is consuming this queue for 3 hours, it will be deleted.
+  - **Message TTL:** Message's lifetime, if not consumed during this time, the message will be automatically removed.
+  - **Overflow:**
+    - Drop head (remove the oldest one), if it reaches the limit of messages for this queue and a new one arrives, remove the oldest one.
+    - Reject publish, does not allow more inputs; will receive an error.
+  - **Exclusive:** Only the channel that created it can access it.
+  - **Max Length or bytes:** Maximum number of messages or maximum size in bytes allowed. For example, the queue can have a maximum of 10 messages. After that, it will fall under the overflow rule, or the queue can only have 2MB of messages.
 
 ### **Dead Letter Queues**
 
@@ -129,14 +131,11 @@ RabbitMQ features to solve such situations:
 **Types of Consumer Acknowledgement**
 
 - Basic.Ack
-    Every time we send a message to the consumer and it responds with "I received and processed the message"
-    
+  Every time we send a message to the consumer and it responds with "I received and processed the message"
 - Basic.Reject
-    If the consumer receives the message and can't resolve it (throw an exception), the message goes back to the queue because the consumer couldn't resolve it.
-    
+  If the consumer receives the message and can't resolve it (throw an exception), the message goes back to the queue because the consumer couldn't resolve it.
 - Basic.Nack
-    Same as Reject, but can reject more than one message at the same time.
-    
+  Same as Reject, but can reject more than one message at the same time.
 
 **Publisher Confirms**
 
@@ -156,4 +155,5 @@ For important messages, we should use Publisher confirms.
 - IoT: It can be used to enable communication between devices and services.
 
 ## Refs
+
 - [rabbitmq-exchange-type](https://hevodata.com/learn/rabbitmq-exchange-type/#direct)
