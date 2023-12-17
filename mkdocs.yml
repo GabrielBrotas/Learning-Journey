@@ -67,6 +67,8 @@ plugins:
   - search:
       lang: en
   - glightbox
+  - blog:
+      blog_dir: examples/
 markdown_extensions:
   - attr_list
   - md_in_html

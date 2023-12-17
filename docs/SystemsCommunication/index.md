@@ -10,8 +10,8 @@ On the other hand, asynchronous communication is a type of communication in whic
 
 In software development, when building a web application, synchronous communication is used between the client and the server. When a user submits a request, the server processes the request and sends back a response immediately. However, asynchronous communication is used when performing background tasks such as sending an email or processing a large file. The user doesn't need to wait for the task to complete before continuing to use the application.
 
-
 ## Some Types of System Communication
-- [REST](REST)
-- [gRPC](gRPC)
-- [GraphQL](GraphQL)
+
+- [REST](REST.md)
+- [gRPC](gRPC.md)
+- [GraphQL](GraphQL.md)

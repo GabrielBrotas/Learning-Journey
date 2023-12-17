@@ -15,7 +15,7 @@
 
 ### **Structure**
 
-![Kubernetes Structure](/Learning-Journey/images/k8s/structure.png)
+![Kubernetes Structure](./images/k8s/structure.png)
 
 **Master(Control Plane) →** Manage the entire process; it must be high available;
 
@@ -55,7 +55,7 @@ k8s is monitoring the health of clusters and pods to be able to recreate if they
 
 Deployment will restore replicaset with running pods
 
-![Kubernetes Structure](/Learning-Journey/images/k8s/deployment.png)
+![Kubernetes Structure](./images/k8s/deployment.png)
 
 ```yaml
 replicas: 3
