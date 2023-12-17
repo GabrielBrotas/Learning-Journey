@@ -2,7 +2,7 @@ site_name: Learning Journey
 site_url: https://gabrielbrotas.github.io/Learning-Journey
 repo_url: https://github.com/GabrielBrotas/Learning-Journey
 edit_uri: blob/main/docs/
-site_description: My learning related to Architecture
+site_description: Sharing what I'm picking up along the way - exploring Architecture, DevOps, and Software Engineering
 site_author: Gabriel Brotas
 remote_branch: gh-deploy
 nav:
