@@ -57,7 +57,7 @@ Tracing makes debugging and understanding distributed systems less daunting by b
 
 Many Observability back-ends visualize Traces as waterfall diagrams that may look something like this:
 
-![Traces as Waterfall](/Learning-Journey/images/observability/waterfall-trace.png)
+![Traces as Waterfall](../images/observability/waterfall-trace.png)
 
 Waterfall diagrams show the parent-child relationship between a Root Span and its child Spans. When a Span encapsulates another Span, this also represents a nested relationship.
 

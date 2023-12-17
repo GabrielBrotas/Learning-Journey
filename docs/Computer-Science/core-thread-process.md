@@ -28,13 +28,13 @@ A thread is a unit of execution on concurrent/parallel programming. **Multithrea
 
 A thread is the unit of execution within a process. A process can have from just one thread to many threads.
 
-![Thread](/Learning-Journey/images/core-thread-process/thread.png)
+![Thread](../images/core-thread-process/thread.png)
 
 When a process starts, it is assigned memory and resources. Each thread in the process shares that memory and resources. In single-threaded processes, the process contains one thread. The process and the thread are one and the same, and there is only one thing happening.
 
 In multithreaded processes, the process contains more than one thread, and the process is accomplishing a number of things at the same time
 
-![Thread vs MultiThread](/Learning-Journey/images/core-thread-process/single-thread-vs-multi.png)
+![Thread vs MultiThread](../images/core-thread-process/single-thread-vs-multi.png)
 
 Each thread will have its own stack.
 
@@ -88,7 +88,7 @@ A CPU performance will depend upon the number of cores on the machine and the sp
 
 On a system with multiple processors or CPU cores (as is common with modern processors), multiple processes or threads can be executed in parallel. On a single processor, though, it is not possible to have processes or threads truly executing at the same time. In this case, the CPU is shared among running processes or threads using a process scheduling algorithm that divides the CPU’s time and yields the illusion of parallel execution. The time given to each task is called a “time slice.” The switching back and forth between tasks happens so fast it is usually not perceptible. The terms, “parallelism” (genuine simultaneous execution) and “concurrency” (interleaving of processes in time to give the appearance of simultaneous execution), distinguish between the two types of real or approximate simultaneous operation.
 
-![Concurrency vs Parallelism](/Learning-Journey/images/core-thread-process/concurrency-vs-parallelism.png)
+![Concurrency vs Parallelism](../images/core-thread-process/concurrency-vs-parallelism.png)
 
 ### **What is Concurrency or Single Core?**
 
@@ -96,7 +96,7 @@ a **Single-core CPU** will only be able to process one program at a time. Howeve
 
 Concurrency is defined as the ability of a system to run two or more programs in overlapping time phases.
 
-![Cores](/Learning-Journey/images/core-thread-process/cores.png)
+![Cores](../images/core-thread-process/cores.png)
 
 Concurrent execution with time slicing
 
@@ -108,7 +108,7 @@ A **Multicore processor** (multiple CPU cores) execute each sub-task simultaneou
 
 In parallel execution, the tasks to be performed by a process are broken down into sub-parts, and multiple CPUs (or multiple cores) process each sub-task at precisely the same time.
 
-![Cores](/Learning-Journey/images/core-thread-process/parallel.png)
+![Cores](../images/core-thread-process/parallel.png)
 
 As you can see, at any given time, all processes are in execution. In reality, it is the sub-tasks of a process which are executing in parallel, but for better understanding, you can visualize them as processes.
 
@@ -167,7 +167,7 @@ An interpreter is a computer program, which converts each high-level program sta
 - A compiler translates a code written in a high-level programming language into *a lower-level language like assembly language, object code, and* machine code (binary 1 and 0 bits). It converts the code ahead of time before the program runs.
 - An interpreter translates the code line by line when the program is running. You’ve likely used interpreters unknowingly at some point in your work career.
 
-![Compiler vs Interpreter](/Learning-Journey/images/core-thread-process/compiler-vs-interpreter.png)
+![Compiler vs Interpreter](../images/core-thread-process/compiler-vs-interpreter.png)
 
 Both compilers and interpreters have pros and cons:
 
@@ -177,7 +177,7 @@ Both compilers and interpreters have pros and cons:
 - Compiler is based on translation linking-loading model, whereas Interpreter is based on Interpretation Method.
 - Compiler takes an entire program whereas the Interpreter takes a single line of code.
 
-![Compiler vs Interpreter](/Learning-Journey/images/core-thread-process/compiler-program.png)
+![Compiler vs Interpreter](../images/core-thread-process/compiler-program.png)
 
 A high-level programming language is usually referred to as “compiled language” or “interpreted language.” However, in practice, they can have both compiled and interpreted implementations. C, for example, is called a compiled language, despite the existence of C interpreters. The first JavaScript engines were simple interpreters, but all modern engines use just-in-time (JIT) compilation for performance reasons.
 

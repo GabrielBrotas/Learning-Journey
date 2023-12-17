@@ -62,7 +62,7 @@ As is shown in the figure, queue A (create_pdf_queue) is tied to a direct exchan
 The exchange binds the related queue with an exchange so it can forward the messages
 The message passes the Routing Key and the Exchange redirects to the respective queue.
 
-![Direct Exchange Ex 2](/Learning-Journey/images/rabbitmq/direct-exchange.png)
+![Direct Exchange Ex 2](./images/rabbitmq/direct-exchange.png)
 
 ### Fanout Exchange
 
@@ -78,7 +78,7 @@ Ex: An e-commerce system has several sectors (purchase, marketing, invoice, log,
 
 If we want that when a user makes a purchase the message is sent to all queues we can use this model, the queues are connected in the exchange and we send the messages.
 
-![Fanout Exchange](/Learning-Journey/images/rabbitmq/fanout.png)
+![Fanout Exchange](./images/rabbitmq/fanout.png)
 
 ### Topic Exchange
 
@@ -86,7 +86,7 @@ Sends messages to queues depending on wildcard matches between the routing key a
 
 - Routing keys have rules, similar to Regex; Ex: X.LOG, T.Y, ...
 
-![Topic Exchange](/Learning-Journey/images/rabbitmq/topic.png)
+![Topic Exchange](./images/rabbitmq/topic.png)
 
 ## **Queues**
 

@@ -29,7 +29,7 @@ An Istio service mesh is logically split into a **data plane** and a **control p
 
 The following diagram shows the different components that make up each plane:
 
-![Istio Architecture](/Learning-Journey/images/service-mesh/istio-architecture.png)
+![Istio Architecture](../images/service-mesh/istio-architecture.png)
 
 The flow of communication in an Istio-enabled service mesh works as follows:
 
