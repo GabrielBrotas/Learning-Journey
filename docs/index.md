@@ -1,4 +1,4 @@
-<h1 align="center"> Advanced Journey </h1>
+<h1 align="center"> Learning Journey </h1>
 
 <p align="center"> Contains my learning related to Architecture, DevOps and Backend tools.</p>
 
