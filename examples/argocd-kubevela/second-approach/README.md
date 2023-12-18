@@ -22,6 +22,8 @@ Tools:
 - helm==3.13.3
 - kubectl==1.26.8
 
+_Note: All commands below are executed from this folder (`second-approach`)._
+
 ## 1. Run Minikube
 
 ```sh
