@@ -1,3 +1,28 @@
+# ---
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: vela-config
+# data:
+#   plugin.yaml: |
+#     apiVersion: argoproj.io/v1alpha1
+#     kind: ConfigManagementPlugin
+#     metadata:
+#       name: vela
+#     spec:
+#       version: v1.0
+#       init:
+#         command: ["vela", "traits"]
+#       generate:
+#         command: ["sh"]
+#         args:
+#           - -c
+#           - |
+#             vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+#       discover:
+#         find:
+#           glob: "**/*oam.yml"
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -18,19 +43,9 @@ data:
         args:
           - -c
           - |
-            vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+            for file in $(find . -type f -name "*.oam.yml"); do
+              vela dry-run -f $file
+            done
       discover:
         find:
           glob: "**/*oam.yml"
-
-# for file in $(find . -type f -name "*.oam.yml"); do
-#   vela dry-run -f $file
-# done
-# create a script to navigate through the apps directory, and if there is a oam.yml file, then run vela dry-run on it
-# vela dry-run -f $ARGOCD_APP_NAME.oam.yml
-# find . -type f -name "oam.yml" -print | while read -r file
-# do
-#     # Echo the name of each oam.yml file found
-#     echo "Found oam.yml file: $file"
-# done
-

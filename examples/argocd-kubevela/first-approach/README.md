@@ -257,8 +257,40 @@ data:
             vela dry-run -f $file
           done
 ```
-To apply this changes, you can run ``
 
+To apply this changes, after updating the [plugin.yaml](./charts/argo-cd/templates/plugin.yaml), you can run:
+
+```sh
+helm upgrade argo-cd charts/argo-cd/ -n argocd
+```
+
+then, delete the `argo-repo-server` pod to refresh the plugin:
+
+```sh
+# replace the pod name with your own
+kubectl delete pod -n argocd argo-cd-argocd-repo-server-6d6cb46867-6k6rz
+```
+
+Now, wait for the pod to be ready again:
+
+```sh
+kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
+```
+
+To make sure the repo server is using the new plugin you can read the plugin config file from its pod:
+
+```sh
+# replace the pod name with your own
+kubectl exec --stdin --tty -n argocd argo-cd-argocd-repo-server-6d6cb46867-92spj -c vela -- cat /home/argocd/cmp-server/config/plugin.yaml
+```
+
+Now we can deploy the [app-of-apps](./app-of-apps/app-of-apps.yml) that will deploy multiple OAM files:
+
+```sh
+kubectl apply -f app-of-apps/app-of-apps.yml
+```
+
+```sh 
 as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example,
 
 ## Clean Up
