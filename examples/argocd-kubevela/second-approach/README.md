@@ -88,8 +88,6 @@ In this example, ArgoCD tracks native Kubevela application resources and its rev
 
 - If you manually remove the OAM application resources (eg. deployment, service,...,) from the cluster (`kubectl delete deployment -l app.oam.dev/name=first-vela-app`), it will take several minutes to recreate them. Even if you click to sync the application using the UI, ArgoCD it will take no action because it will think the app is already in sync with the gitops repo. So you have to wait about ~5 minutes to have your app running again. this is not a good user experience.
 
-- Sometimes when you try to delete the app from the UI ArgoCD just hangs there and does not delete the app. perhaps because ArgoCD is not able to delete the native Kubevela application resources ?
-
 ## Clean Up
 
 ```sh

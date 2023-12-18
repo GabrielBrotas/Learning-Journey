@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-2
+  name: argocd
   namespace: argocd
 spec:
   project: default
@@ -12,7 +12,7 @@ spec:
     targetRevision: HEAD
 
   destination:
-    namespace: vela-2
+    namespace: vela
     server: "https://kubernetes.default.svc"
 
   syncPolicy:
