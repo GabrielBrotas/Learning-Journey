@@ -9,9 +9,12 @@ spec:
       properties:
         image: oamdev/hello-world
         ports:
-         - port: 8000
-           expose: true
+          - port: 8000
+            expose: true
       traits:
         - type: scaler
           properties:
             replicas: 2
+        - type: annotations
+          properties:
+            argocd.argoproj.io/compare-options: IgnoreExtraneous
