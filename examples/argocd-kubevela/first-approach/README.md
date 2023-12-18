@@ -226,78 +226,80 @@ That’s it! Now you can create/modify OAM files, push to git, and Argo CD will 
 
 ## Problems Found in this Approach
 
-- Dependency on ArgoCD Application resource names: In the current approach, a direct correlation is established between OAM files name and their corresponding ArgoCD Application resources name. Specifically, each OAM file must have a name identical to that of the associated ArgoCD Application. This interdependency arises due to the following plugin logic snippet:
+- **Dependency on ArgoCD Application resource names**: One problem with the current method is its reliance on the names of ArgoCD Application resources. The connection between OAM file names and corresponding ArgoCD Application resource names is rigid. Each OAM file must bear an identical name to the associated ArgoCD Application. This tight link is enforced by the following code snippet in the plugin logic:
 
-```yaml
-data:
-  plugin.yaml: |
-    ...
-    generate:
-      command: ["sh"]
-      args:
-        - -c
-        - |
-          vela dry-run -f $ARGOCD_APP_NAME.oam.yml
-```
+  ```yaml
+  data:
+    plugin.yaml: |
+      ...
+      generate:
+        command: ["sh"]
+        args:
+          - -c
+          - |
+            vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+  ```
 
-Here, `$ARGOCD_APP_NAME` represents the name of the ArgoCD Application resource ([argocd-app](./apps/argocd-app.yml)). Consequently, the plugin exclusively processes OAM files sharing the same name as the associated ArgoCD Application. in this case, since the argocd-app name is `name: first-vela-app`, the plugin would apply the `first-vela-app.oam.yml` file to the cluster, but would ignore other OAM or ArgoCD files.
+  Here, `$ARGOCD_APP_NAME` represents the name of the ArgoCD Application resource ([argocd-app](./apps/argocd-app.yml)). Consequently, the plugin exclusively processes OAM files with matching names to their corresponding ArgoCD Applications. For example, if the ArgoCD app name is `name: first-vela-app`, the plugin will apply only the `first-vela-app.oam.yml` file to the cluster, ignoring other OAM or ArgoCD files.
 
-- It doesn't work so well with the `app-of-apps` concept, even if you update the plugin to apply all directory manifests to the clusters, ArgoCD would interpret the OAM files as a k8s resources instead of an ArgoCD Application. To test this, you can update the plugin to have this logic:
+- **Challenges with App-Of-Apps Concept**: The current approach encounters challenges when dealing with the app-of-apps concept. Even if you modify the plugin to apply all the OAM manifests in a directory to the clusters, ArgoCD interprets the OAM files as Kubernetes resources, not as ArgoCD Applications. To test this, consider updating the [plugin](./charts/argo-cd/templates/plugin.yaml) with the following logic:
 
-```yaml
-data:
-  plugin.yaml: |
-    ...
-    generate:
-      command: ["sh"]
-      args:
-        - -c
-        - |
-          for file in $(find . -type f -name "*.oam.yml"); do
-            vela dry-run -f $file
-          done
-```
+  ```yaml
+  data:
+    plugin.yaml: |
+      ...
+      generate:
+        command: ["sh"]
+        args:
+          - -c
+          - |
+            for file in $(find . -type f -name "*.oam.yml"); do
+              vela dry-run -f $file
+            done
+  ```
 
-To apply this changes, after updating the [plugin.yaml](./charts/argo-cd/templates/plugin.yaml), you can run:
+  This new logic will iterate through all the `.oam.yml` files in the directory and apply them to the cluster.
 
-```sh
-helm upgrade argo-cd charts/argo-cd/ -n argocd
-```
+  To implement these changes, update the [plugin.yaml](./charts/argo-cd/templates/plugin.yaml), and then run:
 
-then, delete the `argo-repo-server` pod to refresh the plugin:
+  ```sh
+  helm upgrade argo-cd charts/argo-cd/ -n argocd
+  ```
 
-```sh
-# replace the pod name with your own
-kubectl delete pod -n argocd argo-cd-argocd-repo-server-6d6cb46867-6k6rz
-```
+  Then, delete the `argo-repo-server` pod to refresh the plugin:
 
-Now, wait for the pod to be ready again:
+  ```sh
+  # replace the pod name with your own
+  kubectl delete pod -n argocd argo-cd-argocd-repo-server-6d6cb46867-6k6rz
+  ```
 
-```sh
-kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
-```
+  Wait for the pod to be ready again:
 
-To make sure the repo server is using the new plugin you can read the plugin config file from its pod:
+  ```sh
+  kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
+  ```
 
-```sh
-# replace the pod name with your own
-kubectl exec --stdin --tty -n argocd argo-cd-argocd-repo-server-6d6cb46867-92spj -c vela -- cat /home/argocd/cmp-server/config/plugin.yaml
-```
+  To ensure the repo server is using the new plugin, read the plugin config file from its pod:
 
-Now we can deploy the [app-of-apps](./app-of-apps/app-of-apps.yml) that will deploy multiple OAM files:
+  ```sh
+  # replace the pod name with your own
+  kubectl exec --stdin --tty -n argocd argo-cd-argocd-repo-server-6d6cb46867-92spj -c vela -- cat /home/argocd/cmp-server/config/plugin.yaml
+  ```
 
-```sh
-kubectl apply -f app-of-apps/app-of-apps.yml
-```
+  Now we can deploy the [app-of-apps](./app-of-apps/app-of-apps.yml) that will deploy multiple OAM files:
 
-as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example,
+  ```sh
+  kubectl apply -f app-of-apps/app-of-apps.yml
+  ```
+
+  ![app-of-apps.png](./imgs/app-of-apps.png)
+
+  As you can see, the `argo-repo-server` will render the OAM files into Kubernetes resources and they won't be treated as different ArgoCD Applications.
 
 ## Clean Up
 
 ```sh
-kubectl delete -f apps/argocd-app.yml
-helm uninstall argo-cd -n argocd
-helm uninstall kubevela -n vela-system
+minikube delete
 ```
 
 ## Refs:
