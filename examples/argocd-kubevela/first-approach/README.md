@@ -165,6 +165,19 @@ kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
 kubectl port-forward -n argocd service/argo-cd-argocd-server 8080:443
 ```
 
+Confirm all services and pods are correctly running:
+
+```sh
+$ kubectl get pods -n argocd
+
+NAME                                                      READY   STATUS    RESTARTS   AGE
+argo-cd-argocd-application-controller-0                   1/1     Running   0          2m20s
+argo-cd-argocd-notifications-controller-b59cb9585-ql92b   1/1     Running   0          2m21s
+argo-cd-argocd-redis-5c5bc74fb7-s4xnj                     1/1     Running   0          2m21s
+argo-cd-argocd-repo-server-6d6cb46867-g9blh               2/2     Running   0          2m21s
+argo-cd-argocd-server-859c6bfbcc-l7vnc                    1/1     Running   0          2m21s
+```
+
 By now the vela plugin should have been registered and the `argo-repo-server` should have access to the vela cli to render the OAM files into Kubernetes resources.
 
 Update ArgoCD password:
