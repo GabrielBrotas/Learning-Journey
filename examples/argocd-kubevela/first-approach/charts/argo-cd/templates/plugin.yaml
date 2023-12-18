@@ -18,7 +18,18 @@ data:
         args:
           - -c
           - |
-            vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+            for file in $(find . -type f -name "*.oam.yml"); do
+              vela dry-run -f $file
+            done
       discover:
         find:
           glob: "**/*oam.yml"
+
+# create a script to navigate through the apps directory, and if there is a oam.yml file, then run vela dry-run on it
+# vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+# find . -type f -name "oam.yml" -print | while read -r file
+# do
+#     # Echo the name of each oam.yml file found
+#     echo "Found oam.yml file: $file"
+# done
+

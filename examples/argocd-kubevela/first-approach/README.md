@@ -224,6 +224,10 @@ kubectl apply -f apps/argocd-app.yml
 
 That’s it! Now you can create/modify OAM files, push to git, and Argo CD will automatically deploy them to your Kubernetes cluster, all via the magic of GitOps!
 
+## Problems Found in this Approach
+
+- It doesn't work so well with the `app-of-apps` concept, as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example, 
+
 ## Clean Up
 
 ```sh
