@@ -64,6 +64,22 @@ This document aims to explain the integration of Kubevela and ArgoCD. We have tw
 1. [ArgoCD with Kubevela as a plugin - Kubevela dry-run option](./first-approach/README.md)
 2. [Kubevela Controller + ArgoCD Gitops syncer](./second-approach/README.md)
 
+**Conclusion:**
+
+1. Vela Dry-run option
+
+   - Kubevela can be installed different cluster from ArgoCD.
+   - Limited Kubevela features, we just use component and traits definition.
+   - Workflow and policy features don’t supported by this way.
+   - Depend on Kubevela dry run feature.
+   - No needed rbac, ui or any different experience from ARGO.
+
+2. Kubevela Controller + ArgoCD Gitops syncer
+
+   - Kubevela must be installed to ArgoCD cluster.
+   - We can use all the features of Kubevela.
+   - No need depends on anything.
+
 ## Refs:
 
 - https://kubevela.io/blog/2023/01/06/kubevela-argocd-integration/
