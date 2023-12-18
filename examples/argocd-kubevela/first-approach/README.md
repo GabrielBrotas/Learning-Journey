@@ -290,7 +290,6 @@ Now we can deploy the [app-of-apps](./app-of-apps/app-of-apps.yml) that will dep
 kubectl apply -f app-of-apps/app-of-apps.yml
 ```
 
-```sh 
 as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example,
 
 ## Clean Up
