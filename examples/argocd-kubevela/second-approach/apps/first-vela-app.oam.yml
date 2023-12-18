@@ -17,6 +17,3 @@ spec:
         - type: scaler
           properties:
             replicas: 2
-        - type: annotations
-          properties:
-            argocd.argoproj.io/compare-options: IgnoreExtraneous
