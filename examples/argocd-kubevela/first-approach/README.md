@@ -226,8 +226,40 @@ That’s it! Now you can create/modify OAM files, push to git, and Argo CD will 
 
 ## Problems Found in this Approach
 
-- It doesn't work so well with the `app-of-apps` concept, as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example, 
+- Dependency on ArgoCD Application resource names: In the current approach, a direct correlation is established between OAM files name and their corresponding ArgoCD Application resources name. Specifically, each OAM file must have a name identical to that of the associated ArgoCD Application. This interdependency arises due to the following plugin logic snippet:
 
+```yaml
+data:
+  plugin.yaml: |
+    ...
+    generate:
+      command: ["sh"]
+      args:
+        - -c
+        - |
+          vela dry-run -f $ARGOCD_APP_NAME.oam.yml
+```
+
+Here, `$ARGOCD_APP_NAME` represents the name of the ArgoCD Application resource ([argocd-app](./apps/argocd-app.yml)). Consequently, the plugin exclusively processes OAM files sharing the same name as the associated ArgoCD Application. in this case, since the argocd-app name is `name: first-vela-app`, the plugin would apply the `first-vela-app.oam.yml` file to the cluster, but would ignore other OAM or ArgoCD files.
+
+- It doesn't work so well with the `app-of-apps` concept, even if you update the plugin to apply all directory manifests to the clusters, ArgoCD would interpret the OAM files as a k8s resources instead of an ArgoCD Application. To test this, you can update the plugin to have this logic:
+
+```yaml
+data:
+  plugin.yaml: |
+    ...
+    generate:
+      command: ["sh"]
+      args:
+        - -c
+        - |
+          for file in $(find . -type f -name "*.oam.yml"); do
+            vela dry-run -f $file
+          done
+```
+To apply this changes, you can run ``
+
+as the `argo-repo-server` will only render the OAM files into Kubernetes resources so the OAM apps won't be treated as an ArgoCD Application. For example,
 
 ## Clean Up
 
