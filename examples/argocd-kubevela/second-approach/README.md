@@ -1,6 +1,6 @@
 # 2. Kubevela Controller + ArgoCD Gitops syncer
 
-Second approach is that we can use Kubevela gitops controller way as the server side and argocd can be our gitops syncer. This approach is flexible to use native kubevela feature set without using a custom plugin or dry run module. We just need to add below annotations to our manifest repository to ignore outofsync.
+Second approach is that we can use Kubevela gitops controller way as the server side and argocd can be our gitops syncer. This approach is flexible to use native kubevela feature set without using a custom plugin or dry run module. We just need to add below annotations to our OAM manifest repository to ignore outofsync.
 
 ```yaml
 metadata:
@@ -83,6 +83,12 @@ kubectl apply -f ./apps/argocd-app.yml
 In this example, ArgoCD tracks native Kubevela application resources and its revision.
 
 ![first-vela-app.png](./imgs/first-vela-app.png)
+
+## Problems Found in this Approach
+
+- If you manually remove the OAM application resources (eg. deployment, service,...,) from the cluster (`kubectl delete pods`), ArgoCD will not recreate them even if you click to sync the application. This is because ArgoCD will think the app is already in sync with the gitops repo. This is not a good user experience.
+
+- Sometimes when you try to delete the app from the UI ArgoCD just hangs there and does not delete the app. perhaps because ArgoCD is not able to delete the native Kubevela application resources ?
 
 ## Clean Up
 
