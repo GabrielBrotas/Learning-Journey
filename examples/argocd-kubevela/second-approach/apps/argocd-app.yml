@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-app-6
+  name: argocd-app-7
   namespace: argocd
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
@@ -14,7 +14,7 @@ spec:
     targetRevision: HEAD
 
   destination:
-    namespace: vela-6
+    namespace: vela-7
     server: "https://kubernetes.default.svc"
 
   syncPolicy:
