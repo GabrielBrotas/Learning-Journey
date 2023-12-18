@@ -23,6 +23,7 @@ data:
         find:
           glob: "**/*oam.yml"
 
+## To test with multiple OAM files, covered in the app-of-apps section
 # ---
 # apiVersion: v1
 # kind: ConfigMap
