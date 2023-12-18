@@ -2,6 +2,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: first-vela-app
+  annotations:
+    argocd.argoproj.io/compare-options: IgnoreExtraneous
 spec:
   components:
     - name: express-server
