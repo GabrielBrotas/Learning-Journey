@@ -6,14 +6,9 @@ import (
 "com.wexinc.webservice": {
 	alias: ""
 	annotations: {}
-	attributes: {
-		workload: {
-			definition: {
-				apiVersion: "apps/v1"
-				kind:       "Deployment"
-			}
-			type: "deployments.apps"
-		}
+	attributes: workload: definition: {
+		apiVersion: "argoproj.io/v1alpha1"
+		kind:       "Application"
 	}
 	description: ""
 	labels: {}
@@ -22,52 +17,41 @@ import (
 
 
 template: {
-	output: {}
-
-	outputs: {
-		argocdapp: {
-			apiVersion: "argoproj.io/v1alpha1"
-			kind:       "Application"
-			metadata: {
-				name:      parameter.name
-				namespace: "argocd"
-				labels: {
-			    "argocd.argoproj.io/instance": "app-of-apps-6"
-				}
-			}
-			spec: {
-				project: parameter.project
-				source: {
-					path:           "examples/argocd-kubevela/third-approach/app-of-apps/apps"
-					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
-					targetRevision: "argocd-kubevela"
-					directory:      {
-						include: "first-vela-app.yml"
-					}
-				}
-				// plugin: {
-				// 	name: "vela-v1.0"
-				// 	env: [
-				// 		{
-				// 			name: "FILE_NAME"
-				// 			value: parameter.name + ".oam.yml"
-				// 		}
-				// 	]
-				// }
-				destination: {
-					namespace: parameter.namespace
-					server: "https://kubernetes.default.svc"
-				}
-				syncPolicy: {
-					automated: {
-						prune:    false
-						selfHeal: true
-					}
-					syncOptions: ["CreateNamespace=true"]
-				}
+	output: {
+		apiVersion: "argoproj.io/v1alpha1"
+		kind:       "Application"
+		metadata: {
+			name:      parameter.name
+			namespace: "argocd"
+			labels: {
+				"argocd.argoproj.io/instance": "app-of-apps-7"
 			}
 		}
+		spec: {
+			project: parameter.project
+			source: {
+				path:           "examples/argocd-kubevela/third-approach/app-of-apps/apps"
+				repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
+				targetRevision: "argocd-kubevela"
+				directory:      {
+					include: "first-vela-app.yml"
+				}
+			}
+			destination: {
+				namespace: parameter.namespace
+				server: "https://kubernetes.default.svc"
+			}
+			syncPolicy: {
+				automated: {
+					prune:    false
+					selfHeal: true
+				}
+				syncOptions: ["CreateNamespace=true"]
+			}
+		}
+	}
 
+	outputs: {
 		deployment: {
 			apiVersion: "apps/v1"
 			kind:       "Deployment"
