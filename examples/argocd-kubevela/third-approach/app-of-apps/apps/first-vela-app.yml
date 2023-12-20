@@ -15,6 +15,6 @@ spec:
         - type: scaler
           properties:
             replicas: 1
-        - type: argo-app
+        - type: argo-app-trait
           properties:
             name: first-vela-app
