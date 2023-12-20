@@ -39,7 +39,7 @@ template: {
 					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
 					targetRevision: "argocd-kubevela"
 					directory:      {
-						include: strings.Join(parameter.name, ".yml")
+						include: "first-vela-app.yml"
 					}
 				}
 				// plugin: {
