@@ -5,13 +5,13 @@ metadata:
 spec:
   components:
     - name: express-server-2
-      type: webservice
+      type: com.wexinc.webservice
       properties:
         image: oamdev/hello-world
         ports:
           - port: 8000
             expose: true
-      traits:
-        - type: scaler
-          properties:
-            replicas: 1
+      # traits:
+      #   - type: scaler
+      #     properties:
+      #       replicas: 1

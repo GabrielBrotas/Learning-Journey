@@ -55,9 +55,9 @@ kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 
 ```sh
 # validate format
-vela def vet vela/argo-app-trait.cue
+vela def vet vela/wexinc-webservice.cue
 
-vela def apply vela/argo-app-trait.cue
+vela def apply vela/wexinc-webservice.cue
 ```
 ## Use Argo CD with KubeVela
 

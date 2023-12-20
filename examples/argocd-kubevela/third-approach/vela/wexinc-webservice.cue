@@ -1,3 +1,8 @@
+import (
+	"strconv"
+	"strings"
+)
+
 "com.wexinc.webservice": {
 	alias: ""
 	annotations: {}
@@ -18,55 +23,52 @@
 
 template: {
 	output: {}
+
 	outputs: {
 		argocdapp: {
 			apiVersion: "argoproj.io/v1alpha1"
 			kind:       "Application"
 			metadata: {
-				name:      parameter.name
+				name:      context.name
 				namespace: "argocd"
-				labels: {
-					"app.kubernetes.io/name": parameter.name
-					"argocd.argoproj.io/instance": "fabric-dev_arch.dev.demo-app"
-				}
 			}
 			spec: {
-				project: "default"
+				project: parameter.project
 				source: {
 					path:           "examples/argocd-kubevela/third-approach/app-of-apps/apps"
 					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
 					targetRevision: "argocd-kubevela"
 				}
-				plugin: {
-					name: "vela-v1.0"
-					env: [
-						{
-							name: "FILE_NAME"
-							value: parameter.name + ".oam.yml"
-						}
-					]
-				}
+				// plugin: {
+				// 	name: "vela-v1.0"
+				// 	env: [
+				// 		{
+				// 			name: "FILE_NAME"
+				// 			value: parameter.name + ".oam.yml"
+				// 		}
+				// 	]
+				// }
 				destination: {
-					namespace: "default"
+					namespace: parameter.namespace
 					server: "https://kubernetes.default.svc"
 				}
 				syncPolicy: {
 					automated: {
-						prune:    true
+						prune:    false
 						selfHeal: true
 					}
 					syncOptions: ["CreateNamespace=true"]
 				}
 			}
 		}
+
 		deployment: {
 			apiVersion: "apps/v1"
 			kind:       "Deployment"
 			spec: {
 				selector: matchLabels: {
-					"app.oam.dev/component": context.name
+					"argocd.argoproj.io/instance": context.name
 				}
-
 				template: {
 					spec: {
 						containers: [{
@@ -137,9 +139,6 @@ template: {
 									}}]
 							}
 
-							if parameter["volumeMounts"] != _|_ {
-								volumeMounts: mountsArray
-							}
 
 							if parameter["livenessProbe"] != _|_ {
 								livenessProbe: parameter.livenessProbe
@@ -195,9 +194,6 @@ template: {
 							}]
 						}
 
-						if parameter["volumeMounts"] != _|_ {
-							volumes: deDupVolumesArray
-						}
 					}
 				}
 			}
@@ -241,6 +237,8 @@ template: {
 	]
 
 parameter: {
+		namespace: string
+
 		// +usage=Specify the labels in the workload
 		labels?: [string]: string
 
@@ -403,13 +401,7 @@ parameter: {
 				medium: *"" | "Memory"
 			}
 		}]
-
-		// +usage=Instructions for assessing whether the container is alive.
-		livenessProbe?: #HealthProbe
-
-		// +usage=Instructions for assessing whether the container is in a suitable state to serve traffic.
-		readinessProbe?: #HealthProbe
-
+		
 		// +usage=Specify the hostAliases to add
 		hostAliases?: [...{
 			ip: string

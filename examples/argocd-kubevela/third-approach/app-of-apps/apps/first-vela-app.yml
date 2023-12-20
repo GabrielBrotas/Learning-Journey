@@ -5,16 +5,16 @@ metadata:
 spec:
   components:
     - name: express-server
-      type: webservice
+      type: com.wexinc.webservice
       properties:
         image: oamdev/hello-world
         ports:
           - port: 8000
             expose: true
-      traits:
-        - type: scaler
-          properties:
-            replicas: 1
+      # traits:
+      #   - type: scaler
+      #     properties:
+      #       replicas: 1
         # - type: argo-app-trait
         #   properties:
         #     name: first-vela-app

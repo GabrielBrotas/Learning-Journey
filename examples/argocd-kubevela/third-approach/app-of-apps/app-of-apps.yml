@@ -8,7 +8,7 @@ spec:
     namespace: default
     server: "https://kubernetes.default.svc"
   source:
-    path: examples/argocd-kubevela/third-approach/app-of-apps/common-apps
+    path: examples/argocd-kubevela/third-approach/app-of-apps/apps
     repoURL: "https://github.com/GabrielBrotas/Learning-Journey/"
     targetRevision: argocd-kubevela
     # plugin:
