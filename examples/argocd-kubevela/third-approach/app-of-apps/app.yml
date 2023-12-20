@@ -11,12 +11,11 @@ spec:
     path: examples/argocd-kubevela/third-approach/app-of-apps/apps
     repoURL: "https://github.com/GabrielBrotas/Learning-Journey/"
     targetRevision: argocd-kubevela
-
-    plugin:
-      name: vela
-      env:
-        - name: FILE_NAME
-          value: first-vela-app.oam.yml
+    # plugin:
+    #   name: vela-v1.0
+    #   env:
+    #     - name: FILE_NAME
+    #       value: first-vela-app.oam.yml
 
   project: default
   syncPolicy:

@@ -1,17 +1,22 @@
-"argo-app": {
+"argo-app-trait": {
 	alias: ""
 	annotations: {}
-	attributes: workload: definition: {
-		apiVersion: "argoproj.io/v1alpha1"
-		kind:       "Application"
+	attributes: {
+		appliesToWorkloads: []
+		conflictsWith: []
+		podDisruptive:   false
+		workloadRefPath: ""
 	}
-	description: ""
+	description: "Create argo app."
 	labels: {}
-	type: "component"
+	type: "trait"
 }
 
 template: {
-	output: {
+	parameter: {
+		name:        string
+	}
+	outputs: argoapp: {
 		apiVersion: "argoproj.io/v1alpha1"
 		kind:       "Application"
 		metadata: {
@@ -47,8 +52,5 @@ template: {
 			}
 		}
 	}
-	outputs: {}
-	parameter: {
-		name:        string
-	}
 }
+

@@ -1,13 +1,10 @@
-
-
-## 1. Run Minikube
+## Run Minikube
 
 ```sh
 minikube start --kubernetes-version=v1.28.3
 ```
 
-## 2. Write the plugin configuration file
-
+## ArgoCD
 
 ```sh
 helm repo add argo-cd https://argoproj.github.io/argo-helm
@@ -38,7 +35,7 @@ argocd account update-password --current-password $PASS --new-password admin123
 # password: admin123
 ```
 
-## 5. Install KubeVela
+## Install KubeVela
 
 Install KubeVela so that the `argo-repo-server` can render the OAM files into Kubernetes resources.
 
@@ -53,9 +50,16 @@ helm install kubevela charts/kubevela/ -n vela-system --create-namespace
 kubectl wait pods --for=condition=Ready --timeout -1s --all -n vela-system
 ```
 
-## 6. Use Argo CD with KubeVela
+## Trait
+
+```sh
+# validate format
+vela def vet vela/argo-app-trait.cue
+
+vela def apply vela/argo-app-trait.cue
+```
+## Use Argo CD with KubeVela
 
 ```sh
 kubectl apply -f app-of-apps/app.yml
 ```
-
