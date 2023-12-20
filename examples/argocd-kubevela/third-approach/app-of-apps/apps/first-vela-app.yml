@@ -16,3 +16,5 @@ spec:
           properties:
             replicas: 1
         - type: argo-app
+          properties:
+            name: first-vela-app

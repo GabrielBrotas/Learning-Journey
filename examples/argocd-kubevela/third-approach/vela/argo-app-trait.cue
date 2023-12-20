@@ -35,7 +35,7 @@ template: {
 				env: [
 					{
 						name: "FILE_NAME"
-						value: parameter.name + ".oam.yml"
+						value: parameter.name + ".yml"
 					}
 				]
 			}
