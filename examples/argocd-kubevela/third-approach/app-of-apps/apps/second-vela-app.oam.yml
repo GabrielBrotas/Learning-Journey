@@ -1,0 +1,17 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: seconde-vela-app
+spec:
+  components:
+    - name: express-server-2
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+          - port: 8000
+            expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 2

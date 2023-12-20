@@ -1,0 +1,7 @@
+apiVersion: v2
+name: kubevela
+version: 1.0.0
+dependencies:
+  - name: vela-core
+    version: 1.9.7
+    repository: https://kubevela.github.io/charts

@@ -1,0 +1,71 @@
+argo-cd:
+  applicationSet:
+    enabled: false
+  dex:
+    enabled: false
+
+  repoServer:
+    clusterAdminAccess:
+      enabled: true
+
+    initContainers:
+      - name: kubevela
+        image: nginx:1.21.6
+        command:
+          - bash
+          - "-c"
+          - |
+            #!/usr/bin/env bash
+            set -eo pipefail
+            curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.9.7
+        env:
+          - name: VELA_INSTALL_DIR
+            value: /custom-tools
+        resources:
+          limits:
+            cpu: 50m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 32Mi
+        volumeMounts:
+          - name: custom-tools
+            mountPath: /custom-tools
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        imagePullPolicy: IfNotPresent
+
+    extraContainers:
+      - name: vela
+        image: busybox
+        command: [/var/run/argocd/argocd-cmp-server]
+        args: ["--loglevel", "info"]
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 999
+        volumeMounts:
+          - name: var-files
+            mountPath: /var/run/argocd
+          - name: plugins
+            mountPath: /home/argocd/cmp-server/plugins
+          - name: vela-config
+            mountPath: /home/argocd/cmp-server/config/plugin.yaml
+            subPath: plugin.yaml
+          - name: cmp-tmp
+            mountPath: /tmp
+          - name: custom-tools
+            mountPath: /usr/local/bin/vela
+            subPath: vela
+          - name: vela-cli-dir
+            mountPath: /.vela
+
+    volumes:
+      - name: custom-tools
+        emptyDir: {}
+      - configMap:
+          name: vela-config
+        name: vela-config
+      - emptyDir: {}
+        name: cmp-tmp
+      - name: vela-cli-dir
+        emptyDir: {}
