@@ -39,7 +39,7 @@ template: {
 					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
 					targetRevision: "argocd-kubevela"
 					directory:      {
-						include: context.name + '.yml'
+						include: strings.Join(context.name, ".yml")
 					}
 				}
 				// plugin: {
