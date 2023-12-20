@@ -1,7 +1,7 @@
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: seconde-vela-app
+  name: second-vela-app
 spec:
   components:
     - name: express-server-2

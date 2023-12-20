@@ -38,6 +38,9 @@ template: {
 					path:           "examples/argocd-kubevela/third-approach/app-of-apps/apps"
 					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
 					targetRevision: "argocd-kubevela"
+					directory:      {
+						include: context.name + '.yml'
+					}
 				}
 				// plugin: {
 				// 	name: "vela-v1.0"
@@ -401,7 +404,7 @@ parameter: {
 				medium: *"" | "Memory"
 			}
 		}]
-		
+
 		// +usage=Specify the hostAliases to add
 		hostAliases?: [...{
 			ip: string
