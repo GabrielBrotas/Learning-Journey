@@ -186,17 +186,8 @@ template: {
 			template: {
 				metadata: {
 					labels: {
-						if parameter.labels != _|_ {
-							parameter.labels
-						}
-						if parameter.addRevisionLabel {
-							"app.oam.dev/revision": context.revision
-						}
 						"app.oam.dev/name":      context.appName
 						"app.oam.dev/component": context.name
-					}
-					if parameter.annotations != _|_ {
-						annotations: parameter.annotations
 					}
 				}
 

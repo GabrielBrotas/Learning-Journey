@@ -2,14 +2,15 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: first-vela-app
+  namespace: default
 spec:
   components:
     - name: express-server
       type: com.wexinc.webservice
       properties:
-        name: first-vela-app-tst
         image: oamdev/hello-world
-        namespace: app1
+        namespace: app-1
+        project: fabric-dev
         ports:
           - port: 8000
             expose: true
@@ -17,6 +18,6 @@ spec:
       #   - type: scaler
       #     properties:
       #       replicas: 1
-        # - type: argo-app-trait
-        #   properties:
-        #     name: first-vela-app
+      # - type: argo-app-trait
+      #   properties:
+      #     name: first-vela-app

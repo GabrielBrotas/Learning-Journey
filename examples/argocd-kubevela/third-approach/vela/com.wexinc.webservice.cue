@@ -21,10 +21,10 @@ template: {
 		apiVersion: "argoproj.io/v1alpha1"
 		kind:       "Application"
 		metadata: {
-			name:      parameter.name
+			name:      context.appName
 			namespace: "argocd"
 			labels: {
-				"argocd.argoproj.io/instance": "app-of-apps-7"
+				"argocd.argoproj.io/instance": "app-of-apps"
 			}
 		}
 		spec: {
@@ -55,11 +55,20 @@ template: {
 		deployment: {
 			apiVersion: "apps/v1"
 			kind:       "Deployment"
+			labels: {
+				"argocd.argoproj.io/instance": context.appName
+			}
 			spec: {
 				selector: matchLabels: {
-					"argocd.argoproj.io/instance": parameter.name
+					"app.oam.dev/component": context.name
 				}
 				template: {
+					metadata: {
+						labels: {
+							"app.oam.dev/name":      context.appName
+							"app.oam.dev/component": context.name
+						}
+					}
 					spec: {
 						containers: [{
 							name:  context.name
@@ -189,44 +198,11 @@ template: {
 			}
 		}
 		
-		if len(exposePorts) != 0 {
-			webserviceExpose: {
-				apiVersion: "v1"
-				kind:       "Service"
-				metadata: name: context.name
-				spec: {
-					selector: "app.oam.dev/component": context.name
-					ports: exposePorts
-					type:  parameter.exposeType
-				}
-			}
-		}
 	}
 
-	exposePorts: [
-		if parameter.ports != _|_ for v in parameter.ports if v.expose == true {
-			port:       v.port
-			targetPort: v.port
-			if v.name != _|_ {
-				name: v.name
-			}
-			if v.name == _|_ {
-				_name: "port-" + strconv.FormatInt(v.port, 10)
-				name:  *_name | string
-				if v.protocol != "TCP" {
-					name: _name + "-" + strings.ToLower(v.protocol)
-				}
-			}
-			if v.nodePort != _|_ && parameter.exposeType == "NodePort" {
-				nodePort: v.nodePort
-			}
-			if v.protocol != _|_ {
-				protocol: v.protocol
-			}
-		},
-	]
 
-parameter: {
+
+	parameter: {
 		namespace: string
 
 		// +usage=Specify the labels in the workload
