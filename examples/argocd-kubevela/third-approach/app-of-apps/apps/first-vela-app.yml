@@ -8,6 +8,7 @@ spec:
       type: com.wexinc.webservice
       properties:
         image: oamdev/hello-world
+        namespace: app1
         ports:
           - port: 8000
             expose: true
