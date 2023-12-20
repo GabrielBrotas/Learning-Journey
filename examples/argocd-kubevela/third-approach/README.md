@@ -11,7 +11,8 @@ helm repo add argo-cd https://argoproj.github.io/argo-helm
 helm repo update
 helm dep update charts/argo-cd/
 
-helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml --create-namespace
+helm install argo-cd charts/argo-cd/ -n argocd --create-namespace
+# helm install argo-cd charts/argo-cd/ -n argocd --values charts/argo-cd/values.yaml --create-namespace
 
 # wait for argocd ready
 kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
