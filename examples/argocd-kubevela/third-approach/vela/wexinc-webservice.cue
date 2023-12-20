@@ -31,6 +31,9 @@ template: {
 			metadata: {
 				name:      parameter.name
 				namespace: "argocd"
+				labels: {
+			    "argocd.argoproj.io/instance": "app-of-apps-6"
+				}
 			}
 			spec: {
 				project: parameter.project
@@ -70,7 +73,7 @@ template: {
 			kind:       "Deployment"
 			spec: {
 				selector: matchLabels: {
-					"argocd.argoproj.io/instance": context.name
+					"argocd.argoproj.io/instance": parameter.name
 				}
 				template: {
 					spec: {

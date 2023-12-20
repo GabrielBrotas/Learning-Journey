@@ -7,7 +7,7 @@ spec:
     - name: express-server
       type: com.wexinc.webservice
       properties:
-        name: first-vela-app
+        name: first-vela-app-tst
         image: oamdev/hello-world
         namespace: app1
         ports:
