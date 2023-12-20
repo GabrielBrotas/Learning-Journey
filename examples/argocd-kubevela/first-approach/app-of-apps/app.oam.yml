@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: first-vela-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: "https://kubernetes.default.svc"
+  source:
+    path: examples/argocd-kubevela/first-approach/app-of-apps/apps
+    repoURL: "https://github.com/GabrielBrotas/Learning-Journey/"
+    targetRevision: argocd-kubevela
+
+    directory:
+      include: first-vela-app.oam.yml
+
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
