@@ -14,4 +14,4 @@ spec:
       traits:
         - type: scaler
           properties:
-            replicas: 2
+            replicas: 1
