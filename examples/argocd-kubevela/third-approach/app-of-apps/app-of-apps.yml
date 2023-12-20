@@ -17,7 +17,7 @@ spec:
     #     - name: FILE_NAME
     #       value: first-vela-app.oam.yml
 
-  project: default
+  project: fabric-dev
   syncPolicy:
     automated:
       prune: false
