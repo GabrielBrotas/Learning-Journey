@@ -29,7 +29,7 @@ template: {
 			apiVersion: "argoproj.io/v1alpha1"
 			kind:       "Application"
 			metadata: {
-				name:      context.name
+				name:      parameter.name
 				namespace: "argocd"
 			}
 			spec: {
@@ -39,7 +39,7 @@ template: {
 					repoURL:        "https://github.com/GabrielBrotas/Learning-Journey/"
 					targetRevision: "argocd-kubevela"
 					directory:      {
-						include: strings.Join(context.name, ".yml")
+						include: strings.Join(parameter.name, ".yml")
 					}
 				}
 				// plugin: {
