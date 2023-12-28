@@ -12,36 +12,6 @@ nav:
       - Sustainability: Architecture/sustainability.md
       - Architectural Features: Architecture/architectural-features.md
       - Design Quality Software: Architecture/design-quality-software.md
-  - Systems Communication:
-      - SystemsCommunication/index.md
-      - REST: SystemsCommunication/REST.md
-      - gRPC: SystemsCommunication/gRPC.md
-      - GraphQL: SystemsCommunication/GraphQL.md
-  - SOLID:
-      - SOLID/index.md
-      - Single Responsibility Principle: SOLID/single-responsability.md
-      - Open-closed Principle: SOLID/open-closed.md
-      - Liskov Substitution Principle: SOLID/liskov-substitution.md
-      - Interface Segregation Principle: SOLID/interface-segregation.md
-      - Dependency Inversion Principle: SOLID/dependency-inversion.md
-  - Domain Driven Design: domain-driven-design.md
-  - Microservices: microservices.md
-  - Kafka:
-      - Kafka/index.md
-      - Topics: Kafka/topics.md
-      - Producers and Consumers: Kafka/producers-and-consumers.md
-      - Kafka Connect: Kafka/kafka-connect.md
-      - Avro: Kafka/avro.md
-  - RabbitMQ: rabbitmq.md
-  - Kubernetes: kubernetes.md
-  - Service Mesh:
-      - ServiceMesh/index.md
-      - Istio: ServiceMesh/istio.md
-  - Observability:
-      - Observability/index.md
-      - Service Level: Observability/service-level.md
-      - OpenTelemetry: Observability/open-telemetry.md
-      - Elastic Stack: Observability/elastic-stack.md
   - AWS:
       - Regions and Availability Zones: AWS/1.regions-and-zones.md
   - Computer Science:
@@ -49,8 +19,38 @@ nav:
       - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
       - HTTPS, TLS and mTLS: Computer-Science/https-tls-mtls.md
       - Reactive Programming vs Reactive Systems: Computer-Science/reactive-programming-vs-reactive-systems.md
+  - Domain Driven Design: domain-driven-design.md
   - GitOps: GitOps/index.md
   - IAM: IAM.md
+  - Kafka:
+      - Kafka/index.md
+      - Topics: Kafka/topics.md
+      - Producers and Consumers: Kafka/producers-and-consumers.md
+      - Kafka Connect: Kafka/kafka-connect.md
+      - Avro: Kafka/avro.md
+  - Kubernetes: kubernetes.md
+  - Microservices: microservices.md
+  - Observability:
+      - Observability/index.md
+      - Service Level: Observability/service-level.md
+      - OpenTelemetry: Observability/open-telemetry.md
+      - Elastic Stack: Observability/elastic-stack.md
+  - RabbitMQ: rabbitmq.md
+  - Service Mesh:
+      - ServiceMesh/index.md
+      - Istio: ServiceMesh/istio.md
+  - SOLID:
+      - SOLID/index.md
+      - Single Responsibility Principle: SOLID/single-responsability.md
+      - Open-closed Principle: SOLID/open-closed.md
+      - Liskov Substitution Principle: SOLID/liskov-substitution.md
+      - Interface Segregation Principle: SOLID/interface-segregation.md
+      - Dependency Inversion Principle: SOLID/dependency-inversion.md
+  - Systems Communication:
+      - SystemsCommunication/index.md
+      - REST: SystemsCommunication/REST.md
+      - gRPC: SystemsCommunication/gRPC.md
+      - GraphQL: SystemsCommunication/GraphQL.md
 theme:
   name: material
   logo: images/volcano.svg
