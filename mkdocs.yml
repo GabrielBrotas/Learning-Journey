@@ -42,6 +42,8 @@ nav:
       - Service Level: Observability/service-level.md
       - OpenTelemetry: Observability/open-telemetry.md
       - Elastic Stack: Observability/elastic-stack.md
+  - AWS:
+      - Regions and Availability Zones: AWS/1.regions-and-zones.md
   - Computer Science:
       - Program, Process and Thread: Computer-Science/core-thread-process.md
       - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
