@@ -14,6 +14,7 @@ nav:
       - Design Quality Software: Architecture/design-quality-software.md
   - AWS:
       - Regions and Availability Zones: AWS/1.regions-and-zones.md
+      - IAM: AWS/2.iam.md
   - Computer Science:
       - Program, Process and Thread: Computer-Science/core-thread-process.md
       - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
@@ -58,6 +59,7 @@ theme:
   features:
     - tabs
     - content.tabs.link
+    - content.code.copy
   font:
     code: Roboto Mono
     text: Roboto
@@ -74,3 +76,10 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: True
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
