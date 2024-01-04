@@ -6,10 +6,10 @@ on:
     branches:
       - main
     paths:
-      - 'docs/**'
-      - 'mkdocs.yml'
-      - 'requirements.txt'
-      - '.github/workflows/gh-pages.yml'
+      - "docs/**"
+      - "mkdocs.yml"
+      - "requirements.txt"
+      - ".github/workflows/gh-pages.yml"
 
 permissions:
   pages: write
@@ -30,6 +30,13 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+
+      - name: Add Google Analytics
+        run: |
+          echo "extra:" >> mkdocs.yml
+          echo "  analytics:" >> mkdocs.yml
+          echo "    provider: google" >> mkdocs.yml
+          echo "    property: ${{ secrets.GA_PROPERTY }}" >> mkdocs.yml
 
       - name: Build site
         run: |
