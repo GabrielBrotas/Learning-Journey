@@ -15,6 +15,7 @@ nav:
   - AWS:
       - Regions and Availability Zones: AWS/1.regions-and-zones.md
       - IAM: AWS/2.iam.md
+      - Budget And Cost: AWS/3.budget-and-cost.md
   - Computer Science:
       - Program, Process and Thread: Computer-Science/core-thread-process.md
       - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
