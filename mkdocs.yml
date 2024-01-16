@@ -18,7 +18,7 @@ nav:
       - Budget And Cost: AWS/3.budget-and-cost.md
       - EC2 Fundamentals: AWS/4.ec2.md
       - EC2 Fundamentals Part 2: AWS/5.ec2-pt2.md
-      - EC2 Storage: AWS/6.ec2-storage.md
+      - EC2 Storage & AMI: AWS/6.ec2-storage.md
   - Computer Science:
       - Program, Process and Thread: Computer-Science/core-thread-process.md
       - Object-Oriented-Programming vs Functional Programming: Computer-Science/OOP-vs-Functional-Programming.md
