@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Sharing what I'm picking up along the way - exploring Architecture, DevOps, and Software Engineering" name="description"/>
+<meta content="Gabriel Brotas" name="author"/>
+<link href="https://gabrielbrotas.github.io/Learning-Journey/Architecture/design-quality-software/" rel="canonical"/>
+<link href="../architectural-features/" rel="prev"/>
+<link href="../../AWS/1.regions-and-zones/" rel="next"/>
+<link href="../../images/volcano.svg" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.2" name="generator"/>
+<title>Design Quality Software - Learning Journey</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-2SMKV8KR0M"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-2SMKV8KR0M",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-2SMKV8KR0M",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+<script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+<link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            
+                .gscrollbar-fixer { padding-right: 15px; }
+                .gdesc-inner { font-size: 0.75rem; }
+                body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+                body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+                body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+                </style><script src="../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="red" data-md-color-primary="black" data-md-color-scheme="purple" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#designing-quality-software">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Learning Journey" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Learning Journey
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Design Quality Software
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="red" data-md-color-media="" data-md-color-primary="black" data-md-color-scheme="purple" id="__palette_0" name="__palette" type="radio"/>
+</form>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Learning Journey" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+    Learning Journey
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../types-of-architecture/">
+<span class="md-ellipsis">
+    Types of Architecture
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../sustainability/">
+<span class="md-ellipsis">
+    Sustainability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architectural-features/">
+<span class="md-ellipsis">
+    Architectural Features
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Design Quality Software
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Design Quality Software
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance">
+<span class="md-ellipsis">
+      Performance
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#caching">
+<span class="md-ellipsis">
+      Caching
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scalability">
+<span class="md-ellipsis">
+      Scalability
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#resilience">
+<span class="md-ellipsis">
+      Resilience
+    </span>
+</a>
+<nav aria-label="Resilience" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#resilience-strategies">
+<span class="md-ellipsis">
+      Resilience Strategies
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    AWS
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            AWS
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/1.regions-and-zones/">
+<span class="md-ellipsis">
+    Regions and Availability Zones
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/2.iam/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/3.budget-and-cost/">
+<span class="md-ellipsis">
+    Budget And Cost
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/4.ec2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/5.ec2-pt2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals Part 2
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/6.ec2-storage/">
+<span class="md-ellipsis">
+    EC2 Storage &amp; AMI
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Computer Science
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Computer Science
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/core-thread-process/">
+<span class="md-ellipsis">
+    Program, Process and Thread
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/OOP-vs-Functional-Programming/">
+<span class="md-ellipsis">
+    Object-Oriented-Programming vs Functional Programming
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/https-tls-mtls/">
+<span class="md-ellipsis">
+    HTTPS, TLS and mTLS
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/reactive-programming-vs-reactive-systems/">
+<span class="md-ellipsis">
+    Reactive Programming vs Reactive Systems
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../domain-driven-design/">
+<span class="md-ellipsis">
+    Domain Driven Design
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../GitOps/">
+<span class="md-ellipsis">
+    GitOps
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../IAM/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Kafka
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Kafka
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/">
+<span class="md-ellipsis">
+    Apache Kafka
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/topics/">
+<span class="md-ellipsis">
+    Topics
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/producers-and-consumers/">
+<span class="md-ellipsis">
+    Producers and Consumers
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/kafka-connect/">
+<span class="md-ellipsis">
+    Kafka Connect
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/avro/">
+<span class="md-ellipsis">
+    Avro
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kubernetes/">
+<span class="md-ellipsis">
+    Kubernetes
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+<span class="md-ellipsis">
+    Microservices-based Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_10_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_10">
+<span class="md-nav__icon md-icon"></span>
+            Microservices-based Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/characteristics/">
+<span class="md-ellipsis">
+    Characteristics
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+<span class="md-ellipsis">
+    Observability
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_11_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_11">
+<span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/">
+<span class="md-ellipsis">
+    Observability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/service-level/">
+<span class="md-ellipsis">
+    Service Level
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/open-telemetry/">
+<span class="md-ellipsis">
+    OpenTelemetry
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/elastic-stack/">
+<span class="md-ellipsis">
+    Elastic Stack
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../rabbitmq/">
+<span class="md-ellipsis">
+    RabbitMQ
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_13" type="checkbox"/>
+<label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_13_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_13">
+<span class="md-nav__icon md-icon"></span>
+            Service Mesh
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/istio/">
+<span class="md-ellipsis">
+    Istio
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_14" type="checkbox"/>
+<label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_14_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_14">
+<span class="md-nav__icon md-icon"></span>
+            SOLID
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/single-responsability/">
+<span class="md-ellipsis">
+    Single Responsibility Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/open-closed/">
+<span class="md-ellipsis">
+    Open-closed Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/liskov-substitution/">
+<span class="md-ellipsis">
+    Liskov Substitution Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/interface-segregation/">
+<span class="md-ellipsis">
+    Interface Segregation Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/dependency-inversion/">
+<span class="md-ellipsis">
+    Dependency Inversion Principle
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_15" type="checkbox"/>
+<label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_15_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_15">
+<span class="md-nav__icon md-icon"></span>
+            Systems Communication
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/REST/">
+<span class="md-ellipsis">
+    REST
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/gRPC/">
+<span class="md-ellipsis">
+    gRPC
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/GraphQL/">
+<span class="md-ellipsis">
+    GraphQL
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#performance">
+<span class="md-ellipsis">
+      Performance
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#caching">
+<span class="md-ellipsis">
+      Caching
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#scalability">
+<span class="md-ellipsis">
+      Scalability
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#resilience">
+<span class="md-ellipsis">
+      Resilience
+    </span>
+</a>
+<nav aria-label="Resilience" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#resilience-strategies">
+<span class="md-ellipsis">
+      Resilience Strategies
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="designing-quality-software">Designing Quality Software<a class="headerlink" href="#designing-quality-software" title="Permanent link">¶</a></h1>
+<h2 id="performance">Performance<a class="headerlink" href="#performance" title="Permanent link">¶</a></h2>
+<p>When it comes to developing software, performance is an essential factor. It's the software's ability to complete a specific workload. But how can we determine how well a software performs a particular action? To measure performance, we need data. The primary units of measurement for evaluating software performance are latency and throughput.</p>
+<p>The units of measurement for evaluating software performance are:</p>
+<ul>
+<li>Latency or "response time" ⇒ Time it takes for a software application to process a request and complete a workload.</li>
+<li>Throughput ⇒ Number of requests a software application can handle.</li>
+</ul>
+<p>Having a performative software is different from having a scalable software</p>
+<p>Objective:</p>
+<ul>
+<li>Reduce latency, usually measured in milliseconds; It is affected by the application's processing time, network, and external calls;</li>
+<li>Increase throughput, allow the software to handle more requests; It is directly linked to latency;</li>
+</ul>
+<p><strong>Main reasons for low performance:</strong></p>
+<ul>
+<li>Inefficient processing;<ul>
+<li>Ex: Algorithms, the way the application is handling data, poorly made queries, etc.</li>
+</ul>
+</li>
+<li>Limited computational resources;<ul>
+<li>CPU, RAM, Memory,...</li>
+</ul>
+</li>
+<li>Working in a blocking way;<ul>
+<li>Every time you make a request and if that request blocks the application to deal specifically with that request, the application will decrease throughput because it will not be able to handle thousands of requests in parallel.</li>
+<li>Separate each request into a thread.</li>
+</ul>
+</li>
+<li>Serial access to resources;<ul>
+<li>Every time you access an API you wait for it to finish and call the next one, one after the other, this decreases throughput.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Main ways to increase efficiency:</strong></p>
+<ul>
+<li>Scale of computational capacity (CPU, Disk, Memory, Network);</li>
+<li>Logic behind the software (Algorithms, queries, framework overhead);</li>
+<li>Concurrency and parallelism; Dealing with multiple processes at the same time;</li>
+<li>Databases (types of databases, schema);</li>
+<li>Caching;</li>
+</ul>
+<p><strong>Computational Capacity: Vertical Scale vs Horizontal Scale</strong></p>
+<ul>
+<li>
+<p>Vertical Scale ⇒ Increase the computational capacity of the machine, so that the application can receive more requests;</p>
+</li>
+<li>
+<p>Horizontal Scale ⇒ Increase the number of machines by placing a load balancer in front to balance the loads;</p>
+</li>
+</ul>
+<p><strong>Concurrency and Parallelism</strong></p>
+<p>"Concurrency is about dealing with many things at once. Parallelism is about doing many things at once."</p>
+<ul>
+<li>
+<p><strong>Concurrency ⇒</strong> Deals with several things but they are not necessarily executed at the same time; When two or more tasks can start to be executed and finish in overlapping time periods, not meaning that they need to be in execution necessarily at the same time.</p>
+<p>That is, you have concurrency when:</p>
+<ul>
+<li>
+<p>More than one task progresses at the same time in an environment with multiple CPUs/cores;</p>
+</li>
+<li>
+<p>Or in the case of a single-core environment, two or more tasks may not progress at the exact same moment, but more than one task is processed in the same time interval, not waiting for one task to complete before starting another.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Parallelism ⇒</strong> Perform actions simultaneously. It happens when two or more tasks are executed, literally, at the same time. Obviously requires a processor with multiple cores, or multiple processors so that more than one process or thread can be executed simultaneously.</p>
+</li>
+</ul>
+<p>Imagining a web server with a worker:</p>
+<p><strong>Serial way</strong>
+- Working in a serial way - single process
+- Serving 5 requests</p>
+<p>If the worker operates in serial mode, it will attend to one request at a time.</p>
+<div class="language-docker highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>10ms<span class="w"> </span>-&gt;<span class="w"> </span>10ms<span class="w"> </span>-&gt;<span class="w"> </span>10ms<span class="w"> </span>-&gt;<span class="w"> </span>10ms<span class="w"> </span>-&gt;<span class="w"> </span>10ms<span class="w"> </span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>------------------------------------
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">              </span>50ms
+</span></code></pre></div>
+<p><strong>Concurrent/parallel way</strong>
+- 5 threads serving 1 request each</p>
+<p>If it operates in parallel mode, it can handle multiple requests simultaneously, which improves its performance.</p>
+<div class="language-docker highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="m">10</span><span class="w"> </span>ms<span class="w"> </span>-&gt;
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="m">10</span><span class="w"> </span>ms<span class="w"> </span>-&gt;
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="m">10</span><span class="w"> </span>ms<span class="w"> </span>-&gt;
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="m">10</span><span class="w"> </span>ms<span class="w"> </span>-&gt;
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="m">10</span><span class="w"> </span>ms<span class="w"> </span>-&gt;
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a>--------
+</span><span id="__span-1-7"><a href="#__codelineno-1-7" id="__codelineno-1-7" name="__codelineno-1-7"></a><span class="w">  </span>10ms
+</span></code></pre></div>
+<hr/>
+<h2 id="caching">Caching<a class="headerlink" href="#caching" title="Permanent link">¶</a></h2>
+<p>Fetching things that have been processed before and returning them more quickly to the end user.</p>
+<ul>
+<li>
+<p><strong>Edge caching / Edge computing</strong></p>
+<p>The user does not hit the machine (ec2, ecs, lambda,...) because this type of cache will cache the data on an edge that is before the main server.
+Examples of services: Cloudflare, Cloudfront.</p>
+<p>Cloudfront caches static files (images, css, js, ...) in an availability zone and users who are close to them will receive the data almost instantly.</p>
+<p>Types of edge cache:</p>
+<ul>
+<li>Static data;</li>
+<li>Web pages;</li>
+<li>Internal functions;<ul>
+<li>Avoid reprocessing heavy algorithms by setting a TTL of 30min, for example;</li>
+<li>Access to the database (avoid unnecessary I/O).</li>
+</ul>
+</li>
+<li>Objects;</li>
+</ul>
+<p><strong>Problem:</strong> Netflix has millions of accesses to its web application, if the data center is in the United States, users from all over the world will have to travel from their location to the USA to get these terabytes of data in order to access the site, congesting Netflix's network and the internet in general and generating a lot of latency to access content.</p>
+<p><strong>Solution: Edge computing:</strong>  caching this data in the regions where your users are located, avoiding users having to travel across the entire internet to hit the data center. It will give a better experience to the user (low latency) and we will pay less because we will have fewer requests on our servers.</p>
+<ul>
+<li>Cache performed closer to the user. The user does not need to hit the USA to get an image.</li>
+<li>Avoids the request reaching the Cloud Provider / Infra.</li>
+<li>Usually static files. (Cheaper, faster)</li>
+<li>CDN - Content Delivery Network; (Network of servers, spreads your content to other data centers), e.g: Akamai's CDN → More than 500 points in Brazil, spreads your content (videos) to the regions of Brazil.
+    If you're in Portugal, your video should be loaded from a CDN in Portugal.
+    Cost:<ul>
+<li>CDN cost</li>
+<li>Distribution cost: If Akamai does not have the video/image on its CDN, it will fetch the content from the server (e.g: us-east-1), download it and make it available to you. Once it has been downloaded, it will perform something called Midgress, which means that it will now take that content and distribute it among strategic points, and this content spreading consumes bandwidth, which you pay for to spread across the edges. Origin → CDN → midgress →...</li>
+</ul>
+</li>
+<li>Cloudflare workers ⇒ Edge computing platform</li>
+<li>Vercel</li>
+<li>Akamai</li>
+</ul>
+</li>
+</ul>
+<h2 id="scalability"><strong>Scalability</strong><a class="headerlink" href="#scalability" title="Permanent link">¶</a></h2>
+<p>Scalability is the ability of systems to support an increase (or decrease) in workloads by incrementing (or reducing) the cost in equal or lesser proportion.</p>
+<p>While performance focuses on reducing latency and increasing throughput, scalability aims to have the possibility of increasing or decreasing throughput by adding or removing computational capacity.</p>
+<p>Vertical Scaling - Horizontal Scaling</p>
+<p><strong>Scaling Software - Decentralization</strong></p>
+<p>Machines are disposable, so your system must be independent of the machine being used.</p>
+<ul>
+<li><strong>Ephemeral Disk →</strong> Everything you save on disk can be deleted when needed. We need the power to kill the machine when we want to.</li>
+<li><strong>Application Server vs Assets Server →</strong> Server has the application code, assets are on an assets server (s3 bucket).</li>
+<li><strong>Centralized Cache →</strong> The cache is not on the machine itself, it is on a server specific for caching. ex: DynamoDB.</li>
+<li><strong>Centralized Sessions →</strong> The software cannot store state.</li>
+<li><strong>Upload / File Writing →</strong> Bucket / file server</li>
+</ul>
+<p>Everything can be easily destroyed and created.</p>
+<p><strong>Scaling Databases</strong></p>
+<ul>
+<li>Increasing computational resources; More disk, memory, cpu,...;</li>
+<li>Distributing responsibilities (write vs read); Create replicas;</li>
+<li>Sharding horizontally; Create multiple read machines;</li>
+<li>Query and index optimization;</li>
+<li>Serverless / Cloud databases; (Dynamo, Aurora, Fauna,...);</li>
+</ul>
+<p>Use an APM (Application performance monitoring) system to identify bottlenecks in queries and problems that are occurring.</p>
+<ul>
+<li>Explain in queries → identify what is happening in queries</li>
+<li>CQRS (Command Query Responsibility Segregation)</li>
+</ul>
+<p><strong>Reverse Proxy</strong></p>
+<p>Proxy = Proxy, a person who speaks on your behalf</p>
+<p>Redirects users;</p>
+<p>A proxy is a service that routes traffic between the client and another system. It can regulate traffic according to present policies, enforce security, and block unknown IPs.</p>
+<p>A reverse proxy is a server that sits in front of all servers, it has rules, and these rules cause it to forward your request to certain servers that can resolve it. Unlike a normal proxy, which sits on the client side, the reverse proxy is designed to protect the servers. It accepts the client's request and forwards the request to one or more servers and returns the processed result. The client communicates directly with the reverse proxy and does not know about the server that processed it.</p>
+<p><strong>Reverse Proxy Solution:</strong></p>
+<ul>
+<li>Nginx</li>
+<li>HAProxy (HA = High Availability)</li>
+<li>Traefik</li>
+</ul>
+<h2 id="resilience"><strong>Resilience</strong><a class="headerlink" href="#resilience" title="Permanent link">¶</a></h2>
+<p>It is a set of intentionally adopted strategies for adapting a system when a failure occurs.</p>
+<p>In software, if an error occurs, it either throws an exception or has a strategy to serve the client request, even if partially, despite the error.</p>
+<p>Resilience is the power to adapt if something happens.</p>
+<p>How can I register a user even if the Correios API is not working to get the ZIP code? How can I get that sale if my payment service is not working?</p>
+<p>The only thing we are certain of is that our software will fail at some point, but we must have resilience to deal with these failures.</p>
+<p>Having resilience strategies allows us to minimize the risks of data loss and important business transactions.</p>
+<h3 id="resilience-strategies">Resilience Strategies<a class="headerlink" href="#resilience-strategies" title="Permanent link">¶</a></h3>
+<ul>
+<li>
+<p><strong>Protect and be Protected</strong></p>
+<p>It is very common today for an application to be based on an ecosystem with several other services. A system in a distributed architecture needs to adopt self-preservation mechanisms to ensure its operation with the highest possible quality.</p>
+<p>A system cannot be "selfish" to the point of making more requests on a system that is failing.</p>
+<p><strong>Example:</strong></p>
+<p>System A sending a request to know the price table for System B, but System B does not respond, and System A keeps sending several requests in succession, eventually System B will go offline.</p>
+<p>So, a system cannot keep sending multiple requests to another until it crashes, it is no use kicking a dead dog.</p>
+<p>A slow system online is often worse than a system offline. (Domino effect).</p>
+<p><strong>Example:</strong></p>
+<p>System A calls System B that calls System C, if System C is slow, it will delay B's response, which will consequently delay A's response, and if more requests are coming, it will end up crashing some service and eventually maybe all.</p>
+<p>So, sometimes if a system is not handling requests, it is better to return 500 for everyone until it stabilizes again.</p>
+<p>One form of protection is to identify that you cannot handle requests or that the other service is no longer able to handle them or taking too long to respond.</p>
+</li>
+<li>
+<p><strong>Health Check</strong></p>
+<p>Check the application's health;</p>
+<p>"Without vital signs, it is not possible to know the health of a system".</p>
+<p>Important to know if it is able to receive requests or not, ..., if it is bad, it already returns a 500 error for the other applications to know if it is unavailable.</p>
+<p>An unhealthy system has a chance to recover if traffic stops being directed to it temporarily.</p>
+<p>Self-healing, give the server time to self-recover, stop sending requests to it.</p>
+<p><strong>Quality Health Check</strong>, usually people only put a /health route to check if the application is healthy, but this cannot measure if the application is really healthy because in the other routes, there is usually processing, database query, data formatting, etc.</p>
+</li>
+<li>
+<p><strong>Rate Limiting</strong></p>
+<p>Protects the system based on what it was designed to support.</p>
+<p>To know this limit, we can do stress testing and/or the company's budget to know how much traffic it can handle.</p>
+<p><strong>Example:</strong> 100 requests per second, "it's as much as I can handle", returns a 500 error if exceeded.</p>
+<p>We can also work with priority, reserve 60 requests for an important client and 40 for the rest.</p>
+</li>
+<li>
+<p><strong>Circuit breaker</strong></p>
+<p>It protects the system by denying requests made to it. Example: 500</p>
+<p>If the API is having problems, the circuit opens the "switch" and no longer allows requests to pass through.</p>
+<p><strong>Closed Circuit =</strong> Requests arrive normally;</p>
+<p><strong>Open Circuit</strong> = Requests do not reach the system. Instant error to the client;</p>
+<p><strong>Half-open</strong> = Allows a limited number of requests to verify if the system can fully come back online.</p>
+</li>
+<li>
+<p><strong>API Gateway</strong></p>
+<p>Centralizes the receipt of all application requests, all requests pass through it and it applies the policy/validation rules before forwarding the request to the resolver.</p>
+<p>It understands the individual needs of each application.</p>
+<p>Ensures that "inappropriate" requests reach the system:</p>
+<p>Example: Unauthenticated user.</p>
+<p>We take the authentication responsibility away from the application and pass it to the API Gateway, just by doing that we already reduce the resource expense to check whether the user is authenticated or not.</p>
+<p>It's like living in a condominium and the person can only enter the apartment if they go through the gatehouse (API Gateway) first.</p>
+<p>Implements policies such as Rate Limiting, Health check, etc...</p>
+<p>Example of services: Kong</p>
+</li>
+<li>
+<p><strong>Service mesh</strong></p>
+<p>Controls network traffic.</p>
+<p>Instead of services communicating directly with each other, they hit a proxy called a sidecar and that sidecar sends the request to the sidecar of another system.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>[ System A ] (Sidecar) ----&gt; (Sidecar) [System B]
+</span></code></pre></div>
+<p>All network communication is performed via proxy, so everything that is passing on the network can be controlled.</p>
+<p>Avoids protection implementations by the system itself.</p>
+<p>You can analyze everything that is happening on the network, all traffic, and with that you can define the rules for Rate Limiter, Circuit Breaker, etc...</p>
+<p>mTLS → encrypt the network to ensure that Service A is itself and B is itself.</p>
+</li>
+<li>
+<p><strong>Asynchronous communication</strong></p>
+<p>With less computational resources, it can handle more computational resources than it could otherwise.</p>
+<p>It does not need to deliver the response to the requests immediately.</p>
+<p>Avoids data loss;</p>
+<p>There is no data loss in sending a transaction if the server is down;</p>
+<p><strong>Example:</strong> synchronously, if we make a payment and the server is not available, it will tell us to try again later, however, asynchronously allows us to send the message/information to an intermediary (Redis, RabbitMQ, AWS SNS, Kafka, ...) to handle the action because the other end does not need the response at that moment.</p>
+<p>The server can process the transaction in its own time when it is online;</p>
+</li>
+<li>
+<p><strong>Delivery guarantees with Retry</strong></p>
+<p>When we want resilience in the request, we need to make sure that the message we are sending is reaching its destination, but not always the message can reach its destination because the other system may be slow, offline, ... and because of that one of the ways to have resilience and minimize this problem is to have Retry policies, send a message, if the system does not respond, send another, and another, ...</p>
+<p>But we have a <strong>problem</strong>, if 10 services send a request and the server cannot handle 10 simultaneous requests, even if the other servers have retry policies and keep sending messages every 2 seconds, it will not help because they are all trying to access the server at the same time and will always return an error.</p>
+<p>To do this, we have the <strong>Exponential backoff - Jitter</strong>, where we wait exponentially 2s, 4s, 8s, 16s, etc., to give the server more time to recover, and with Jitter, it has an algorithm that adds random noise to requests so that they do not happen simultaneously. For example, (2.1s, 2.5s, 2.0s), (4.7s, 4.01s, 4.12s), etc., so that even if services are sending requests simultaneously, the noise will make them arrive differently.</p>
+</li>
+<li>
+<p><strong>Delivery guarantees with Kafka</strong></p>
+</li>
+<li>
+<p><strong>Complex situations</strong></p>
+<ul>
+<li>What happens if the message broker goes down? (Kafka, RabbitMQ, SNS, etc.)</li>
+<li>Will messages be lost?</li>
+<li>Will your system be down?</li>
+<li>How to ensure resilience in unusual situations?</li>
+</ul>
+<p>There are always some Single Points of Failure (SPF).</p>
+<p>For example, if all the resilience you rely on is in Apache Kafka, it means that your SPF is in Apache Kafka.</p>
+<p>How can we avoid this, so that if Kafka goes down, the system does not lose information?</p>
+<p>All of this involves risk management, and the more resilience we guarantee, the more expensive it will be for the company.</p>
+<p>If AWS goes down? Is it worth working with multi-cloud?</p>
+<p>There will always be a limit to your resilience, and the more resilience, the more effort and cost.</p>
+<p>The responsibility for defining the level of resilience of the system lies with the CTO / CEO, who defines the risk that it will generate for the business.</p>
+</li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["tabs", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>

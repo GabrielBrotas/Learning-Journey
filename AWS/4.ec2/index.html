@@ -1,0 +1,1504 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Sharing what I'm picking up along the way - exploring Architecture, DevOps, and Software Engineering" name="description"/>
+<meta content="Gabriel Brotas" name="author"/>
+<link href="https://gabrielbrotas.github.io/Learning-Journey/AWS/4.ec2/" rel="canonical"/>
+<link href="../3.budget-and-cost/" rel="prev"/>
+<link href="../5.ec2-pt2/" rel="next"/>
+<link href="../../images/volcano.svg" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.2" name="generator"/>
+<title>EC2 Fundamentals - Learning Journey</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-2SMKV8KR0M"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-2SMKV8KR0M",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-2SMKV8KR0M",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+<script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+<link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            
+                .gscrollbar-fixer { padding-right: 15px; }
+                .gdesc-inner { font-size: 0.75rem; }
+                body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+                body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+                body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+                </style><script src="../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="red" data-md-color-primary="black" data-md-color-scheme="purple" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#ec2-fundamentals">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Learning Journey" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Learning Journey
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              EC2 Fundamentals
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="red" data-md-color-media="" data-md-color-primary="black" data-md-color-scheme="purple" id="__palette_0" name="__palette" type="radio"/>
+</form>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Learning Journey" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+    Learning Journey
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/types-of-architecture/">
+<span class="md-ellipsis">
+    Types of Architecture
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/sustainability/">
+<span class="md-ellipsis">
+    Sustainability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/architectural-features/">
+<span class="md-ellipsis">
+    Architectural Features
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/design-quality-software/">
+<span class="md-ellipsis">
+    Design Quality Software
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    AWS
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            AWS
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../1.regions-and-zones/">
+<span class="md-ellipsis">
+    Regions and Availability Zones
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../2.iam/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../3.budget-and-cost/">
+<span class="md-ellipsis">
+    Budget And Cost
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    EC2 Fundamentals
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    EC2 Fundamentals
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-sizing-configuration">
+<span class="md-ellipsis">
+      EC2 Sizing &amp; Configuration
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launching-an-ec2-instance-with-a-web-server">
+<span class="md-ellipsis">
+      Launching an EC2 Instance with a Web Server
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-instance-types">
+<span class="md-ellipsis">
+      EC2 Instance Types
+    </span>
+</a>
+<nav aria-label="EC2 Instance Types" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-purpose">
+<span class="md-ellipsis">
+      General Purpose
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compute-optimised">
+<span class="md-ellipsis">
+      Compute Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#memory-optimised">
+<span class="md-ellipsis">
+      Memory Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#accelerated-computing">
+<span class="md-ellipsis">
+      Accelerated Computing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-optimised">
+<span class="md-ellipsis">
+      Storage Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hcp-optimised">
+<span class="md-ellipsis">
+      HCP Optimised
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-groups">
+<span class="md-ellipsis">
+      Security Groups
+    </span>
+</a>
+<nav aria-label="Security Groups" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#classic-ports-to-know">
+<span class="md-ellipsis">
+      Classic Ports to Know
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-roles-to-ec2-instances">
+<span class="md-ellipsis">
+      Adding Roles to EC2 Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-purchasing-options">
+<span class="md-ellipsis">
+      EC2 Purchasing Options
+    </span>
+</a>
+<nav aria-label="EC2 Purchasing Options" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#on-demand">
+<span class="md-ellipsis">
+      On-Demand
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reserved">
+<span class="md-ellipsis">
+      Reserved
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#savings-plans">
+<span class="md-ellipsis">
+      Savings Plans
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#spot-instances">
+<span class="md-ellipsis">
+      Spot Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dedicated-hosts">
+<span class="md-ellipsis">
+      Dedicated Hosts
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dedicated-instances">
+<span class="md-ellipsis">
+      Dedicated Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#capacity-reservations">
+<span class="md-ellipsis">
+      Capacity Reservations
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#which-purchasing-option-is-right-for-me">
+<span class="md-ellipsis">
+      Which Purchasing Option is Right For Me?
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-spot-instances-spot-fleet">
+<span class="md-ellipsis">
+      EC2 Spot Instances &amp; Spot Fleet
+    </span>
+</a>
+<nav aria-label="EC2 Spot Instances &amp; Spot Fleet" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-spot-instances-work">
+<span class="md-ellipsis">
+      How Spot Instances Work
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#spot-fleets">
+<span class="md-ellipsis">
+      Spot Fleets
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launching-a-spot-request">
+<span class="md-ellipsis">
+      Launching a Spot Request
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../5.ec2-pt2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals Part 2
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../6.ec2-storage/">
+<span class="md-ellipsis">
+    EC2 Storage &amp; AMI
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Computer Science
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Computer Science
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/core-thread-process/">
+<span class="md-ellipsis">
+    Program, Process and Thread
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/OOP-vs-Functional-Programming/">
+<span class="md-ellipsis">
+    Object-Oriented-Programming vs Functional Programming
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/https-tls-mtls/">
+<span class="md-ellipsis">
+    HTTPS, TLS and mTLS
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/reactive-programming-vs-reactive-systems/">
+<span class="md-ellipsis">
+    Reactive Programming vs Reactive Systems
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../domain-driven-design/">
+<span class="md-ellipsis">
+    Domain Driven Design
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../GitOps/">
+<span class="md-ellipsis">
+    GitOps
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../IAM/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Kafka
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Kafka
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/">
+<span class="md-ellipsis">
+    Apache Kafka
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/topics/">
+<span class="md-ellipsis">
+    Topics
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/producers-and-consumers/">
+<span class="md-ellipsis">
+    Producers and Consumers
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/kafka-connect/">
+<span class="md-ellipsis">
+    Kafka Connect
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/avro/">
+<span class="md-ellipsis">
+    Avro
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kubernetes/">
+<span class="md-ellipsis">
+    Kubernetes
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+<span class="md-ellipsis">
+    Microservices-based Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_10_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_10">
+<span class="md-nav__icon md-icon"></span>
+            Microservices-based Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/characteristics/">
+<span class="md-ellipsis">
+    Characteristics
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+<span class="md-ellipsis">
+    Observability
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_11_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_11">
+<span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/">
+<span class="md-ellipsis">
+    Observability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/service-level/">
+<span class="md-ellipsis">
+    Service Level
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/open-telemetry/">
+<span class="md-ellipsis">
+    OpenTelemetry
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/elastic-stack/">
+<span class="md-ellipsis">
+    Elastic Stack
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../rabbitmq/">
+<span class="md-ellipsis">
+    RabbitMQ
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_13" type="checkbox"/>
+<label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_13_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_13">
+<span class="md-nav__icon md-icon"></span>
+            Service Mesh
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/istio/">
+<span class="md-ellipsis">
+    Istio
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_14" type="checkbox"/>
+<label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_14_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_14">
+<span class="md-nav__icon md-icon"></span>
+            SOLID
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/single-responsability/">
+<span class="md-ellipsis">
+    Single Responsibility Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/open-closed/">
+<span class="md-ellipsis">
+    Open-closed Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/liskov-substitution/">
+<span class="md-ellipsis">
+    Liskov Substitution Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/interface-segregation/">
+<span class="md-ellipsis">
+    Interface Segregation Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/dependency-inversion/">
+<span class="md-ellipsis">
+    Dependency Inversion Principle
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_15" type="checkbox"/>
+<label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_15_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_15">
+<span class="md-nav__icon md-icon"></span>
+            Systems Communication
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/REST/">
+<span class="md-ellipsis">
+    REST
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/gRPC/">
+<span class="md-ellipsis">
+    gRPC
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/GraphQL/">
+<span class="md-ellipsis">
+    GraphQL
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-sizing-configuration">
+<span class="md-ellipsis">
+      EC2 Sizing &amp; Configuration
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launching-an-ec2-instance-with-a-web-server">
+<span class="md-ellipsis">
+      Launching an EC2 Instance with a Web Server
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-instance-types">
+<span class="md-ellipsis">
+      EC2 Instance Types
+    </span>
+</a>
+<nav aria-label="EC2 Instance Types" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#general-purpose">
+<span class="md-ellipsis">
+      General Purpose
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compute-optimised">
+<span class="md-ellipsis">
+      Compute Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#memory-optimised">
+<span class="md-ellipsis">
+      Memory Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#accelerated-computing">
+<span class="md-ellipsis">
+      Accelerated Computing
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#storage-optimised">
+<span class="md-ellipsis">
+      Storage Optimised
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hcp-optimised">
+<span class="md-ellipsis">
+      HCP Optimised
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security-groups">
+<span class="md-ellipsis">
+      Security Groups
+    </span>
+</a>
+<nav aria-label="Security Groups" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#classic-ports-to-know">
+<span class="md-ellipsis">
+      Classic Ports to Know
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-roles-to-ec2-instances">
+<span class="md-ellipsis">
+      Adding Roles to EC2 Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-purchasing-options">
+<span class="md-ellipsis">
+      EC2 Purchasing Options
+    </span>
+</a>
+<nav aria-label="EC2 Purchasing Options" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#on-demand">
+<span class="md-ellipsis">
+      On-Demand
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#reserved">
+<span class="md-ellipsis">
+      Reserved
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#savings-plans">
+<span class="md-ellipsis">
+      Savings Plans
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#spot-instances">
+<span class="md-ellipsis">
+      Spot Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dedicated-hosts">
+<span class="md-ellipsis">
+      Dedicated Hosts
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#dedicated-instances">
+<span class="md-ellipsis">
+      Dedicated Instances
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#capacity-reservations">
+<span class="md-ellipsis">
+      Capacity Reservations
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#which-purchasing-option-is-right-for-me">
+<span class="md-ellipsis">
+      Which Purchasing Option is Right For Me?
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ec2-spot-instances-spot-fleet">
+<span class="md-ellipsis">
+      EC2 Spot Instances &amp; Spot Fleet
+    </span>
+</a>
+<nav aria-label="EC2 Spot Instances &amp; Spot Fleet" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-spot-instances-work">
+<span class="md-ellipsis">
+      How Spot Instances Work
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#spot-fleets">
+<span class="md-ellipsis">
+      Spot Fleets
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#launching-a-spot-request">
+<span class="md-ellipsis">
+      Launching a Spot Request
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="ec2-fundamentals">EC2 Fundamentals<a class="headerlink" href="#ec2-fundamentals" title="Permanent link">¶</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<ul>
+<li>EC2- Elastic Compute Cloud = Infrastructure as a Service</li>
+<li>It's composed of many things at a high level. It mainly consists in the capability of:<ul>
+<li>Renting virtual machines (EC2)</li>
+<li>Storing data on virtual drives (EBS)</li>
+<li>Distributing load across machines (ELB)</li>
+<li>Scaling the services using an auto-scaling group (ASG)</li>
+</ul>
+</li>
+</ul>
+<h2 id="ec2-sizing-configuration">EC2 Sizing &amp; Configuration<a class="headerlink" href="#ec2-sizing-configuration" title="Permanent link">¶</a></h2>
+<ul>
+<li>Operating System (OS): Linux, Windows or MacOS</li>
+<li>How much compute power &amp; cores (CPU)</li>
+<li>How much random access memory (RAM)</li>
+<li>How much storage space:<ul>
+<li>Network attached (EBS &amp; EFS)</li>
+<li>Hardware attached (EC2 Instance Store)</li>
+</ul>
+</li>
+<li>Network card: speed of the card, public IP address</li>
+<li>Firewall rules (security groups)</li>
+<li>Bootstrap script (configure at first launch): EC2 User Data<ul>
+<li>Used to run commands at first launch and automate tasks such as installing updates, softwares, downloading common files from the internet,...</li>
+<li>It runs with the root user</li>
+<li>The more you add to the bootstrap script, the longer it will take for the EC2 instance to start</li>
+</ul>
+</li>
+</ul>
+<p>You can choose pretty much how you want your Virtual Machine to be and you can rent it from AWS.</p>
+<h2 id="launching-an-ec2-instance-with-a-web-server">Launching an EC2 Instance with a Web Server<a class="headerlink" href="#launching-an-ec2-instance-with-a-web-server" title="Permanent link">¶</a></h2>
+<p>EC2 =&gt; Instances =&gt; Launch Instance</p>
+<ul>
+<li>Name: MyWebServer</li>
+<li>AMI: Amazon Linux 2023 AMI (Free tier elegible)</li>
+<li>Instance Type: t2.micro (Free tier elegible)</li>
+<li>Create a new key pair so you can SSH into your instance</li>
+<li>Network Settings:<ul>
+<li>Default VPC</li>
+<li>Subnet: No preference</li>
+<li>Auto-assign Public IP: Enable</li>
+<li>Security Group:<ul>
+<li>Create a new security group</li>
+<li>Security group name: MyWebServer-SG</li>
+<li>Description: Allow HTTP traffic</li>
+<li>Inbound rules:<ul>
+<li>Type: HTTP</li>
+<li>Source: Anywhere</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Use default storage settings (just make sure Delete on Termination is enabled)</li>
+<li>
+<p>Advanced Details -&gt; User Data</p>
+<ul>
+<li>Add the following script:</li>
+</ul>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>yum<span class="w"> </span>update<span class="w"> </span>-y
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>httpd
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>systemctl<span class="w"> </span>start<span class="w"> </span>httpd
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>httpd
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">"&lt;h1&gt;Hello World from </span><span class="k">$(</span>hostname<span class="w"> </span>-f<span class="k">)</span><span class="s2">&lt;/h1&gt;"</span><span class="w"> </span>&gt;<span class="w"> </span>/var/www/html/index.html
+</span></code></pre></div>
+</li>
+<li>
+<p>Launch the instance</p>
+</li>
+</ul>
+<p>When you open the public IP address of your instance in your browser, you should see the following message:</p>
+<div class="language-html highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Hello World from ip-172-31-22-123.ec2.internal<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></code></pre></div>
+<p>Now, if we're not using the EC2 instance anymore, we can Stop it to avoid being charged for it. If we want to use it again, we can Start it again.</p>
+<ul>
+<li>If we decide to stop an instance then AWS will not bill you for it.</li>
+<li>The instance state is kept because you have a volume attached to it.</li>
+<li>You can get rid of the instance by terminating it. This will delete the instance and the volume attached to it.</li>
+<li>If you stop an instance and start it again, AWS will give you a new public IP address.</li>
+</ul>
+<h2 id="ec2-instance-types">EC2 Instance Types<a class="headerlink" href="#ec2-instance-types" title="Permanent link">¶</a></h2>
+<ul>
+<li>You can use different types of EC2 instances that are optimised for different use cases. see: <a href="https://aws.amazon.com/ec2/instance-types/">https://aws.amazon.com/ec2/instance-types/</a></li>
+<li>
+<p>AWS has the following naming convention: <code>m5.2xlarge</code></p>
+<ul>
+<li>m: instance class</li>
+<li>5: generation (AWS improves them over time)</li>
+<li>2xlarge: size within the instance class, the more the size, the more the CPU and Memory you get</li>
+</ul>
+</li>
+<li>
+<p>Compare instances types: <a href="https://instances.vantage.sh/">https://instances.vantage.sh/</a></p>
+</li>
+</ul>
+<h3 id="general-purpose">General Purpose<a class="headerlink" href="#general-purpose" title="Permanent link">¶</a></h3>
+<ul>
+<li>These instances are ideal for applications that use these resources in equal proportions such as web servers and code repositories. </li>
+<li>Great for a diversity of workloads.</li>
+<li>Balance between compute, memory and networking resources</li>
+<li>Use Cases:<ul>
+<li>Websites and web applications, development environments, build servers, code repositories, micro services, test and staging environments, and line of business applications.  </li>
+</ul>
+</li>
+</ul>
+<p>Some examples of general purpose instances are: <code>t2.micro</code>, <code>t2.small</code>, <code>t2.medium</code>, <code>m5.large</code>, <code>m5.xlarge</code>, <code>m5.2xlarge</code>, <code>m5.4xlarge</code>, <code>m5.12xlarge</code>, <code>m5.24xlarge</code></p>
+<h3 id="compute-optimised">Compute Optimised<a class="headerlink" href="#compute-optimised" title="Permanent link">¶</a></h3>
+<ul>
+<li>Compute Optimized instances are ideal for compute bound applications that benefit from high performance processors.</li>
+<li>Great for compute-intensive tasks that require high performance processors</li>
+<li>Use Cases:<ul>
+<li>High performance web servers, scientific modelling, batch processing workloads, media transcoding, distributed analytics, high-performance computing (HPC), machine/deep learning inference, ad serving, dedicated gaming servers, and video encoding.</li>
+</ul>
+</li>
+</ul>
+<p>Some examples of compute optimised instances are: <code>c4.large</code>, <code>c5.large</code>, <code>c5.4xlarge</code>, <code>c5.metal</code>,...</p>
+<h3 id="memory-optimised">Memory Optimised<a class="headerlink" href="#memory-optimised" title="Permanent link">¶</a></h3>
+<ul>
+<li>Fast performance for workloads that process large data sets in memory (RAM).</li>
+<li>Use Cases:<ul>
+<li>Memory-intensive workloads such as open source databases, in-memory caches, and real-time big data analytics.</li>
+<li>High performance, relational and NoSQL databases, distributed web scale cache stores, in-memory databases optimized for BI (Business Intelligence), applications performing real time processing of big unstructured data.</li>
+</ul>
+</li>
+</ul>
+<p>Some examples of memory optimised instances are: <code>r5.large</code>, <code>r5.4xlarge</code>, <code>x1.16xlarge</code>, <code>x1e.32xlarge</code>,...</p>
+<h3 id="accelerated-computing">Accelerated Computing<a class="headerlink" href="#accelerated-computing" title="Permanent link">¶</a></h3>
+<ul>
+<li>These instances use hardware accelerators, or co-processors, to perform some functions, such as floating point number calculations, graphics processing, or data pattern matching, more efficiently than is possible in software running on CPUs.</li>
+<li>Use Cases:<ul>
+<li>Generative AI applications, including question answering, code generation, video and image generation, speech recognition, and more.</li>
+<li>Inferencing for ML models, including image and speech recognition, natural language processing, and recommendation engines.</li>
+</ul>
+</li>
+</ul>
+<p>Some examples of accelerated computing instances are: <code>p2.xlarge</code>, <code>p3.2xlarge</code>, <code>g3.4xlarge</code>, <code>g3.8xlarge</code>, <code>f1.2xlarge</code>,...</p>
+<h3 id="storage-optimised">Storage Optimised<a class="headerlink" href="#storage-optimised" title="Permanent link">¶</a></h3>
+<ul>
+<li>Great for storage-intensive task that require high, sequential read and write access to large data sets on local storage.</li>
+<li>They are optimized to deliver tens of thousands of low-latency, random I/O operations per second (IOPS) to applications.</li>
+<li>Use Cases:<ul>
+<li>High frequency online transaction processing (OLTP) systems, relational &amp; NoSQL databases, caching for in-memory databases (Redis, Memcached), Data warehousing applications, distributed file systems.</li>
+</ul>
+</li>
+</ul>
+<p>Some examples of storage optimised instances are: <code>h1.2xlarge</code>, <code>i3.large</code>, <code>i3.4xlarge</code>,...</p>
+<h3 id="hcp-optimised">HCP Optimised<a class="headerlink" href="#hcp-optimised" title="Permanent link">¶</a></h3>
+<ul>
+<li>High performance computing (HPC) instances are purpose built to offer the best price performance for running HPC workloads at scale on AWS. HPC instances are ideal for applications that benefit from high-performance processors such as large, complex simulations and deep learning workloads.</li>
+<li>Use Cases:<ul>
+<li>computational fluid dynamics (CFD), weather forecasting, molecular dynamics, multiphysics simulations, finite element analysis (FEA) for crash simulations, seismic reservoir simulations, and structural simulations.</li>
+</ul>
+</li>
+</ul>
+<h2 id="security-groups">Security Groups<a class="headerlink" href="#security-groups" title="Permanent link">¶</a></h2>
+<ul>
+<li>A security group is a virtual firewall that controls inbound and outbound traffic for your EC2 instances.</li>
+<li>It controls the traffic that is allowed to reach and leave the resources that it is associated with. For example, after you associate a security group with an EC2 instance, it controls the inbound and outbound traffic for the instance.</li>
+<li>Fundamental of network security in AWS</li>
+<li>Only contain <code>allow</code> rules</li>
+<li>Rules can reference by IP or by security group</li>
+<li>They regulate:<ul>
+<li>Access to Ports</li>
+<li>Authorized IP ranges - IPv4 and IPv6</li>
+<li>Control of inbound network (from other to the instance)</li>
+<li>Control of outbound network (from the instance to the other)</li>
+</ul>
+</li>
+</ul>
+<p>Example:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Protocol</th>
+<th>Port Range</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SSH</td>
+<td>TCP</td>
+<td>22</td>
+<td>122.1499.196.85/32</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>TCP</td>
+<td>80</td>
+<td>0.0.0.0/0</td>
+</tr>
+<tr>
+<td>Custom TCP Rule</td>
+<td>TCP</td>
+<td>3000</td>
+<td>sg-0a1b2c3d4e5f67890</td>
+</tr>
+</tbody>
+</table>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/aws/ec2/security-group.png"><img alt="security-group-ex" src="../../images/aws/ec2/security-group.png"/></a></p>
+<p>Good to know:</p>
+<ul>
+<li>Can be attached to multiple instances</li>
+<li>An instance can have multiple security groups</li>
+<li>Locked down to a region/VPC combination, so if we change our vpc or region we need to create a new security group</li>
+<li>Live 'outside' the EC2 - if traffic is blocked the EC2 instance won't see it -- firewal outside the instance</li>
+<li>It's good to maintain one separate security group for SSH access</li>
+<li>If your application is not accessible (timeout), then it's a security group issue</li>
+<li>If your application gives a "connection refused" error, then it's an application error or it's not launched -- the SG actually worked, the traffic went through and the app was errored.</li>
+<li>By default, all inbound traffic is blocked and all outbound traffic is authorized</li>
+</ul>
+<p>Security Groups can reference other security groups. This is good because it means we don't have to maintain IP addresses in our security groups for our applications to communicate with each other.</p>
+<p>For example, if we have an EC2 instance (<code>EC2-1</code>) and it has a SG called <code>SG-1</code>, and this SG authorizes <code>SG-1</code> and <code>SG-2</code> inbounds. So if we launch another EC2 instance (<code>EC2-2</code>) and we attach <code>SG-2</code> to it, then <code>EC2-2</code> will be able to communicate with <code>EC2-1</code> in the port defined by the <code>SG-1</code> because <code>SG-2</code> is authorized in <code>SG-1</code>.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/aws/ec2/sg-to-sg.png"><img alt="sg-to-sg" src="../../images/aws/ec2/sg-to-sg.png"/></a></p>
+<h3 id="classic-ports-to-know">Classic Ports to Know<a class="headerlink" href="#classic-ports-to-know" title="Permanent link">¶</a></h3>
+<ul>
+<li>22 = SSH (Secure Shell) - Log into a Linux instance</li>
+<li>21 = FTP (File Transfer Protocol) - upload files into a file share</li>
+<li>22 = SFTP (Secure File Transfer Protocol) - upload files using SSH</li>
+<li>80 = HTTP - access unsecured websites</li>
+<li>443 = HTTPS - access secured websites</li>
+<li>3389 = RDP (Remote Desktop Protocol) - windows instance</li>
+</ul>
+<h2 id="adding-roles-to-ec2-instances">Adding Roles to EC2 Instances<a class="headerlink" href="#adding-roles-to-ec2-instances" title="Permanent link">¶</a></h2>
+<p>Roles are a secure way to grant permissions to instances to access AWS services.</p>
+<ul>
+<li>Launch a Web Server EC2 instance</li>
+<li>In the Security Group, allow inbound traffic on port 22 from your IP address so that you can SSH into the instance.</li>
+<li>
+<p>When the instance is launched, SSH into it:</p>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="c1"># Locate your private key file and Run this command, if necessary, to ensure your key is not publicly viewable.</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>chmod<span class="w"> </span><span class="m">400</span><span class="w"> </span>my-key.pem
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="c1"># Connect to your instance using its Public DNS:</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>ssh<span class="w"> </span>-i<span class="w"> </span><span class="s2">"my-key.pem"</span><span class="w"> </span>ec2-user@ec2-34-230-32-123.compute-1.amazonaws.com
+</span></code></pre></div>
+</li>
+<li>
+<p>Try to run the AWS command to list users:
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>$<span class="w"> </span>aws<span class="w"> </span>iam<span class="w"> </span>list-users
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a>Unable<span class="w"> </span>to<span class="w"> </span>locate<span class="w"> </span>credentials.<span class="w"> </span>You<span class="w"> </span>can<span class="w"> </span>configure<span class="w"> </span>credentials<span class="w"> </span>by<span class="w"> </span>running<span class="w"> </span><span class="s2">"aws configure"</span>.
+</span></code></pre></div></p>
+</li>
+<li>
+<p>You should never use <code>aws configure</code> on an EC2 instance, it's not secure because the credentials are stored in the instance. Instead, we can use Roles.</p>
+</li>
+<li>
+<p>Go to IAM =&gt; Roles =&gt; Create Role <code>EC2-IAM-Read-Only</code> and attach the <code>IAMReadOnlyAccess</code> policy to it.</p>
+</li>
+<li>
+<p>Go to EC2 =&gt; Select your Instance =&gt; Actions =&gt; Security =&gt; Modify IAM Role =&gt; Select the role you just created</p>
+</li>
+<li>
+<p>Now, if you run the same command, it should work.</p>
+</li>
+</ul>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a>$<span class="w"> </span>aws<span class="w"> </span>iam<span class="w"> </span>list-users
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="o">{</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="s2">"Users"</span>:<span class="w"> </span><span class="o">[</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">        </span><span class="o">{</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">            </span><span class="s2">"Path"</span>:<span class="w"> </span><span class="s2">"/"</span>,
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">            </span><span class="s2">"UserName"</span>:<span class="w"> </span><span class="s2">"gabriel-brotas"</span>,
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">            </span><span class="s2">"UserId"</span>:<span class="w"> </span><span class="s2">"..."</span>,
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">            </span><span class="s2">"Arn"</span>:<span class="w"> </span><span class="s2">"..."</span>,
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">            </span><span class="s2">"CreateDate"</span>:<span class="w"> </span><span class="s2">"..."</span>,
+</span><span id="__span-4-11"><a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">            </span><span class="s2">"PasswordLastUsed"</span>:<span class="w"> </span><span class="s2">"..."</span>
+</span><span id="__span-4-12"><a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">        </span><span class="o">}</span>
+</span><span id="__span-4-13"><a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">    </span><span class="o">]</span>
+</span><span id="__span-4-14"><a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="o">}</span>
+</span></code></pre></div>
+<h2 id="ec2-purchasing-options">EC2 Purchasing Options<a class="headerlink" href="#ec2-purchasing-options" title="Permanent link">¶</a></h2>
+<h3 id="on-demand">On-Demand<a class="headerlink" href="#on-demand" title="Permanent link">¶</a></h3>
+<ul>
+<li>Pay for what you use:<ul>
+<li>Linux or Windows - billing per second, after the first minute</li>
+<li>All other Operating Systems - billing per hour</li>
+</ul>
+</li>
+<li>Has the highest cost but no upfront payment</li>
+<li>No long-term commitment</li>
+<li>Recommended for short-term and un-interrupted workloads, where you can't predict how the application will behave</li>
+</ul>
+<h3 id="reserved">Reserved<a class="headerlink" href="#reserved" title="Permanent link">¶</a></h3>
+<ul>
+<li>Reserved Instances provide you with significant savings on your Amazon EC2 costs compared to On-Demand Instance pricing. Up to 72% discount compared to On-demand</li>
+<li>Not physical instances, but rather a billing discount applied to the use of On-Demand Instances in your account.</li>
+<li>You reserve a specific instance attributes (Instance Type, Region, Tenancy, OS)</li>
+<li>Reservation Period - 1-year (+discount) or 3-year (+++discount).</li>
+<li>
+<p>Payment options:</p>
+<ul>
+<li>
+<p>All Upfront (+++): Full payment is made at the start of the term, with no other costs or additional hourly charges incurred for the remainder of the term, regardless of hours used.</p>
+</li>
+<li>
+<p>Partial Upfront (++): A portion of the cost must be paid upfront and the remaining hours in the term are billed at a discounted hourly rate, regardless of whether the Reserved Instance is being used.</p>
+</li>
+<li>
+<p>No Upfront (+): billed a discounted hourly rate for every hour within the term, regardless of whether the Reserved Instance is being used. No upfront payment is required. (contractual obligation to pay monthly for the entire term of the reservation. For this reason, a successful billing history is required before you can purchase No Upfront Reserved Instances.)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Reserved Instance's Scope - Regional or Zonal (reserve capacity in an AZ)</p>
+</li>
+<li>Recommended for steady-state usage applications (think database)</li>
+<li>You can buy and sell in the Reserved Instance Marketplace</li>
+<li>
+<p>Offering class, If your computing needs change, you might be able to modify or exchange your Reserved Instance, depending on the offering class:</p>
+<ul>
+<li>
+<p>Standard: provide the most significant discount, but can only be modified. Standard Reserved Instances can't be exchanged.</p>
+</li>
+<li>
+<p>Convertible: provide a lower discount than Standard Reserved Instances, but can change the EC2 instance type, family, OS, scop and tenancy.</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="savings-plans">Savings Plans<a class="headerlink" href="#savings-plans" title="Permanent link">¶</a></h3>
+<ul>
+<li>Get a discount based on long-term usage (up to 72% - same as RI)</li>
+<li>Commit to a certain type of usage (e.g. $10/hour for a 1 or 3 year term)</li>
+<li>Usage beyond EC2 Savings Plans is billed at the On-Demand price</li>
+<li>Locked to a specific instance family &amp; AWS Region (e.g. M5 in us-east-1)</li>
+<li>Flexible across:<ul>
+<li>Instance Size (e.g., m5.xlarge, m5.2xlarge)</li>
+<li>OS (e.g. Linux, Windows)</li>
+<li>Tenancy (Host, Dedicated, Default)</li>
+</ul>
+</li>
+<li>Also applies to AWS Fargate and AWS Lambda usage.</li>
+</ul>
+<h3 id="spot-instances">Spot Instances<a class="headerlink" href="#spot-instances" title="Permanent link">¶</a></h3>
+<ul>
+<li>Can get a discount of up to 90% compared to On-demand taking advantage of unused EC2 capacity</li>
+<li>Instances that you can "lose" at any point if your max price is less than the spot price</li>
+<li>The most cost-efficient instances in AWS</li>
+<li>Useful for workloads that are resilient to failure:<ul>
+<li>Batch Jobs</li>
+<li>Data Analysis</li>
+<li>Background processing</li>
+<li>Any distributed workload and optional tasks</li>
+<li>Workloads with a flexible start and end time</li>
+</ul>
+</li>
+<li>Not suitable for critical jobs or databases</li>
+</ul>
+<h3 id="dedicated-hosts">Dedicated Hosts<a class="headerlink" href="#dedicated-hosts" title="Permanent link">¶</a></h3>
+<ul>
+<li>Physical server with EC2 instance capacity fully dedicated to your use.</li>
+<li>Allows you address corporate compliance and regulatory requirements, and use your existing server-bound software license (per-socket, per-core, per-VM software licenses)</li>
+<li>Purchasing Options:<ul>
+<li>On-demand - pay per second for active Dedicated Host</li>
+<li>Reserved - 1 or 3 years</li>
+</ul>
+</li>
+<li>Most expensive option</li>
+<li>Useful for software that have complicated licensing model (BYOL - Bring Your Own License)</li>
+<li>Or for companies that have strong regulatory or compliance needs</li>
+</ul>
+<h3 id="dedicated-instances">Dedicated Instances<a class="headerlink" href="#dedicated-instances" title="Permanent link">¶</a></h3>
+<ul>
+<li>Instances run on hardware that's dedicated to you -- EC2 instances that run on hardware that's dedicated to a single customer.</li>
+<li>Dedicated Instances might share hardware with other instances from the same AWS account that are not Dedicated Instances.</li>
+<li>Dedicated Instances that belong to different AWS accounts are physically isolated at a hardware level.</li>
+<li>No control over instance placement (can move hardware after stop/start)</li>
+</ul>
+<p>DH vs DI =&gt; Dedicated Instances means that you have your own instance on your own hardware, whereas dedicated host, you get access to the physical server itself and it gives you visibility into the lower level hardware.</p>
+<h3 id="capacity-reservations">Capacity Reservations<a class="headerlink" href="#capacity-reservations" title="Permanent link">¶</a></h3>
+<ul>
+<li>Reserve On-Demand instances capacity in a specific AZ for any duration</li>
+<li>You always have access to EC2 capacity when you need it</li>
+<li>No time commitment (create/cancel anytime), no billing discounts</li>
+<li>The only purpose is to reverse capacity</li>
+<li>Combine with Regional Reserved Instances and Savings Plans to benefit from billing discounts</li>
+<li>You're charged at On-Demand rate wheter you run instances or not -- that means that your reserved capacity, you're going to be billed for it, and you know for sure that if you want to launch instances they're going to be available, but if you don't launch them, you're still going to get charged</li>
+<li>Suitable for short-term, uninterrupeted workloads that needs to be in a specific AZ</li>
+</ul>
+<h3 id="which-purchasing-option-is-right-for-me">Which Purchasing Option is Right For Me?<a class="headerlink" href="#which-purchasing-option-is-right-for-me" title="Permanent link">¶</a></h3>
+<ul>
+<li><strong>On Demand</strong>: coming and staying in resort whenever we like, we pay the full price.</li>
+<li><strong>Reserved</strong>: like planning ahead and if we plan to stay a long time, we may get a good discount.</li>
+<li><strong>Savings Plans</strong>: pay a certain amount per hour for certain period and stay in any room type (e.g., King, Suite, Sea View,...,) -- for example, I know for sure I'm going to spend $300 per month every month for the next 12 months, and therefore, you may wannt change room type over time.</li>
+<li><strong>Spot Instances</strong>: the hotel allows people to bid for the empty rooms and the highest bidded keeps the rooms. You can get kicked out at any time.</li>
+<li><strong>Dedicated Host</strong>: we book an entire building of the resort.</li>
+<li><strong>Capacity Reservations</strong>: you book a room for a period with full price even you don't stay in it.</li>
+</ul>
+<h2 id="ec2-spot-instances-spot-fleet">EC2 Spot Instances &amp; Spot Fleet<a class="headerlink" href="#ec2-spot-instances-spot-fleet" title="Permanent link">¶</a></h2>
+<ul>
+<li>Unused EC2 instance that is available for less than the On-Demand price</li>
+<li>The hourly price for a Spot Instance is called a Spot price</li>
+<li>Can be up to 90% cheaper than On-Demand instances. However, Spot Instances carry the risk of interruption</li>
+<li>Define <strong>max spot price</strong> and get the instance while <strong>current spot price &lt; max</strong><ul>
+<li>The hourly spot price varies based on offer and capacity</li>
+<li>If the current spot price &gt; your max price, Amazon EC2 provides a Spot Instance interruption notice, which gives the instance a two-minute warning before Amazon EC2 interrupts it. You can't enable termination protection for Spot Instances.</li>
+</ul>
+</li>
+<li>Work well for big data, batch jobs, containerized workloads, CI/CD, stateless web servers, high performance computing (HPC), and rendering workloads that are resilient to failures.</li>
+<li>Not great for inflexible, stateful, fault-intolerant, tightly coupled between instance nodes, critical jobs or databases</li>
+</ul>
+<h3 id="how-spot-instances-work">How Spot Instances Work<a class="headerlink" href="#how-spot-instances-work" title="Permanent link">¶</a></h3>
+<ul>
+<li>
+<p>Spot Request</p>
+<ul>
+<li>Maximum price</li>
+<li>Number of instances</li>
+<li>Launch specification (AMI, Instance Type, SG,...,)</li>
+<li>When your request is valid from and until, but it can be infinite</li>
+<li>Request Type:<ul>
+<li>One-time: As soon as your spot request is fulfilled, your instances are going to be launched and then your spot request will go away because it was a one-time request type.</li>
+<li>Persistent: it means that we want this number of instances to be valid as long as the spot request is valid from to valid until. And so, if somehow your instances do get stopped or interruped based on the spot price, then your spot request will go back into action and when things can be validated it will restart the spot instances for you. If you stop a spot instance in persistent mode and your spot request is sill active, your spot request automatically will be smart enough to restart and launch the instance for you</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>If you cancel a spot request, it's not going to terminate the instances that were launched by the spot request. It's just going to cancel the spot request itself. If you want to terminate the instances, you need to do it manually.</p>
+</li>
+</ul>
+<h3 id="spot-fleets">Spot Fleets<a class="headerlink" href="#spot-fleets" title="Permanent link">¶</a></h3>
+<ul>
+<li>Collection of Spot Instances and optionally On-Demand Instances</li>
+<li>The Spot Fleet will try to meet the target capacity with price constraints<ul>
+<li>Define possible launch pools: instance type (m5.large), OS, AZ...</li>
+<li>Can have multiple launch pools so that the fleet can choose</li>
+<li>Spot Fleet stops launching instances when reaching capacity or max cost</li>
+</ul>
+</li>
+<li>Spot Fleet maintains the target capacity by launching replacement instances when Spot Instances are terminated.</li>
+<li>Spot Fleet re-balances instances across availability zones if an AZ is experiencing a price spike.</li>
+<li>Spot instances need to be carefully managed, because they are terminated by Amazon at short notice when the market price goes about your bidding price</li>
+<li>Strategies to allocate Spot Instances:<ul>
+<li><code>lowestPrice</code>: from the pool with lowest price (cost optmization, short workload)</li>
+<li><code>diversified</code>: distributed across all pools (great for availability, long workload)</li>
+<li><code>capacityOptimized</code>: pool with the optimal capacity for the number of instances</li>
+<li><code>priceCapacityOptimized</code> (recommended): pools with highest capacity available, then select the pool with the lowest price (best choice for most workloads)</li>
+</ul>
+</li>
+<li>Spot Fleets allow us to automatically request Spot Instances with the lowest price</li>
+</ul>
+<h3 id="launching-a-spot-request">Launching a Spot Request<a class="headerlink" href="#launching-a-spot-request" title="Permanent link">¶</a></h3>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["tabs", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>

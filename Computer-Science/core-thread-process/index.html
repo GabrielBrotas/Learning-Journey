@@ -1,0 +1,1041 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Sharing what I'm picking up along the way - exploring Architecture, DevOps, and Software Engineering" name="description"/>
+<meta content="Gabriel Brotas" name="author"/>
+<link href="https://gabrielbrotas.github.io/Learning-Journey/Computer-Science/core-thread-process/" rel="canonical"/>
+<link href="../../AWS/6.ec2-storage/" rel="prev"/>
+<link href="../OOP-vs-Functional-Programming/" rel="next"/>
+<link href="../../images/volcano.svg" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.2" name="generator"/>
+<title>Program, Process and Thread - Learning Journey</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-2SMKV8KR0M"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-2SMKV8KR0M",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-2SMKV8KR0M",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+<script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+<link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            
+                .gscrollbar-fixer { padding-right: 15px; }
+                .gdesc-inner { font-size: 0.75rem; }
+                body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+                body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+                body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+                </style><script src="../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="red" data-md-color-primary="black" data-md-color-scheme="purple" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#computer-concepts-program-core-process-thread">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Learning Journey" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Learning Journey
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Program, Process and Thread
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="red" data-md-color-media="" data-md-color-primary="black" data-md-color-scheme="purple" id="__palette_0" name="__palette" type="radio"/>
+</form>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Learning Journey" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+    Learning Journey
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/types-of-architecture/">
+<span class="md-ellipsis">
+    Types of Architecture
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/sustainability/">
+<span class="md-ellipsis">
+    Sustainability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/architectural-features/">
+<span class="md-ellipsis">
+    Architectural Features
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/design-quality-software/">
+<span class="md-ellipsis">
+    Design Quality Software
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    AWS
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            AWS
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/1.regions-and-zones/">
+<span class="md-ellipsis">
+    Regions and Availability Zones
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/2.iam/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/3.budget-and-cost/">
+<span class="md-ellipsis">
+    Budget And Cost
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/4.ec2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/5.ec2-pt2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals Part 2
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../AWS/6.ec2-storage/">
+<span class="md-ellipsis">
+    EC2 Storage &amp; AMI
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Computer Science
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Computer Science
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    Program, Process and Thread
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    Program, Process and Thread
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#programs">
+<span class="md-ellipsis">
+      Programs
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#process">
+<span class="md-ellipsis">
+      Process
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#thread">
+<span class="md-ellipsis">
+      Thread
+    </span>
+</a>
+<nav aria-label="Thread" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-threads-work">
+<span class="md-ellipsis">
+      How Threads Work
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#thread-vs-process">
+<span class="md-ellipsis">
+      Thread vs Process
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-multithreading-works">
+<span class="md-ellipsis">
+      How Multithreading Works?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#working-of-core-and-thread">
+<span class="md-ellipsis">
+      Working of Core and Thread
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#concurrency-and-parallelism">
+<span class="md-ellipsis">
+      Concurrency and Parallelism
+    </span>
+</a>
+<nav aria-label="Concurrency and Parallelism" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-concurrency-or-single-core">
+<span class="md-ellipsis">
+      What is Concurrency or Single Core?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-parallel-execution-or-multi-core">
+<span class="md-ellipsis">
+      What is Parallel Execution or (Multi-Core)?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-differences">
+<span class="md-ellipsis">
+      Key Differences
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cpu-core">
+<span class="md-ellipsis">
+      CPU Core
+    </span>
+</a>
+<nav aria-label="CPU Core" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-the-main-issue-with-single-core">
+<span class="md-ellipsis">
+      What is the Main Issue with Single Core?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-solution-provided-by-multi-core">
+<span class="md-ellipsis">
+      The Solution Provided by Multi-Core:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#benefits-of-multi-core-processor">
+<span class="md-ellipsis">
+      Benefits of Multi-core Processor
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compiler-vs-interpreter">
+<span class="md-ellipsis">
+      Compiler vs. Interpreter
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#refs">
+<span class="md-ellipsis">
+      Refs
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../OOP-vs-Functional-Programming/">
+<span class="md-ellipsis">
+    Object-Oriented-Programming vs Functional Programming
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../https-tls-mtls/">
+<span class="md-ellipsis">
+    HTTPS, TLS and mTLS
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../reactive-programming-vs-reactive-systems/">
+<span class="md-ellipsis">
+    Reactive Programming vs Reactive Systems
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../domain-driven-design/">
+<span class="md-ellipsis">
+    Domain Driven Design
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../GitOps/">
+<span class="md-ellipsis">
+    GitOps
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../IAM/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Kafka
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Kafka
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/">
+<span class="md-ellipsis">
+    Apache Kafka
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/topics/">
+<span class="md-ellipsis">
+    Topics
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/producers-and-consumers/">
+<span class="md-ellipsis">
+    Producers and Consumers
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/kafka-connect/">
+<span class="md-ellipsis">
+    Kafka Connect
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/avro/">
+<span class="md-ellipsis">
+    Avro
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kubernetes/">
+<span class="md-ellipsis">
+    Kubernetes
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+<span class="md-ellipsis">
+    Microservices-based Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_10_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_10">
+<span class="md-nav__icon md-icon"></span>
+            Microservices-based Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/characteristics/">
+<span class="md-ellipsis">
+    Characteristics
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+<span class="md-ellipsis">
+    Observability
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_11_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_11">
+<span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/">
+<span class="md-ellipsis">
+    Observability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/service-level/">
+<span class="md-ellipsis">
+    Service Level
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/open-telemetry/">
+<span class="md-ellipsis">
+    OpenTelemetry
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/elastic-stack/">
+<span class="md-ellipsis">
+    Elastic Stack
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../rabbitmq/">
+<span class="md-ellipsis">
+    RabbitMQ
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_13" type="checkbox"/>
+<label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_13_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_13">
+<span class="md-nav__icon md-icon"></span>
+            Service Mesh
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/istio/">
+<span class="md-ellipsis">
+    Istio
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_14" type="checkbox"/>
+<label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_14_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_14">
+<span class="md-nav__icon md-icon"></span>
+            SOLID
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/single-responsability/">
+<span class="md-ellipsis">
+    Single Responsibility Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/open-closed/">
+<span class="md-ellipsis">
+    Open-closed Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/liskov-substitution/">
+<span class="md-ellipsis">
+    Liskov Substitution Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/interface-segregation/">
+<span class="md-ellipsis">
+    Interface Segregation Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/dependency-inversion/">
+<span class="md-ellipsis">
+    Dependency Inversion Principle
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_15" type="checkbox"/>
+<label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_15_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_15">
+<span class="md-nav__icon md-icon"></span>
+            Systems Communication
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/REST/">
+<span class="md-ellipsis">
+    REST
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/gRPC/">
+<span class="md-ellipsis">
+    gRPC
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/GraphQL/">
+<span class="md-ellipsis">
+    GraphQL
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#programs">
+<span class="md-ellipsis">
+      Programs
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#process">
+<span class="md-ellipsis">
+      Process
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#thread">
+<span class="md-ellipsis">
+      Thread
+    </span>
+</a>
+<nav aria-label="Thread" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-threads-work">
+<span class="md-ellipsis">
+      How Threads Work
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#thread-vs-process">
+<span class="md-ellipsis">
+      Thread vs Process
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-multithreading-works">
+<span class="md-ellipsis">
+      How Multithreading Works?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#working-of-core-and-thread">
+<span class="md-ellipsis">
+      Working of Core and Thread
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#concurrency-and-parallelism">
+<span class="md-ellipsis">
+      Concurrency and Parallelism
+    </span>
+</a>
+<nav aria-label="Concurrency and Parallelism" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-concurrency-or-single-core">
+<span class="md-ellipsis">
+      What is Concurrency or Single Core?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-parallel-execution-or-multi-core">
+<span class="md-ellipsis">
+      What is Parallel Execution or (Multi-Core)?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#key-differences">
+<span class="md-ellipsis">
+      Key Differences
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#cpu-core">
+<span class="md-ellipsis">
+      CPU Core
+    </span>
+</a>
+<nav aria-label="CPU Core" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-is-the-main-issue-with-single-core">
+<span class="md-ellipsis">
+      What is the Main Issue with Single Core?
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#the-solution-provided-by-multi-core">
+<span class="md-ellipsis">
+      The Solution Provided by Multi-Core:
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#benefits-of-multi-core-processor">
+<span class="md-ellipsis">
+      Benefits of Multi-core Processor
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#compiler-vs-interpreter">
+<span class="md-ellipsis">
+      Compiler vs. Interpreter
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#refs">
+<span class="md-ellipsis">
+      Refs
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="computer-concepts-program-core-process-thread">Computer Concepts (Program, Core, Process, Thread,...)<a class="headerlink" href="#computer-concepts-program-core-process-thread" title="Permanent link">¶</a></h1>
+<h2 id="programs"><strong>Programs</strong><a class="headerlink" href="#programs" title="Permanent link">¶</a></h2>
+<p><strong>A program is a code that is stored on your computer that is intended to fulfill a certain task</strong>. There are many types of programs, including programs that help your computer function and are part of the operating system, and other programs that fulfill a particular job. These task-specific programs are also known as “applications” and can include programs such as word processing, web browsing,...</p>
+<p>Programs are typically stored on disk or in non-volatile memory in a form that can be executed by your computer. Prior to that, <strong>they are created using a programming language using instructions that involve logic, data and device manipulation, recurrence, and user interaction.</strong> The end result is a text file of code that is <strong>compiled</strong> into binary form (ones and zeros) in order to run on the computer. Another type of program is called <strong>interpreted</strong> and instead of being compiled in advance in order to run, is interpreted into executable code at the time it is run. Some common, typically interpreted programming languages, are Python, PHP, JavaScript, and Ruby.</p>
+<h2 id="process"><strong>Process</strong><a class="headerlink" href="#process" title="Permanent link">¶</a></h2>
+<p>The program has been loaded into the computer’s memory in binary form. Now what?</p>
+<p>The program needs memory and various operating system resources in order to run. <strong>A “process” is what we call a program that has been loaded into memory along with all the resources it needs to operate.</strong> The “operating system” is the brains behind allocating all these resources. The OS handles the task of managing the resources needed to turn your program into a running process.</p>
+<p><strong>There can be multiple instances of a single program, and each instance of that running program is a process. Each process has a separate memory address space, which means that a process runs independently and is isolated from other processes</strong>. <strong>It cannot directly access shared data in other processes.</strong> Switching from one process to another requires some time (relatively) for saving and loading registers, memory maps, and other resources.</p>
+<p>This independence of processes is valuable because the operating system tries its best to isolate processes so that a problem with one process doesn’t corrupt or cause havoc with another process. You’ve undoubtedly run into the situation in which one application on your computer freezes or has a problem and you’ve been able to quit that program without affecting others.</p>
+<h2 id="thread"><strong>Thread</strong><a class="headerlink" href="#thread" title="Permanent link">¶</a></h2>
+<p><strong>Thread is a single sequential flow of control in a program that allows multiple activities within a single process.</strong> A single thread is like one command that runs at a time.</p>
+<p>Most processor manufacturers use the Simultaneous multithreading (SMT) technique to make sure a single processer can run multiple threads. Multithreading is similar to multitasking in which multiple threads are executed at a time, and <strong>a multithread ability manages numerous requests by the same user without opening multiple copies of programs running on the computer.</strong></p>
+<p>A thread is a unit of execution on concurrent/parallel programming. <strong>Multithreading is a technique which allows a CPU to execute many tasks of one process at the same time.</strong> These threads can execute individually while sharing their resources.</p>
+<h3 id="how-threads-work"><strong>How Threads Work</strong><a class="headerlink" href="#how-threads-work" title="Permanent link">¶</a></h3>
+<p>A thread is the unit of execution within a process. A process can have from just one thread to many threads.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/thread.png"><img alt="Thread" src="../../images/core-thread-process/thread.png"/></a></p>
+<p>When a process starts, it is assigned memory and resources. Each thread in the process shares that memory and resources. In single-threaded processes, the process contains one thread. The process and the thread are one and the same, and there is only one thing happening.</p>
+<p>In multithreaded processes, the process contains more than one thread, and the process is accomplishing a number of things at the same time</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/single-thread-vs-multi.png"><img alt="Thread vs MultiThread" src="../../images/core-thread-process/single-thread-vs-multi.png"/></a></p>
+<p>Each thread will have its own stack.</p>
+<p><strong>Threads are sometimes called lightweight processes</strong> because they have their own stack but can access shared data. <strong>Because threads share the same address space as the process and other threads within the process, the operational cost of communication between the threads is low, which is an advantage. The disadvantage is that a problem with one thread in a process will certainly affect other threads and the viability of the process itself.</strong></p>
+<p>Review:</p>
+<ol>
+<li>The program starts out as a text file of programming code.</li>
+<li>The program is compiled or interpreted into binary form.</li>
+<li>The program is loaded into memory.</li>
+<li>The program becomes one or more running processes.</li>
+<li>Processes are typically independent of each other.</li>
+<li>Threads exist as the subset of a process.</li>
+<li>Threads can communicate with each other more easily than processes can.</li>
+<li>Threads are more vulnerable to problems caused by other threads in the same process.</li>
+</ol>
+<h3 id="thread-vs-process"><strong>Thread vs Process</strong><a class="headerlink" href="#thread-vs-process" title="Permanent link">¶</a></h3>
+<p>When Google was designing the Chrome browser, they needed to decide how to handle the many different tasks that needed computer, communications, and network resources at the same time. Each browser window or tab communicates with multiple servers on the internet to retrieve text, programs, graphics, audio, video, and other resources, and renders that data for display and interaction with the user. In addition, the browser can open many windows, each with many tasks.</p>
+<p>Google had to decide how to handle that separation of tasks. They chose to run each browser window in Chrome as a separate process rather than a thread or many threads, as is common with other browsers. Doing that brought Google a number of benefits. Running each window as a process protects the overall application from bugs and glitches in the rendering engine and restricts access from each rendering engine process to others and to the rest of the system. Isolating a JavaScript program in a process prevents it from running away with too much CPU time and memory and making the entire browser non-responsive.</p>
+<p>Google made a calculated trade-off with the multi-processing design. Starting a new process for each browser window has a higher fixed cost in memory and resources than using threads. They were betting that their approach would end up with less memory bloat overall.</p>
+<p>Using processes instead of threads also provides better memory usage when memory gets low. An inactive window is treated as a lower priority by the operating system and becomes eligible to be swapped to disk when memory is needed for other processes. That helps keep the user-visible windows more responsive. If the windows were threaded, it would be more difficult to separate the used and unused memory as cleanly, wasting both memory and performance.</p>
+<h3 id="how-multithreading-works"><strong>How Multithreading Works?</strong><a class="headerlink" href="#how-multithreading-works" title="Permanent link">¶</a></h3>
+<p>For example, most modern CPUs support multithreading. A simple app on your smartphone can give you a live demo of the same.</p>
+<p>When you open an app that requires some data to be fetched from the internet, the content area of the app is replaced by a spinner. This will rotates until the data is fetched and displayed.</p>
+<p>In the background, there are two threads:</p>
+<ul>
+<li>One fetching the data from a network, and</li>
+<li>One rendering the GUI that displays the spinner</li>
+</ul>
+<p>Both of these threads execute one after the other to give the illusion of concurrent execution</p>
+<h3 id="working-of-core-and-thread"><strong>Working of Core and Thread</strong><a class="headerlink" href="#working-of-core-and-thread" title="Permanent link">¶</a></h3>
+<p>The <strong>core</strong> is a hardware component and performs and has the ability to run one task at one time.</p>
+<p>But <strong>multiple cores</strong> can support multiple applications to be executed without any disruptions.</p>
+<p>If the user is planning to set up a game, some parts of cores are required to run the game, some needed to check other background applications like skype, chrome, Facebook, etc. <strong>But the CPU should supports multithreading</strong> to executes these effectively to fetch the relevant information from the application within a minimum response time. Multithreading just makes the process fast and organized, and convert into better performance. It increases power consumption but rarely causes a rise in temperature.</p>
+<p>A CPU performance will depend upon the number of cores on the machine and the speed at which the individual cores can execute instructions.</p>
+<h2 id="concurrency-and-parallelism"><strong>Concurrency and Parallelism</strong><a class="headerlink" href="#concurrency-and-parallelism" title="Permanent link">¶</a></h2>
+<p>On a system with multiple processors or CPU cores (as is common with modern processors), multiple processes or threads can be executed in parallel. On a single processor, though, it is not possible to have processes or threads truly executing at the same time. In this case, the CPU is shared among running processes or threads using a process scheduling algorithm that divides the CPU’s time and yields the illusion of parallel execution. The time given to each task is called a “time slice.” The switching back and forth between tasks happens so fast it is usually not perceptible. The terms, “parallelism” (genuine simultaneous execution) and “concurrency” (interleaving of processes in time to give the appearance of simultaneous execution), distinguish between the two types of real or approximate simultaneous operation.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/concurrency-vs-parallelism.png"><img alt="Concurrency vs Parallelism" src="../../images/core-thread-process/concurrency-vs-parallelism.png"/></a></p>
+<h3 id="what-is-concurrency-or-single-core"><strong>What is Concurrency or Single Core?</strong><a class="headerlink" href="#what-is-concurrency-or-single-core" title="Permanent link">¶</a></h3>
+<p>a <strong>Single-core CPU</strong> will only be able to process one program at a time. However, when you run multiple programs simultaneously, then a single-core processor will divide all programs into small pieces and concurrently execute with time slicing, as you can view in the picture given below.</p>
+<p>Concurrency is defined as the ability of a system to run two or more programs in overlapping time phases.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/cores.png"><img alt="Cores" src="../../images/core-thread-process/cores.png"/></a></p>
+<p>Concurrent execution with time slicing</p>
+<p>As you can see, at any given time, there is only one process in execution. Therefore, concurrency is only a generalized approximation of real parallel execution. This kind of situation can be found in systems having a single-core processor.</p>
+<h3 id="what-is-parallel-execution-or-multi-core"><strong>What is Parallel Execution or (Multi-Core)?</strong><a class="headerlink" href="#what-is-parallel-execution-or-multi-core" title="Permanent link">¶</a></h3>
+<p>A <strong>Multicore processor</strong> (multiple CPU cores) execute each sub-task simultaneously</p>
+<p>In parallel execution, the tasks to be performed by a process are broken down into sub-parts, and multiple CPUs (or multiple cores) process each sub-task at precisely the same time.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/parallel.png"><img alt="Cores" src="../../images/core-thread-process/parallel.png"/></a></p>
+<p>As you can see, at any given time, all processes are in execution. In reality, it is the sub-tasks of a process which are executing in parallel, but for better understanding, you can visualize them as processes.</p>
+<p>Therefore, parallelism is the real way in which multiple tasks can be processed at the same time. This type of situation can be found in systems having multicore processors, which includes almost all modern, commercial processors.</p>
+<h3 id="key-differences"><strong>Key Differences</strong><a class="headerlink" href="#key-differences" title="Permanent link">¶</a></h3>
+<p>• <strong>Cores increase the amount of work accomplished at a time</strong>, whereas <strong>threads improve throughput, computational speed-up.</strong></p>
+<p>• <strong>Cores is an actual hardware component</strong> whereas <strong>thread is a virtual component that manages the tasks</strong>.</p>
+<p>• <strong>Cores use content switching</strong> while threads use multiple CPUs for operating numerous processes.</p>
+<p>• Cores require only a signal process unit whereas threads require multiple processing units.</p>
+<h2 id="cpu-core"><strong>CPU Core</strong><a class="headerlink" href="#cpu-core" title="Permanent link">¶</a></h2>
+<p>A CPU core is the part of something central to its existence or character. In the same way in the computer system, the CPU is also referred to as the core.</p>
+<p>There are basically two types of core processor:</p>
+<ol>
+<li>Single-Core Processor</li>
+<li>Multi-Core Processor</li>
+</ol>
+<h3 id="what-is-the-main-issue-with-single-core"><strong>What is the Main Issue with Single Core?</strong><a class="headerlink" href="#what-is-the-main-issue-with-single-core" title="Permanent link">¶</a></h3>
+<p>There are mainly two issues with Single Core.</p>
+<ul>
+<li>To execute the tasks faster, you need to increase the clock time.</li>
+<li>Increasing clock time increases power consumption and heat dissipation to an extremely high level, which makes the processor inefficient.</li>
+</ul>
+<h3 id="the-solution-provided-by-multi-core"><strong>The Solution Provided by Multi-Core:</strong><a class="headerlink" href="#the-solution-provided-by-multi-core" title="Permanent link">¶</a></h3>
+<ul>
+<li>Creating two cores or more on the same die to increase the processing power while it also keeps clock speed at an efficient level.</li>
+<li>A processor with two cores running an efficient speed can process instructions with similar speed to the single-core processor. Its clock speed is twice, yet the multicore process consumes less energy.</li>
+</ul>
+<h3 id="benefits-of-multi-core-processor"><strong>Benefits of Multi-core Processor</strong><a class="headerlink" href="#benefits-of-multi-core-processor" title="Permanent link">¶</a></h3>
+<p>Here are some advantages of the multicore processor:</p>
+<ul>
+<li>More transistor per choice</li>
+<li>Shorter connections</li>
+<li>Lower capacitance</li>
+<li>A small circuit can work at fast speed</li>
+</ul>
+<h2 id="compiler-vs-interpreter"><strong>Compiler vs. Interpreter</strong><a class="headerlink" href="#compiler-vs-interpreter" title="Permanent link">¶</a></h2>
+<p><strong>Computers can only understand a program written in a binary system known as machine code.</strong></p>
+<p>To speak to a computer in its non-human language, we came up with two solutions: interpreters and compilers. Ironically, most of us know very little about them, although they belong to our daily coding life.</p>
+<p>A <strong>compiler</strong> is a computer program that transforms code written in a high-level programming language into the machine code. It is a program which translates the human-readable code to a language a computer processor understands (binary 1 and 0 bits). The computer processes the machine code to perform the corresponding tasks.</p>
+<p>An interpreter is a computer program, which converts each high-level program statement into the machine code. This includes source code, pre-compiled code, and scripts. Both compiler and interpreters do the same job which is converting higher level programming language to machine code. However, a compiler will convert the code into machine code (create an exe) before program run. Interpreters convert code into machine code when the program is run.</p>
+<ul>
+<li>A compiler translates a code written in a high-level programming language into <em>a lower-level language like assembly language, object code, and</em> machine code (binary 1 and 0 bits). It converts the code ahead of time before the program runs.</li>
+<li>An interpreter translates the code line by line when the program is running. You’ve likely used interpreters unknowingly at some point in your work career.</li>
+</ul>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/compiler-vs-interpreter.png"><img alt="Compiler vs Interpreter" src="../../images/core-thread-process/compiler-vs-interpreter.png"/></a></p>
+<p>Both compilers and interpreters have pros and cons:</p>
+<ul>
+<li>Compiler transforms code written in a high-level programming language into the machine code, at once, before program runs, whereas an Interpreter converts each high-level program statement, one by one, into the machine code, during program run.</li>
+<li>Compiled code runs faster while interpreted code runs slower.</li>
+<li>Compiler displays all errors after compilation, on the other hand, the Interpreter displays errors of each line one by one.</li>
+<li>Compiler is based on translation linking-loading model, whereas Interpreter is based on Interpretation Method.</li>
+<li>Compiler takes an entire program whereas the Interpreter takes a single line of code.</li>
+</ul>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/core-thread-process/compiler-program.png"><img alt="Compiler vs Interpreter" src="../../images/core-thread-process/compiler-program.png"/></a></p>
+<p>A high-level programming language is usually referred to as “compiled language” or “interpreted language.” However, in practice, they can have both compiled and interpreted implementations. C, for example, is called a compiled language, despite the existence of C interpreters. The first JavaScript engines were simple interpreters, but all modern engines use just-in-time (JIT) compilation for performance reasons.</p>
+<h2 id="refs">Refs<a class="headerlink" href="#refs" title="Permanent link">¶</a></h2>
+<ul>
+<li><a href="https://www.backblaze.com/blog/whats-the-diff-programs-processes-and-threads/">https://www.backblaze.com/blog/whats-the-diff-programs-processes-and-threads/</a></li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["tabs", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>

@@ -1,0 +1,1216 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Sharing what I'm picking up along the way - exploring Architecture, DevOps, and Software Engineering" name="description"/>
+<meta content="Gabriel Brotas" name="author"/>
+<link href="https://gabrielbrotas.github.io/Learning-Journey/AWS/2.iam/" rel="canonical"/>
+<link href="../1.regions-and-zones/" rel="prev"/>
+<link href="../3.budget-and-cost/" rel="next"/>
+<link href="../../images/volcano.svg" rel="icon"/>
+<meta content="mkdocs-1.5.3, mkdocs-material-9.5.2" name="generator"/>
+<title>IAM - Learning Journey</title>
+<link href="../../assets/stylesheets/main.50c56a3b.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.06af60db.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-2SMKV8KR0M"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-2SMKV8KR0M",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-2SMKV8KR0M",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+<script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+<link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            
+                .gscrollbar-fixer { padding-right: 15px; }
+                .gdesc-inner { font-size: 0.75rem; }
+                body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+                body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+                body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+                </style><script src="../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="red" data-md-color-primary="black" data-md-color-scheme="purple" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#iam">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Learning Journey" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Learning Journey
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              IAM
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="red" data-md-color-media="" data-md-color-primary="black" data-md-color-scheme="purple" id="__palette_0" name="__palette" type="radio"/>
+</form>
+<script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Learning Journey" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Learning Journey">
+<img alt="logo" src="../../images/volcano.svg"/>
+</a>
+    Learning Journey
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/GabrielBrotas/Learning-Journey" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+<span class="md-ellipsis">
+    Home
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+<span class="md-ellipsis">
+    Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/types-of-architecture/">
+<span class="md-ellipsis">
+    Types of Architecture
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/sustainability/">
+<span class="md-ellipsis">
+    Sustainability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/architectural-features/">
+<span class="md-ellipsis">
+    Architectural Features
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Architecture/design-quality-software/">
+<span class="md-ellipsis">
+    Design Quality Software
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+<span class="md-ellipsis">
+    AWS
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+            AWS
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../1.regions-and-zones/">
+<span class="md-ellipsis">
+    Regions and Availability Zones
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    IAM
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-permissions">
+<span class="md-ellipsis">
+      IAM Permissions
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-admin-user">
+<span class="md-ellipsis">
+      Adding Admin User
+    </span>
+</a>
+<nav aria-label="Adding Admin User" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#login-with-iam-user">
+<span class="md-ellipsis">
+      Login With IAM User
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security">
+<span class="md-ellipsis">
+      Security
+    </span>
+</a>
+<nav aria-label="Security" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#securing-your-account">
+<span class="md-ellipsis">
+      Securing your Account
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-can-users-access-aws">
+<span class="md-ellipsis">
+      How can users access AWS?
+    </span>
+</a>
+<nav aria-label="How can users access AWS?" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-cli">
+<span class="md-ellipsis">
+      AWS CLI
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-sdk">
+<span class="md-ellipsis">
+      AWS SDK
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#creating-access-keys">
+<span class="md-ellipsis">
+      Creating Access Keys
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-cloudshell">
+<span class="md-ellipsis">
+      AWS CloudShell
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-roles-for-services">
+<span class="md-ellipsis">
+      IAM Roles for Services
+    </span>
+</a>
+<nav aria-label="IAM Roles for Services" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#example-ec2-instance-iam-access">
+<span class="md-ellipsis">
+      Example - EC2 Instance + IAM Access
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-security-tools">
+<span class="md-ellipsis">
+      IAM Security Tools
+    </span>
+</a>
+<nav aria-label="IAM Security Tools" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#credentials-report">
+<span class="md-ellipsis">
+      Credentials Report
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#access-advisor">
+<span class="md-ellipsis">
+      Access Advisor
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-guidelines-best-practices">
+<span class="md-ellipsis">
+      IAM Guidelines &amp; Best Practices
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../3.budget-and-cost/">
+<span class="md-ellipsis">
+    Budget And Cost
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../4.ec2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../5.ec2-pt2/">
+<span class="md-ellipsis">
+    EC2 Fundamentals Part 2
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../6.ec2-storage/">
+<span class="md-ellipsis">
+    EC2 Storage &amp; AMI
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+<span class="md-ellipsis">
+    Computer Science
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+            Computer Science
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/core-thread-process/">
+<span class="md-ellipsis">
+    Program, Process and Thread
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/OOP-vs-Functional-Programming/">
+<span class="md-ellipsis">
+    Object-Oriented-Programming vs Functional Programming
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/https-tls-mtls/">
+<span class="md-ellipsis">
+    HTTPS, TLS and mTLS
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Computer-Science/reactive-programming-vs-reactive-systems/">
+<span class="md-ellipsis">
+    Reactive Programming vs Reactive Systems
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../domain-driven-design/">
+<span class="md-ellipsis">
+    Domain Driven Design
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../GitOps/">
+<span class="md-ellipsis">
+    GitOps
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../IAM/">
+<span class="md-ellipsis">
+    IAM
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_8" type="checkbox"/>
+<label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+<span class="md-ellipsis">
+    Kafka
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_8_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_8">
+<span class="md-nav__icon md-icon"></span>
+            Kafka
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/">
+<span class="md-ellipsis">
+    Apache Kafka
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/topics/">
+<span class="md-ellipsis">
+    Topics
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/producers-and-consumers/">
+<span class="md-ellipsis">
+    Producers and Consumers
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/kafka-connect/">
+<span class="md-ellipsis">
+    Kafka Connect
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Kafka/avro/">
+<span class="md-ellipsis">
+    Avro
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kubernetes/">
+<span class="md-ellipsis">
+    Kubernetes
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_10" type="checkbox"/>
+<label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+<span class="md-ellipsis">
+    Microservices-based Architecture
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_10_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_10">
+<span class="md-nav__icon md-icon"></span>
+            Microservices-based Architecture
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/">
+<span class="md-ellipsis">
+    Introduction
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Microservices/characteristics/">
+<span class="md-ellipsis">
+    Characteristics
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_11" type="checkbox"/>
+<label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+<span class="md-ellipsis">
+    Observability
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_11_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_11">
+<span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/">
+<span class="md-ellipsis">
+    Observability
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/service-level/">
+<span class="md-ellipsis">
+    Service Level
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/open-telemetry/">
+<span class="md-ellipsis">
+    OpenTelemetry
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../Observability/elastic-stack/">
+<span class="md-ellipsis">
+    Elastic Stack
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../rabbitmq/">
+<span class="md-ellipsis">
+    RabbitMQ
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_13" type="checkbox"/>
+<label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_13_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_13">
+<span class="md-nav__icon md-icon"></span>
+            Service Mesh
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/">
+<span class="md-ellipsis">
+    Service Mesh
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../ServiceMesh/istio/">
+<span class="md-ellipsis">
+    Istio
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_14" type="checkbox"/>
+<label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="0">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_14_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_14">
+<span class="md-nav__icon md-icon"></span>
+            SOLID
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/">
+<span class="md-ellipsis">
+    SOLID
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/single-responsability/">
+<span class="md-ellipsis">
+    Single Responsibility Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/open-closed/">
+<span class="md-ellipsis">
+    Open-closed Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/liskov-substitution/">
+<span class="md-ellipsis">
+    Liskov Substitution Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/interface-segregation/">
+<span class="md-ellipsis">
+    Interface Segregation Principle
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SOLID/dependency-inversion/">
+<span class="md-ellipsis">
+    Dependency Inversion Principle
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_15" type="checkbox"/>
+<label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="0">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_15_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_15">
+<span class="md-nav__icon md-icon"></span>
+            Systems Communication
+          </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/">
+<span class="md-ellipsis">
+    Systems Communication
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/REST/">
+<span class="md-ellipsis">
+    REST
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/gRPC/">
+<span class="md-ellipsis">
+    gRPC
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../SystemsCommunication/GraphQL/">
+<span class="md-ellipsis">
+    GraphQL
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+<span class="md-ellipsis">
+      Overview
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-permissions">
+<span class="md-ellipsis">
+      IAM Permissions
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-admin-user">
+<span class="md-ellipsis">
+      Adding Admin User
+    </span>
+</a>
+<nav aria-label="Adding Admin User" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#login-with-iam-user">
+<span class="md-ellipsis">
+      Login With IAM User
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#security">
+<span class="md-ellipsis">
+      Security
+    </span>
+</a>
+<nav aria-label="Security" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#securing-your-account">
+<span class="md-ellipsis">
+      Securing your Account
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#how-can-users-access-aws">
+<span class="md-ellipsis">
+      How can users access AWS?
+    </span>
+</a>
+<nav aria-label="How can users access AWS?" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-cli">
+<span class="md-ellipsis">
+      AWS CLI
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-sdk">
+<span class="md-ellipsis">
+      AWS SDK
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#creating-access-keys">
+<span class="md-ellipsis">
+      Creating Access Keys
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#aws-cloudshell">
+<span class="md-ellipsis">
+      AWS CloudShell
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-roles-for-services">
+<span class="md-ellipsis">
+      IAM Roles for Services
+    </span>
+</a>
+<nav aria-label="IAM Roles for Services" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#example-ec2-instance-iam-access">
+<span class="md-ellipsis">
+      Example - EC2 Instance + IAM Access
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-security-tools">
+<span class="md-ellipsis">
+      IAM Security Tools
+    </span>
+</a>
+<nav aria-label="IAM Security Tools" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#credentials-report">
+<span class="md-ellipsis">
+      Credentials Report
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#access-advisor">
+<span class="md-ellipsis">
+      Access Advisor
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#iam-guidelines-best-practices">
+<span class="md-ellipsis">
+      IAM Guidelines &amp; Best Practices
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="iam">IAM<a class="headerlink" href="#iam" title="Permanent link">¶</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">¶</a></h2>
+<p>IAM stands for Identity and Access Management and is a global service. in IAM we're going to create our users and assign them to groups and give them permissions to do certain things.</p>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>IAM = Identity and Access Management, Global Service.</li>
+<li>When we create an AWS account, a root account is created by default. This account has full admin access to everything in our account. We should never use this account for security reasons..</li>
+<li>Users are people within your organization, and can be grouped; Users are mapped to a physical user, has a password for AWS Console.</li>
+<li>Groups only contain users, not other groups, can't be nested.</li>
+<li>Users don't have to belong to a group, and a user can belong to multiple groups.</li>
+<li>Policies ⇒ JSON document that outlines permissions for users or groups</li>
+<li>Roles ⇒ for EC2 instances or AWS services</li>
+<li>Security ⇒ MFA + Password Policy</li>
+<li>Access Keys provide programmatic access to the AWS API, CLI, SDK, and other development tools.</li>
+<li>Audit ⇒ IAM Credential Reports &amp; IAM Access Advisor</li>
+</ul>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="100%" href="../../images/aws/iam/users-groups.png"><img alt="users-groups.png" src="../../images/aws/iam/users-groups.png"/></a></p>
+<h2 id="iam-permissions">IAM Permissions<a class="headerlink" href="#iam-permissions" title="Permanent link">¶</a></h2>
+<p>Users or Groups can be assigned JSON documents called polices.</p>
+<p>Example:</p>
+<div class="language-json highlight"><span class="filename">policy.json</span><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">{</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1234567890"</span><span class="p">,</span>
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"s3:ListAllMyBuckets"</span><span class="p">,</span><span class="w"> </span><span class="s2">"s3:GetBucketLocation"</span><span class="p">],</span>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"arn:aws:s3:::*"</span><span class="p">]</span>
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1234567891"</span><span class="p">,</span>
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"ec2:Describe*"</span><span class="p">],</span>
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"*"</span><span class="p">]</span>
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="w">      </span><span class="nt">"Sid"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Stmt1234567892"</span><span class="p">,</span>
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="w">      </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a><span class="w">      </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="w">        </span><span class="s2">"cloudwatch:ListMetrics"</span><span class="p">,</span>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a><span class="w">        </span><span class="s2">"cloudwatch:GetMetricStatistics"</span><span class="p">,</span>
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="w">        </span><span class="s2">"cloudwatch:Describe*"</span>
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">      </span><span class="p">],</span>
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">      </span><span class="nt">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"*"</span><span class="p">]</span>
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>In the policy you define what a user or group is allowed to do in AWS.</p>
+<p>Policies consists of:</p>
+<ul>
+<li><strong>Version:</strong> policy language version, always include "2012-10-17"</li>
+<li><strong>Id:</strong> an identifier for the policy (optional)</li>
+<li><strong>Statement:</strong> one or more individual statements (required)</li>
+<li>Statements consists of:<ul>
+<li><strong>Sid:</strong> and identifier for the statement (optional)</li>
+<li><strong>Effect:</strong> whether the statement allows or denies access (Allow/Deny)</li>
+<li><strong>Principal:</strong> account/user/role to which this policy applied to</li>
+<li><strong>Action:</strong> list of actions this policy allows or denies based on effect</li>
+<li><strong>Resource:</strong> list of resources to which the actions applied to</li>
+<li><strong>Condition:</strong> conditions for when this policy is in effect (optional)</li>
+</ul>
+</li>
+</ul>
+<p>It's recommended to apply the <strong>least privilege principle</strong>, which means that you should only give the minimum permissions required to do the job.</p>
+<h2 id="adding-admin-user">Adding Admin User<a class="headerlink" href="#adding-admin-user" title="Permanent link">¶</a></h2>
+<p>By default when we create a new AWS account we'll have a root account, but it's not a best practice to use the root account for security reasons. So therefore, we want to create users such as admin users that will allow us to use our account more safely.</p>
+<p>IAM ⇒ Users tab ⇒ Add Users:</p>
+<ul>
+<li>Provide a name;</li>
+<li>Select the option to allow access to the AWS Management Console;</li>
+<li>User type: IAM user;</li>
+<li>Console password ⇒ custom password</li>
+<li>Require password reset ⇒ doesn't need</li>
+<li>Next</li>
+<li><strong>Add user to group</strong></li>
+<li>Create a group =&gt; Admin</li>
+<li>Add the policy <code>AdministratorAccess</code></li>
+<li>Tags ⇒ information's, ex: <code>Department: engineer</code></li>
+<li>Now we can create the user.</li>
+</ul>
+<h3 id="login-with-iam-user">Login With IAM User<a class="headerlink" href="#login-with-iam-user" title="Permanent link">¶</a></h3>
+<p>In the IAM Dashboard, we can define an alias for our account so users can login with the alias instead of the account id.</p>
+<p>Go to IAM ⇒ Dashboard</p>
+<p>In the right bar we have <code>Account Alias</code> where we can set an alias for our account. once updated, the sign-in url of our account will be updated to the alias.</p>
+<p>Now we can login with the IAM user we created.</p>
+<h2 id="security">Security<a class="headerlink" href="#security" title="Permanent link">¶</a></h2>
+<p>Now that we have created users and groups, it's time for us to protect these users and groups from being compromised. For this, we can have two defense mechanism.</p>
+<ol>
+<li>
+<p><strong>Password Policy</strong></p>
+<ul>
+<li>the stronger the password you use, the harder it is to crack it.</li>
+<li>
+<p>you can setup password policiy with different options:</p>
+<ol>
+<li>Minimum password length</li>
+<li>Require specific character types (uppercase letters, number,...,)</li>
+<li>Allow all IAM users to change their own passwords</li>
+<li>Require users to change their passwordd after some time (password expiration)</li>
+<li>Prevent password re-use</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Multi Factory Authentication - MFA</strong></p>
+<ul>
+<li>Users have access to your account and can possibly change configuration or delete resources in your AWS account.</li>
+<li>You want to protect your Root Accounts and IAM users.</li>
+<li>MFA = password you know + security device you own.</li>
+<li>Main benefit of MFA: if a password is stolen or hacked, the account is not compromised because the hacker would need the security device to login. </li>
+</ul>
+<p>MFA devices options in AWS:</p>
+<ol>
+<li>Virtual MFA device - Authenticate using a code generated by an app installed on your mobile device or computer. (Google Authenticator, Authy,...,)</li>
+<li>Universal 2nd Factor (U2F) security key - Authenticate using a physical key plugged into your computer's USB port. (YoubiKey by Yubico(3rd party))</li>
+<li>Hardware Key Fob MFA device - Authenticate using a code displayed on a hardware Time-based one-time password (TOTP) token. (Gemalto(3rd party),...,)</li>
+</ol>
+</li>
+</ol>
+<h3 id="securing-your-account">Securing your Account<a class="headerlink" href="#securing-your-account" title="Permanent link">¶</a></h3>
+<p>IAM ⇒ Account settings ⇒ Edit Password Policy</p>
+<p>In the password policy options you can either use the <code>IAM default</code> or customize the settings to improve the security of our accounts.</p>
+<p>To set up MFA, you need to click on your account name in the top right corner and select <code>Security Credentials</code>. There you can set up MFA for your account.</p>
+<h2 id="how-can-users-access-aws">How can users access AWS?<a class="headerlink" href="#how-can-users-access-aws" title="Permanent link">¶</a></h2>
+<ul>
+<li>To access AWS we have three options:<ol>
+<li>AWS Management console ⇒ (Protected by password + MFA)</li>
+<li>AWS Command Line Interface (CLI) ⇒ Protected by access keys</li>
+<li>AWS Software Developer Kit (SDK) ⇒ Protected by access keys</li>
+</ol>
+</li>
+<li>Access Keys are generated through the AWS console</li>
+<li>Users manage their own access key</li>
+<li>Access Keys are secret, just like password<ul>
+<li>Access Key ID ~= Username</li>
+<li>Secret Access Key ~= Password</li>
+</ul>
+</li>
+</ul>
+<h3 id="aws-cli">AWS CLI<a class="headerlink" href="#aws-cli" title="Permanent link">¶</a></h3>
+<ul>
+<li>AWS CLI is a tool that enables you to interact with AWS services using commands in your command line shell</li>
+<li>Direct access to the public APIs of AWS services</li>
+<li>Follow this guid to install: <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-version.html">docs.aws.amazon.com/cli</a></li>
+</ul>
+<h3 id="aws-sdk">AWS SDK<a class="headerlink" href="#aws-sdk" title="Permanent link">¶</a></h3>
+<ul>
+<li>AWS Software Development Kit (AWS SDK)</li>
+<li>Language-specific APIs (set of libraries)</li>
+<li>Enables you to access and manage AWS services programmatically</li>
+<li>Embedded within your application</li>
+<li>Supports<ul>
+<li>SDKs (JavaScript, Python, PHP, Go, Node.js,...)</li>
+<li>Mobile SDKs (Android, iOS)</li>
+<li>IoT Devices SDKs (Embedded C, Arduino,...)</li>
+</ul>
+</li>
+</ul>
+<h3 id="creating-access-keys">Creating Access Keys<a class="headerlink" href="#creating-access-keys" title="Permanent link">¶</a></h3>
+<p><em>Note: we should never create access key for our root account for security reasons</em></p>
+<p>IAM ⇒ Users ⇒ Choose a user ⇒ Security credentials</p>
+<ul>
+<li>In this tab we can create a access key</li>
+<li>From your terminal:
+      <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>aws<span class="w"> </span>configure
+</span></code></pre></div></li>
+<li>You will be prompted to set the:<ul>
+<li>Access Key ID;</li>
+<li>Secret Key</li>
+<li>Region: ex: us-east-1</li>
+<li>Default output format</li>
+</ul>
+</li>
+<li>Test:
+      <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>aws<span class="w"> </span>iam<span class="w"> </span>list-users
+</span></code></pre></div></li>
+</ul>
+<h3 id="aws-cloudshell">AWS CloudShell<a class="headerlink" href="#aws-cloudshell" title="Permanent link">¶</a></h3>
+<p>AWS CloudShell is a browser-based shell that makes it easy to securely manage, explore, and interact with your AWS resources using the AWS CLI and SDKs.</p>
+<ul>
+<li>Terminal in the cloud of AWS;</li>
+<li>Pre-authenticated with your console credentials;</li>
+<li>The environments also include the Python and Node runtimes;</li>
+<li>You can download files from CloudShell to your local machine, and also upload files from your local machine to CloudShell;</li>
+<li>The shell environment is based on Amazon Linux 2. You can store up to 1 GB of files per region in the home directory and they’ll be available each time you open a shell in the region.</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Timeouts &amp; Persistence – Each CloudShell session will timeout after 20 minutes or so of inactivity, and can be reestablished by refreshing the window:</li>
+<li>Persistent Storage – Files stored within $HOME persist between invocations of CloudShell with a limit of 1 GB per region; all other storage is ephemeral. This means that any software that is installed outside of $HOME will not persist, and that no matter what you change (or break), you can always begin anew with a fresh CloudShell environment.</li>
+<li>Network Access – Sessions can make outbound connections to the Internet, but do not allow any type of inbound connections. Sessions cannot currently connect to resources inside of private VPC subnets, but that’s also on the near-term roadmap.</li>
+<li>Pricing – You can use up to 10 concurrent shells in each region at no charge. You only pay for other AWS resources you use with CloudShell to create and run your applications.</li>
+</ul>
+<h2 id="iam-roles-for-services">IAM Roles for Services<a class="headerlink" href="#iam-roles-for-services" title="Permanent link">¶</a></h2>
+<ul>
+<li>Some AWS services will need to perform actions on your behalf, on your account, for example:<ul>
+<li>EC2 instances need to be able to access S3 buckets;</li>
+<li>Lambda functions may need to access DynamoDB tables (to read/write data);</li>
+<li>And so on...</li>
+</ul>
+</li>
+<li>So we need to assign permissions to AWS service with IAM Roles</li>
+<li><strong>IAM roles</strong> is just like users, but they are not intended to be used by physical people, but instead they will be used by AWS services.</li>
+</ul>
+<p>Role is a way to give AWS entities permissions to do stuff on AWS. As of now, we have 5 types of entities that can assume roles:</p>
+<ol>
+<li>AWS Service =&gt; AWS services like EC2, Lambda, or others to perform actions in your account.</li>
+<li>AWS Account =&gt; Entities in other AWS accounts belonging to you or a 3rd party to perform actions in your account.</li>
+<li>Web Identity =&gt; Entities/Users federated by the specified external web identity provider (Amazon, Facebook, Google, or any OpenID Connect (OIDC)compatible provider) to perform actions in your account.</li>
+<li>SAML 2.0 Federation =&gt; Users federated with SAML 2.0 from a corporate directory</li>
+<li>Custom Trust Policy =&gt; Custom trust policy to enable others to perform actions;</li>
+</ol>
+<h3 id="example-ec2-instance-iam-access">Example - EC2 Instance + IAM Access<a class="headerlink" href="#example-ec2-instance-iam-access" title="Permanent link">¶</a></h3>
+<p>The most common entity type for a Role is the <code>AWS Service</code>, which means that we're going to give permissions to an AWS service to perform actions in our account.</p>
+<p>Example: EC2 instance needs to access to read IAM users.</p>
+<p>IAM ⇒ Roles ⇒ Create Role</p>
+<ul>
+<li>Trusted entity ⇒ AWS Service</li>
+<li>Use case - Service ⇒ EC2</li>
+<li>Use case for the specified service =&gt; EC2</li>
+</ul>
+<p>And now we can give the permissions to which services the EC2 will have access to.</p>
+<ul>
+<li>Attach permissions policies ⇒ <code>IAMReadOnlyAccess</code></li>
+<li>Role name ⇒ <code>EC2-IAM-Read-Only</code></li>
+<li>Create role</li>
+</ul>
+<p>Trusted Entity:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">{</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w">  </span><span class="nt">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w">  </span><span class="nt">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w">          </span><span class="nt">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="p">,</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w">          </span><span class="nt">"Principal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="w">              </span><span class="nt">"Service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec2.amazonaws.com"</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="w">          </span><span class="p">},</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="w">          </span><span class="nt">"Action"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sts:AssumeRole"</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="w">  </span><span class="p">]</span>
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>this policy is saying, this role can be assumed by the ec2 service in our account.</p>
+<p>Now, If you create an EC2 instance and assign this role to it, the EC2 instance will be able to read IAM users.</p>
+<h2 id="iam-security-tools">IAM Security Tools<a class="headerlink" href="#iam-security-tools" title="Permanent link">¶</a></h2>
+<ul>
+<li>
+<p>IAM Credentials Report (account-level)</p>
+<ul>
+<li>a report that lists all your account's users and the status of their various credentials.</li>
+</ul>
+</li>
+<li>
+<p>IAM Access Advisor (user-level)</p>
+<ul>
+<li>Shows the service permissions granted to a user and when those services were last accessed.</li>
+<li>You can use this information to revise your policies and see which permissions are not used and reduce the permission a user can get to be inline with the principle of the least privilege.</li>
+</ul>
+</li>
+</ul>
+<h3 id="credentials-report">Credentials Report<a class="headerlink" href="#credentials-report" title="Permanent link">¶</a></h3>
+<p>IAM =&gt; from the left hand side menu, click on <code>Credential Report</code></p>
+<p>Now we can download the report (csv format) and see the status of our users and their credentials.</p>
+<p>In this report you will find useful information's such as if the user has a password, access keys, MFA enabled, etc.</p>
+<h3 id="access-advisor">Access Advisor<a class="headerlink" href="#access-advisor" title="Permanent link">¶</a></h3>
+<p>IAM =&gt; Users =&gt; Select a user =&gt; Access Advisor</p>
+<p>In this tab we can see the services that the user has access to, the Policies grating permission to the user, and when was the last time the user accessed that service.</p>
+<h2 id="iam-guidelines-best-practices">IAM Guidelines &amp; Best Practices<a class="headerlink" href="#iam-guidelines-best-practices" title="Permanent link">¶</a></h2>
+<ul>
+<li>Don't use the root account expect for AWS account setup</li>
+<li>One physical user = One AWS user</li>
+<li>Assign users to groups and assign permissions to groups</li>
+<li>Create a strong password policy</li>
+<li>Use and enforce the use of Multi Factor Authentication (MFA)</li>
+<li>Create and use Roles for giving permissions to AWS services</li>
+<li>Use Access Keys for Programmatic Access (CLI / SDK)</li>
+<li>Audit permission of your account with the IAM Credentials Report &amp; IAM Access Advisor</li>
+<li>Never share IAM users &amp; Access Keys</li>
+</ul>
+</article>
+</div>
+<script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["tabs", "content.tabs.link", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>
