@@ -74,8 +74,6 @@
 | Independent Deployment | Eventual Consistency |
 | Technology Diversity | Operational Complexity |
 
-
-
 ## Refs
 
 - [martinfowler-componentization](www.martinfowler.com/articles/microservices.html#ComponentizationViaServices)
