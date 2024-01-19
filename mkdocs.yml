@@ -34,7 +34,9 @@ nav:
       - Kafka Connect: Kafka/kafka-connect.md
       - Avro: Kafka/avro.md
   - Kubernetes: kubernetes.md
-  - Microservices: microservices.md
+  - Microservices-based Architecture:
+      - Introduction: Microservices/index.md
+      - Characteristics: Microservices/characteristics.md
   - Observability:
       - Observability/index.md
       - Service Level: Observability/service-level.md

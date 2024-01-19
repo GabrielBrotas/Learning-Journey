@@ -1,6 +1,6 @@
-# Microservices
+# Microservices-based Architecture
 
-## **Differences between Microservice and Monolith**
+## Differences between Microservice and Monolith
 
 Microservices are ordinary applications, there isn't any difference from any other application.
 
@@ -14,7 +14,7 @@ Another big difference is the deployment process, microservices has less risk be
 
 Another difference is the team organization, we can have one team per microservice
 
-## **When to use**
+## When to use
 
 Monolith
 
@@ -34,7 +34,7 @@ Microservice
 - When you have the necessity of scale just one part of the system
 - When you need different technologies
 
-## **Migration**
+## Migration
 
 - Context separation;
 - Avoid excess granularity;
@@ -45,7 +45,7 @@ Microservice
 - CI/CD/Tests/Environments;
 - Start from the edges, parts of the system that doesn't affect the main domain;
 
-## **Resiliency**
+## Resiliency
 
 - Health Check
 - Rate Limiting
@@ -73,7 +73,7 @@ Exponential backoff and Jitter: [https://aws.amazon.com/pt/blogs/architecture/e
 
 OTEL - [https://opentelemetry.io/](https://opentelemetry.io/)
 
-## **Choreography vs Orchestration**
+## Choreography vs Orchestration
 
 A choreographed system uses by definition event-driven communication, whereas microservice orchestration uses command-driven communication. An event is something which happened in the past and is a fact. The sender does not know who picks up the event or what happens next. An example can be the event “Credit checked.”
 
@@ -97,7 +97,7 @@ When talking about orchestration you can picture a big orchestra which features 
 - **Visibility:** Orchestration allows for a holistic view of the system, as the central coordinator has visibility into all of the interactions between the microservices.
 - **Ease of troubleshooting:** With a central coordinator, it is easier to troubleshoot issues in an orchestrated system.
 
-## **DURS Principle**
+## DURS Principle
 
 Each service can be independently DURS (deployed, updated, replaced, and scaled)
 
@@ -110,7 +110,7 @@ Each service can be independently DURS (deployed, updated, replaced, and scaled)
 - *Scalability*
 - *Resilience*
 
-## **Failure Isolation**
+## Failure Isolation
 
 - What happens when that request fails?
 - What is our average response time on that request?
@@ -120,22 +120,22 @@ The microservices architecture moves application logic to services and uses a ne
 
 One of the biggest advantage of a microservices architecture over a monolithic one is that teams can independently design, develop and deploy their services. They have full ownership over their service’s lifecycle. It also means that teams have no control over their service dependencies as it’s more likely managed by a different team. With a microservices architecture, we need to keep in mind that provider **services can be temporarily unavailable** by broken releases, configurations, and other changes as they are controlled by someone else and components move independently from each other.
 
-Strategies: 
+### Strategies: 
 
 - **Automatic Rollouts**
 
-In a microservices architecture, services depend on each other. This is why you should minimize failures and limit their negative effect. To deal with issues from changes, you can implement change management strategies and **automatic rollouts**.
+    In a microservices architecture, services depend on each other. This is why you should minimize failures and limit their negative effect. To deal with issues from changes, you can implement change management strategies and **automatic rollouts**.
 
-For example, when you deploy new code, or you change some configuration, you should apply these changes to a subset of your instances gradually, monitor them and even automatically revert the deployment if you see that it has a negative effect on your key metrics.
+    For example, when you deploy new code, or you change some configuration, you should apply these changes to a subset of your instances gradually, monitor them and even automatically revert the deployment if you see that it has a negative effect on your key metrics.
 
-Another solution could be that you run two production environments. You always deploy to only one of them, and you only point your load balancer to the new one after you verified that the new version works as it is expected. This is called blue-green, or red-black deployment.
+    Another solution could be that you run two production environments. You always deploy to only one of them, and you only point your load balancer to the new one after you verified that the new version works as it is expected. This is called blue-green, or red-black deployment.
 
 - **Health-check and Load balancing**
 
-Instances continuously start, restart and stop because of failures, deployments or autoscaling. It makes them temporarily or permanently unavailable. To avoid issues, your load balancer should **skip unhealthy instances** from the routing as they cannot serve your customers’ or sub-systems’ need.
+    Instances continuously start, restart and stop because of failures, deployments or autoscaling. It makes them temporarily or permanently unavailable. To avoid issues, your load balancer should **skip unhealthy instances** from the routing as they cannot serve your customers’ or sub-systems’ need.
 
-Application instance health can be determined via external observation. You can do it with repeatedly calling a `GET /health` endpoint or via self-reporting. Modern **service discovery** solutions continuously collect health information from instances and configure the load-balancer to route traffic only to healthy components.
+    Application instance health can be determined via external observation. You can do it with repeatedly calling a `GET /health` endpoint or via self-reporting. Modern **service discovery** solutions continuously collect health information from instances and configure the load-balancer to route traffic only to healthy components.
 
-more:
+More:
 
 - [designing-microservices-architecture-for-failure](https://blog.risingstack.com/designing-microservices-architecture-for-failure/)
