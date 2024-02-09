@@ -12,17 +12,17 @@ spec:
           - cluster: in-cluster
   template:
     metadata:
-      name: "guestbook-a"
-      namespace: tenant-a
+      name: guestbook-a
+      namespace: tenant-a-dev
     spec:
-      project: tenant-a
+      project: tenant-a-dev
       source:
         repoURL: https://github.com/argoproj/argo-cd.git
         targetRevision: HEAD
         path: applicationset/examples/list-generator/guestbook/{{cluster}}
       destination:
         name: "{{cluster}}"
-        namespace: tenant-a
+        namespace: tenant-a-dev
       syncPolicy:
         automated:
           prune: true

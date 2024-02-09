@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant-a.dev.app-of-apps
+  namespace: tenant-a-dev
+  labels:
+    name: tenant-a.dev.app-of-apps
+    environment: dev
+    id: tenant-a
+spec:
+  project: tenant-a-dev
+
+  source:
+    path: examples/argocd-kyverno/resources/tenant-a
+    repoURL: https://github.com/GabrielBrotas/Learning-Journey.git
+    targetRevision: HEAD
+
+  destination:
+    namespace: tenant-a-dev
+    name: in-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

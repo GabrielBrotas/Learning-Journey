@@ -1,10 +1,7 @@
 argo-cd:
+  crds:
+    install: true
   global:
-    image:
-      imagePullPolicy: Always
-    securityContext:
-      fsGroup: 999
-
     extraArgs:
       - --insecure
       - --application-namespaces="*"
