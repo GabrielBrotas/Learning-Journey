@@ -1,0 +1,40 @@
+argocd-apps:
+  applications:
+    - name: tenant-a.dev.app-of-apps
+      namespace: tenant-a-dev
+      additionalLabels:
+        environment: dev
+        id: tenant-a
+      project: tenant-a-dev
+      source:
+        path: examples/argocd-kyverno/apps/tenant-a
+        repoURL: https://github.com/GabrielBrotas/Learning-Journey.git
+        targetRevision: HEAD
+      destination:
+        namespace: tenant-a
+        name: in-cluster
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+    - name: tenant-b.dev.app-of-apps
+      namespace: tenant-b-dev
+      additionalLabels:
+        environment: dev
+        id: tenant-b
+      project: tenant-b-dev
+      source:
+        path: examples/argocd-kyverno/apps/tenant-b
+        repoURL: https://github.com/GabrielBrotas/Learning-Journey.git
+        targetRevision: HEAD
+      destination:
+        namespace: tenant-b
+        name: in-cluster
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

@@ -1,0 +1,36 @@
+argocd-apps:
+  projects:
+    - name: tenant-a-dev
+      namespace: argocd
+      additionalLabels:
+        environment: dev
+        id: tenant-a
+      description: Project for Tenant A
+      sourceNamespaces:
+        - tenant-a-dev
+      sourceRepos:
+        - "*"
+      clusterResourceWhitelist:
+        - group: "*"
+          kind: "*"
+      destinations:
+        - namespace: "*"
+          server: https://kubernetes.default.svc
+          name: in-cluster
+    - name: tenant-b-dev
+      namespace: argocd
+      additionalLabels:
+        environment: dev
+        id: tenant-b
+      description: Project for Tenant B
+      sourceNamespaces:
+        - tenant-b-dev
+      sourceRepos:
+        - "*"
+      clusterResourceWhitelist:
+        - group: "*"
+          kind: "*"
+      destinations:
+        - namespace: "*"
+          server: https://kubernetes.default.svc
+          name: in-cluster

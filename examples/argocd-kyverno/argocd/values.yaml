@@ -1,0 +1,10 @@
+argo-cd:
+  global:
+    image:
+      imagePullPolicy: Always
+    securityContext:
+      fsGroup: 999
+
+    extraArgs:
+      - --insecure
+      - --application-namespaces="*"

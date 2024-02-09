@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook-b
+  namespace: argocd
+  labels:
+    name: guestbook-b
+spec:
+  generators:
+    - list:
+        elements:
+          - cluster: in-cluster
+  template:
+    metadata:
+      name: "guestbook-b"
+      namespace: tenant-b
+    spec:
+      project: tenant-b
+      source:
+        repoURL: https://github.com/argoproj/argo-cd.git
+        targetRevision: HEAD
+        path: applicationset/examples/list-generator/guestbook/{{cluster}}
+      destination:
+        name: "{{cluster}}"
+        namespace: tenant-b
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: false
+        syncOptions:
+          - CreateNamespace=true
