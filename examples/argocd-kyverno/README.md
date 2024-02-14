@@ -20,21 +20,36 @@ kubectl create namespace argocd
 helm install argocd -n argocd ./argocd \
   -f ./argocd/values.yaml
 
-kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=argocd-server -n argocd
+# wait for argocd ready
+kubectl wait pods --for=condition=Ready --timeout -1s --all -n argocd
 
-kubectl get pods -n argocd
-
+# argocd ui
 kubectl -n argocd port-forward svc/argocd-server 8080:443
-
-# get admin password
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-# login: admin
-# pass: yCzuPXTapZZc-Rlh
 ```
 
-3. install project and apps:
+3. Update ArgoCD password:
+
 ```sh
+export PASS=$(kubectl --namespace argocd get secret argocd-initial-admin-secret \
+    --output jsonpath="{.data.password}" \
+    | base64 --decode)
+
+argocd login localhost:8080 --insecure --username admin --password $PASS
+
+argocd account update-password --current-password $PASS --new-password admin123
+
+# login: admin
+# password: admin123
+```
+
+4. install project and apps:
+```sh
+kubectl create namespace tenant-a-dev
+kubectl create namespace tenant-b-dev
+
 kubectl apply -f ./resources/projects
+
+kubectl apply -f ./resources/app-of-apps
 ```
 
 

@@ -1,7 +1,10 @@
 argo-cd:
   crds:
     install: true
-  global:
+
+  server:
     extraArgs:
-      - --insecure
+      - --application-namespaces="*"
+  controller:
+    extraArgs:
       - --application-namespaces="*"
