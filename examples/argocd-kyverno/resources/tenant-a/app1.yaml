@@ -17,9 +17,9 @@ spec:
     spec:
       project: tenant-a-dev
       source:
-        repoURL: https://github.com/argoproj/argo-cd.git
+        repoURL: https://github.com/argoproj/argocd-example-apps.git
         targetRevision: HEAD
-        path: applicationset/examples/list-generator/guestbook/{{cluster}}
+        path: guestbook
       destination:
         name: "{{cluster}}"
         namespace: tenant-a-dev
