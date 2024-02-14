@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-repo-project-binding
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: check-repo-for-project
+      match:
+        resources:
+          kinds:
+            - argoproj.io/v1alpha1/Application
+          selector:
+            matchLabels:
+              app.kubernetes.io/name: tenant-a.dev.app-of-apps
+      validate:
+        message: "This repository is not allowed to deploy to the specified project."
+        deny:
+          conditions:
+            - key: "{{ request.object.spec.source.repoURL }}"
+              operator: NotEquals
+              value: "https://github.com/GabrielBrotas/Learning-Journey.git"
+            - key: "{{ request.object.spec.destination.namespace }}"
+              operator: NotEquals
+              value: "tenant-a-dev"
+            - key: "{{ request.object.spec.source.path }}"
+              operator: NotEquals
+              value: "examples/argocd-kyverno/resources/tenant-a"

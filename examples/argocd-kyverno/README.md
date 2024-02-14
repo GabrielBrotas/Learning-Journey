@@ -52,6 +52,17 @@ kubectl apply -f ./resources/projects
 kubectl apply -f ./resources/app-of-apps
 ```
 
+5. install kyverno:
+
+```sh
+kubectl create -f https://github.com/kyverno/kyverno/releases/download/v1.11.1/install.yaml
+```
+
+6. install kyverno policies:
+
+```sh
+kubectl apply -f ./resources/policies
+```
 
 ## Refs:
 
