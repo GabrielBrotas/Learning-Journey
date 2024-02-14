@@ -13,7 +13,7 @@ spec:
             - argoproj.io/v1alpha1/Application
           selector:
             matchLabels:
-              app.kubernetes.io/name: tenant-a.dev.app-of-apps
+              name: tenant-a.dev.app-of-apps
       validate:
         message: "This repository is not allowed to deploy to the specified project."
         deny:
