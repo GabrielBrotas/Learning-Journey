@@ -13,17 +13,11 @@ spec:
             - argoproj.io/v1alpha1/Application
           selector:
             matchLabels:
-              name: tenant-a.dev.app-of-apps
+              argocd.argoproj.io/instance: tenant-a-dev_tenant-a.dev.app-of-apps
       validate:
         message: "This repository is not allowed to deploy to the specified project."
         deny:
           conditions:
-            - key: "{{ request.object.spec.source.repoURL }}"
-              operator: NotEquals
-              value: "https://github.com/GabrielBrotas/Learning-Journey.git"
-            - key: "{{ request.object.spec.destination.namespace }}"
+            - key: "{{ request.object.spec.project }}"
               operator: NotEquals
               value: "tenant-a-dev"
-            - key: "{{ request.object.spec.source.path }}"
-              operator: NotEquals
-              value: "examples/argocd-kyverno/resources/tenant-a"
