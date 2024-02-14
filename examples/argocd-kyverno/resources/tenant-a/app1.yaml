@@ -15,7 +15,7 @@ spec:
     targetRevision: HEAD
     path: guestbook
   destination:
-    server: in-cluster
+    name: in-cluster
     namespace: tenant-a-dev
   syncPolicy:
     automated:
